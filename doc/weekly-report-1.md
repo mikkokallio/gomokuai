@@ -23,3 +23,7 @@ No major obstacles, but I think there's quite a lot of material to go through to
 ## What am I doing next?
 
 Finalize the project structure according to OT course, and then start working on the core functionality of the program. The plan is to get as much functionality done during next week, so that it's already possible to see which ideas work and which don't.
+
+## How many hours did I spend?
+
+Setting up the repo, reading through the materials, choosing a project, and creating documents took about 6 hours.
