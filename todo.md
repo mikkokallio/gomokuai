@@ -1,19 +1,9 @@
 Palautus 1: lauantaina 5.11. klo 22:59
 
-Aihe, käytettävä ohjelmointikieli ja työn laajuus päätetty.
+Aihe ja työn laajuus päätetty.
 
-Java vai Python?
-
-Valmis aihe?
-
-
-Tustustu kurssimateriaaliin. Lue ainakin dokumentaatio-ohjeet tarkkaan.
 
 Dokumentaatio: Määrittelydokumentti valmis.
-
-TÄRKEÄÄ! Muista kirjoittaa määrittelydokumenttiin opinto-ohjelmasi ja projektin kieli!
-
-Viikkoraportti numero 1: Kirjoitettu ensimmäinen viikkoraportti (ks. Palautukset)
 
 Katso, että repositoriosi etusivulle on linkattu suoraan viikkoraportit. Jos tarvitset apua markdownissa, niin katso GitHubin ohje: 
 
