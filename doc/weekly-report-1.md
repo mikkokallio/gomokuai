@@ -14,7 +14,7 @@ No progress yet on the actual program. This week I just made everything ready so
 
 ## What did I learn this week?
 
-The majority of the learning will come later when actual implementation begins.
+Nothing new so far. The majority of the learning will come later when actual implementation begins.
 
 ## What was unclear or has been challenging?
 
