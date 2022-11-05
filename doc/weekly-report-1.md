@@ -2,7 +2,7 @@
 
 ## What did I do this week?
 
-This week, my plan is only to choose a topic for my project and set up the repo as per week 1 requirements.
+This week, my plan was only to choose a topic for my project and set up the repo as per week 1 requirements.
 
 ## What progress did I make?
 
