@@ -22,7 +22,7 @@ class AIPlayer:
         for move in moves:
             child = copy.deepcopy(state)
             child[move[0]][move[1]] = 'O'
-            value = self.min_value(child, move, self.depth)
+            value = self.min_value(child, move, self.depth, -999999, 999999)
             #print(value)
             if best_move is None or value > best_value:
                 best_value = value
@@ -31,7 +31,7 @@ class AIPlayer:
         # if board.is_legal_move(y, x, color):
         return best_move
             
-    def max_value(self, node, move, depth):
+    def max_value(self, node, move, depth, alpha, beta):
         #print(node, move, depth)
         if self.board.is_winning_move(node, move[0], move[1], 'X'): # <- Depends!
             return -1
@@ -41,10 +41,13 @@ class AIPlayer:
         for newmove in self.get_possible_moves(node):
             child = copy.deepcopy(node)
             child[newmove[0]][newmove[1]] = 'O'
-            v = max(v, self.min_value(child, newmove, depth-1))
+            v = max(v, self.min_value(child, newmove, depth-1, alpha, beta))
+            alpha = max(alpha, v)
+            if alpha >= beta:
+                return v
         return v
 
-    def min_value(self, node, move, depth):
+    def min_value(self, node, move, depth, alpha, beta):
         #print(node, move, depth)
         if self.board.is_winning_move(node, move[0], move[1], 'O'): # <- Depends!
             return 1
@@ -54,5 +57,8 @@ class AIPlayer:
         for newmove in self.get_possible_moves(node):
             child = copy.deepcopy(node)
             child[newmove[0]][newmove[1]] = 'X'
-            v = min(v, self.max_value(child, newmove, depth-1))
+            v = min(v, self.max_value(child, newmove, depth-1, alpha, beta))
+            beta = min(beta, v)
+            if alpha >= beta:
+                return v
         return v
