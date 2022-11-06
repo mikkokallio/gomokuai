@@ -1,6 +1,9 @@
+DIRECTIONS = [(1, 0), (0, 1), (1, 1), (-1, 1)]
+
 class Board:
-    def __init__ (self, size):
+    def __init__ (self, size, row_len):
         self.size = size
+        self.row_len = row_len
         self.state = [['.' for _ in range(size)] for _ in range(size)]
         # TODO: Add info about turn black/white, turn number, other stats?
 
@@ -8,10 +11,13 @@ class Board:
         for row in self.state:
             print(''.join(row))
 
+    def get_size(self):
+        return self.size
+    
     def add_piece(self, y, x, color):
         # TODO: Check legality again?
         self.state[y][x] = color
-        return self.is_winning_move(y, x, color)
+        return self.is_winning_move(self.state, y, x, color)
 
     def is_legal_move(self, y, x, color):
         if y < 0 or y >= self.size or x < 0 or x >= self.size:
@@ -22,10 +28,9 @@ class Board:
             return False
         return True
 
-    def is_winning_move(self, y, x, color):
+    def is_winning_move(self, state, y, x, color):
         '''Check if new piece forms a row of exactly 5 pieces'''
-        directions = [(1, 0), (0, 1), (1, 1), (-1, 1)]
-        for dir in directions:
+        for dir in DIRECTIONS:
             count = 1
             for sign in [-1, +1]:
                 yy, xx = y, x
@@ -38,6 +43,6 @@ class Board:
                         count +=1
                     else:
                         break
-            if count == 5:
+            if count == self.row_len:
                 return True
         return False
