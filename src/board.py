@@ -39,7 +39,7 @@ class Board:
                     xx += sign * dir[1]
                     if yy < 0 or xx < 0 or yy >= self.size or xx >= self.size:
                         break
-                    if self.state[yy][xx] == color:
+                    if state[yy][xx] == color:
                         count +=1
                     else:
                         break

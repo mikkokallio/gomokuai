@@ -1,10 +1,10 @@
 import random
 
 class RandomPlayer:
-    def __init__ (self, black=True, board=None):
-        pass
+    def __init__ (self, board, color):
+        self.color = color
     
-    def get_move(self, board, color):
+    def get_move(self, board):
         while True:
             # TODO: implement get_size?
             y = random.randint(0, board.size-1)
