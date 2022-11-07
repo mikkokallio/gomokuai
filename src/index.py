@@ -3,17 +3,17 @@ from board import Board, PIECES
 from random_player import RandomPlayer
 from human_player import HumanPlayer
 from AI_player import AIPlayer
-from AI_player01 import AIPlayerV1
+from AI_player_01 import AIPlayerV1
 
-SIZE = 9
+SIZE = 11
 ROW = 5
 board = Board(SIZE, ROW)
 
 human_00 = HumanPlayer()
 human_01 = HumanPlayer()
 computer_00 = RandomPlayer()
-computer_01 = AIPlayer(3, board)
-computer_02 = AIPlayer(3, board)
+computer_01 = AIPlayerV1(3, board)
+computer_02 = AIPlayer(4, board)
 
 players = [computer_01, computer_02]
 white_turn = False

@@ -1,8 +1,8 @@
 import random
 import copy
-from board import PIECES, DIRECTIONS
+from board import PIECES
 
-class AIPlayer:
+class AIPlayerV1:
     def __init__ (self, depth, board):
         self.depth = depth
         self.board = board
@@ -31,55 +31,19 @@ class AIPlayer:
                 if state[y][x] == '.' and movemap[y][x] >= 1:
                     # 0... size
                     #prio = abs(self.board.size/2-y) + abs(self.board.size/2-x)
-                    #prio = -movemap[y][x]
-                    own = self.evaluate_move(state, y, x, PIECES[self.player_two])
-                    foe = self.evaluate_move(state, y, x, PIECES[not self.player_two])
-                    prio = -(2 * own + foe)
-
-                    #prio = -self.evaluate_move()
+                    prio = -movemap[y][x]
                     moves.append((prio, y, x))
         return sorted(moves)
-
-    def evaluate_move(self, state, y, x, color):
-        '''Check if move completes 2s, 3s, 4s, or 5s'''
-        points = 0
-        for dir in DIRECTIONS:
-            count = 1
-            for sign in [-1, +1]:
-                yy, xx = y, x
-                for _ in range(5):
-                    yy += sign * dir[0]
-                    xx += sign * dir[1]
-                    if yy < 0 or xx < 0 or yy >= self.board.size or xx >= self.board.size:
-                        break
-                    if state[yy][xx] == color:
-                        count +=1
-                    else:
-                        break
-            if count == 2:
-                points += 1
-            if count == 3:
-                points += 10
-            if count == 4:
-                points += 100
-            if count == 5:
-                points += 1000
-        return points
 
     def get_move(self, board, player_two):
         self.player_two = player_two
         state = board.state
         moves = self.get_possible_moves(state)
-        print(moves)
         best_move, best_value = None, -999999
         for move in moves:
             child = copy.deepcopy(state)
             child[move[1]][move[2]] = PIECES[self.player_two]
             #[print(row) for row in child]
-            if self.board.is_winning_move(state, move[1], move[2], PIECES[self.player_two]):
-                print('kill!')
-                return move[1:]
-
             value = self.min_value(child, move, self.depth, -999999, 999999)
             #print(value)
             if best_move is None or value > best_value:
@@ -96,7 +60,7 @@ class AIPlayer:
         if sum([row.count('.') for row in node]) == 0:
             return 0
         if depth == 0:
-            return 0
+            return -random.random()
         v = -999999
         for newmove in self.get_possible_moves(node):
             child = copy.deepcopy(node)
@@ -114,7 +78,7 @@ class AIPlayer:
         if sum([row.count('.') for row in node]) == 0:
             return 0
         if depth == 0:
-            return 0
+            return random.random()
         v = +999999
         for newmove in self.get_possible_moves(node):
             child = copy.deepcopy(node)
