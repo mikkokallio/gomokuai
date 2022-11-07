@@ -1,3 +1,4 @@
+PIECES = {False: 'X', True: 'O'}
 DIRECTIONS = [(1, 0), (0, 1), (1, 1), (-1, 1)]
 
 class Board:

@@ -1,12 +1,12 @@
 import random
 import copy
+from board import PIECES
 
 class AIPlayer:
-    def __init__ (self, depth, board, color, other):
+    def __init__ (self, depth, board):
         self.depth = depth
         self.board = board
-        self.color = color
-        self.opponent = other
+        self.player_two = None
     
     def get_possible_moves(self, state):
         n = self.board.size
@@ -18,8 +18,8 @@ class AIPlayer:
         for y in range(self.board.get_size()):
             for x in range(self.board.get_size()):
                 if state[y][x] != '.':
-                    for yy in range(max(0, y-1), min(y+2, n-1)):
-                        for xx in range(max(0, x-1), min(x+2, n-1)):
+                    for yy in range(max(0, y-1), min(y+2, n)):
+                        for xx in range(max(0, x-1), min(x+2, n)):
                             movemap[yy][xx] += 1 # Higher prio if higher number?
 
         #[print(row) for row in state]
@@ -28,23 +28,21 @@ class AIPlayer:
         for y in range(self.board.get_size()):
             for x in range(self.board.get_size()):
                 # TODO: Use either .get_size() or .size consistently!
-                # Keep state of a "proximity map"? I.e. when a piece is placed,
-                # update map to include positions within x intersections (and exclude occupied positions)
                 if state[y][x] == '.' and movemap[y][x] >= 1:
                     # 0... size
                     #prio = abs(self.board.size/2-y) + abs(self.board.size/2-x)
                     prio = -movemap[y][x]
-                    # TODO: keep tracks of "center of mass"
                     moves.append((prio, y, x))
         return sorted(moves)
 
-    def get_move(self, board):
+    def get_move(self, board, player_two):
+        self.player_two = player_two
         state = board.state
         moves = self.get_possible_moves(state)
         best_move, best_value = None, -999999
         for move in moves:
             child = copy.deepcopy(state)
-            child[move[1]][move[2]] = self.color
+            child[move[1]][move[2]] = PIECES[self.player_two]
             #[print(row) for row in child]
             value = self.min_value(child, move, self.depth, -999999, 999999)
             #print(value)
@@ -57,7 +55,7 @@ class AIPlayer:
             
     def max_value(self, node, move, depth, alpha, beta):
         #print(node, move, depth)
-        if self.board.is_winning_move(node, move[1], move[2], self.opponent):
+        if self.board.is_winning_move(node, move[1], move[2], PIECES[not self.player_two]):
             return -1 - depth # Protect against quick losses
         if sum([row.count('.') for row in node]) == 0:
             return 0
@@ -66,7 +64,7 @@ class AIPlayer:
         v = -999999
         for newmove in self.get_possible_moves(node):
             child = copy.deepcopy(node)
-            child[newmove[1]][newmove[2]] = self.color
+            child[newmove[1]][newmove[2]] = PIECES[self.player_two]
             v = max(v, self.min_value(child, newmove, depth-1, alpha, beta))
             alpha = max(alpha, v)
             if alpha >= beta:
@@ -75,7 +73,7 @@ class AIPlayer:
 
     def min_value(self, node, move, depth, alpha, beta):
         #print(node, move, depth)
-        if self.board.is_winning_move(node, move[1], move[2], self.color): 
+        if self.board.is_winning_move(node, move[1], move[2], PIECES[self.player_two]): 
             return 1 + depth # Prefer quick wins
         if sum([row.count('.') for row in node]) == 0:
             return 0
@@ -84,7 +82,7 @@ class AIPlayer:
         v = +999999
         for newmove in self.get_possible_moves(node):
             child = copy.deepcopy(node)
-            child[newmove[1]][newmove[2]] = self.opponent
+            child[newmove[1]][newmove[2]] = PIECES[not self.player_two]
             v = min(v, self.max_value(child, newmove, depth-1, alpha, beta))
             #[print(row) for row in child]
             #print(v)
