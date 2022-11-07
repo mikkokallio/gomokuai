@@ -26,7 +26,7 @@ for a in range(SIZE**2):
     board.print()
     print('')
     if win:
-        print(f'{SIZE} in a row!', white_turn)
+        print(f'{ROW} in a row!', white_turn)
         break
     white_turn = not white_turn
 

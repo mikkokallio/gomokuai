@@ -80,7 +80,7 @@ class AIPlayer:
         if sum([row.count('.') for row in node]) == 0:
             return 0
         if depth == 0:
-            return -random.random()
+            return random.random()
         v = +999999
         for newmove in self.get_possible_moves(node):
             child = copy.deepcopy(node)
