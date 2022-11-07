@@ -8,8 +8,10 @@ class Board:
         # TODO: Add info about turn black/white, turn number, other stats?
 
     def print(self):
-        for row in self.state:
-            print(''.join(row))
+        print('  ' + ''.join([f'{x:02d}'[0] for x in range(self.size)]))
+        print('  ' + ''.join([f'{x:02d}'[1] for x in range(self.size)]))
+        for y, row in enumerate(self.state):
+            print(f'{y:02d}' + ''.join(row))
 
     def get_size(self):
         return self.size
