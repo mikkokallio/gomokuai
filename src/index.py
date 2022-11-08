@@ -4,6 +4,7 @@ from random_player import RandomPlayer
 from human_player import HumanPlayer
 from AI_player import AIPlayer
 from AI_player_01 import AIPlayerV1
+from AI_player_02 import AIPlayerV2
 
 SIZE = 11
 ROW = 5
@@ -13,9 +14,10 @@ human_00 = HumanPlayer()
 human_01 = HumanPlayer()
 computer_00 = RandomPlayer()
 computer_01 = AIPlayerV1(3, board)
-computer_02 = AIPlayer(4, board)
+computer_02 = AIPlayerV2(5, board)
+computer_03 = AIPlayer(8, board)
 
-players = [computer_01, computer_02]
+players = [computer_02, computer_03]
 white_turn = False
 
 start_time = perf_counter()

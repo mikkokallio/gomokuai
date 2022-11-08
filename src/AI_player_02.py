@@ -2,13 +2,13 @@ import random
 import copy
 from board import PIECES, DIRECTIONS
 
-class AIPlayer:
+class AIPlayerV2:
     def __init__ (self, depth, board):
         self.depth = depth
         self.board = board
         self.player_two = None
     
-    def get_possible_moves(self, state, depth):
+    def get_possible_moves(self, state):
         n = self.board.size
         # TODO: Movemap updated when moves happen rather than creating a new one each time?
         # Requires that engine gives opponent's last move, can be done
@@ -22,45 +22,44 @@ class AIPlayer:
                         for xx in range(max(0, x-1), min(x+2, n)):
                             movemap[yy][xx] += 1 # Higher prio if higher number?
 
+        #[print(row) for row in state]
+        #[print(row) for row in movemap]
         moves = []
         for y in range(self.board.get_size()):
             for x in range(self.board.get_size()):
                 # TODO: Use either .get_size() or .size consistently!
                 if state[y][x] == '.' and movemap[y][x] >= 1:
+                    # 0... size
                     #prio = abs(self.board.size/2-y) + abs(self.board.size/2-x)
                     #prio = -movemap[y][x]
                     own = self.evaluate_move(state, y, x, PIECES[self.player_two])
                     foe = self.evaluate_move(state, y, x, PIECES[not self.player_two])
                     prio = -(2 * own + foe)
                     moves.append((prio, y, x))
-        return sorted(moves)[:depth+2]
+        return sorted(moves)[:10]
 
     def evaluate_move(self, state, y, x, color):
         '''Check if move completes 2s, 3s, 4s, or 5s'''
         points = 0
         for dir in DIRECTIONS:
-            count, open = 1, 2
+            count = 1
             for sign in [-1, +1]:
                 yy, xx = y, x
                 for _ in range(5):
                     yy += sign * dir[0]
                     xx += sign * dir[1]
                     if yy < 0 or xx < 0 or yy >= self.board.size or xx >= self.board.size:
-                        open -=1
                         break
                     if state[yy][xx] == color:
                         count +=1
-                    elif state[yy][xx] == '.':
-                        break
                     else:
-                        open -=1
                         break
             if count == 2:
-                points += 1 * open
+                points += 1
             if count == 3:
-                points += 10 * open
+                points += 10
             if count == 4:
-                points += 100 * open
+                points += 100
             if count == 5:
                 points += 1000
         return points
@@ -68,7 +67,7 @@ class AIPlayer:
     def get_move(self, board, player_two):
         self.player_two = player_two
         state = board.state
-        moves = self.get_possible_moves(state, self.depth)
+        moves = self.get_possible_moves(state)
         print(moves)
         best_move, best_value = None, -999999
         for move in moves:
@@ -88,14 +87,15 @@ class AIPlayer:
         return best_move[1:]
             
     def max_value(self, node, move, depth, alpha, beta):
+        #print(node, move, depth)
         if self.board.is_winning_move(node, move[1], move[2], PIECES[not self.player_two]):
-            return -1
+            return -1 - depth # Protect against quick losses
         if sum([row.count('.') for row in node]) == 0:
             return 0
         if depth == 0:
             return 0
         v = -999999
-        for newmove in self.get_possible_moves(node, depth):
+        for newmove in self.get_possible_moves(node):
             child = copy.deepcopy(node)
             child[newmove[1]][newmove[2]] = PIECES[self.player_two]
             v = max(v, self.min_value(child, newmove, depth-1, alpha, beta))
@@ -105,17 +105,20 @@ class AIPlayer:
         return v
 
     def min_value(self, node, move, depth, alpha, beta):
+        #print(node, move, depth)
         if self.board.is_winning_move(node, move[1], move[2], PIECES[self.player_two]): 
-            return 1
+            return 1 + depth # Prefer quick wins
         if sum([row.count('.') for row in node]) == 0:
             return 0
         if depth == 0:
             return 0
         v = +999999
-        for newmove in self.get_possible_moves(node, depth):
+        for newmove in self.get_possible_moves(node):
             child = copy.deepcopy(node)
             child[newmove[1]][newmove[2]] = PIECES[not self.player_two]
             v = min(v, self.max_value(child, newmove, depth-1, alpha, beta))
+            #[print(row) for row in child]
+            #print(v)
             beta = min(beta, v)
             if alpha >= beta:
                 return v

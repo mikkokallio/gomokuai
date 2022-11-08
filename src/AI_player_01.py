@@ -33,7 +33,7 @@ class AIPlayerV1:
                     #prio = abs(self.board.size/2-y) + abs(self.board.size/2-x)
                     prio = -movemap[y][x]
                     moves.append((prio, y, x))
-        return sorted(moves)
+        return sorted(moves)[:10]
 
     def get_move(self, board, player_two):
         self.player_two = player_two
