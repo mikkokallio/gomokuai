@@ -68,7 +68,7 @@ class AIPlayerV2:
         self.player_two = player_two
         state = board.state
         moves = self.get_possible_moves(state)
-        print(moves)
+        #print(moves)
         best_move, best_value = None, -999999
         for move in moves:
             child = copy.deepcopy(state)

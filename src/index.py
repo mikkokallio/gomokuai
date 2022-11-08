@@ -6,7 +6,7 @@ from AI_player import AIPlayer
 from AI_player_01 import AIPlayerV1
 from AI_player_02 import AIPlayerV2
 
-SIZE = 11
+SIZE = 13
 ROW = 5
 board = Board(SIZE, ROW)
 
@@ -15,7 +15,7 @@ human_01 = HumanPlayer()
 computer_00 = RandomPlayer()
 computer_01 = AIPlayerV1(3, board)
 computer_02 = AIPlayerV2(5, board)
-computer_03 = AIPlayer(8, board)
+computer_03 = AIPlayer(7, 2, board)
 
 players = [computer_02, computer_03]
 white_turn = False

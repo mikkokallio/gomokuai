@@ -6,6 +6,7 @@ class Board:
         self.size = size
         self.row_len = row_len
         self.state = [['.' for _ in range(size)] for _ in range(size)]
+        self.moves = []
         # TODO: Add info about turn black/white, turn number, other stats?
 
     def print(self):
@@ -20,6 +21,7 @@ class Board:
     def add_piece(self, y, x, color):
         # TODO: Check legality again?
         self.state[y][x] = color
+        self.moves.append((y, x, color))
         return self.is_winning_move(self.state, y, x, color)
 
     def is_legal_move(self, y, x, color):
