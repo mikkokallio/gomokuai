@@ -27,10 +27,12 @@ class Board:
     def is_legal_move(self, y, x, color):
         if y < 0 or y >= self.size or x < 0 or x >= self.size:
             return False
-        #if color not in [0, 1]:
-        #    return False
+        if color not in PIECES:
+            return False
         if self.state[y][x] != '.':
             return False
+        if len(self.moves) == 2:
+            pass
         return True
 
     def is_winning_move(self, state, y, x, color):
