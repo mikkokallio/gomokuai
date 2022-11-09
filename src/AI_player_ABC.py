@@ -97,9 +97,8 @@ class AIPlayer:
             child[move[1]][move[2]] = PIECES[self.player_two]
             #[print(row) for row in child]
             if self.board.is_winning_move(state, move[1], move[2], PIECES[self.player_two]):
-                best_value = 1
-                best_move = move
-                break
+                return move[1:]
+
             value = self.min_value(child, move, self.depth, -999999, 999999)
             if best_move is None or value > best_value:
                 best_value = value
@@ -108,30 +107,15 @@ class AIPlayer:
         self.update_proximity_map(y, x)
         #[print(row) for row in self.proximity_map]
         print(best_value)
-        if best_value in [-1, 1]:
-            yn = input('Try to solve?')
-            if yn == 'y':
-                print(state)
-                n = self.board.size
-                self.proximity_map = [[1 for _ in range(n)] for _ in range(n)]
-                self.limit_moves = 999
-                value = self.max_value(state, None, 7, -999999, 999999)
-                print('Solved value is: ', value)
-                if value == best_value:
-                    print('Yay!')
-                    #break
         return (y, x)
-
-    def max_value(self, node, move, depth, alpha, beta):
-        if move is not None and self.board.is_winning_move(node, move[1], move[2], PIECES[not self.player_two]):
-            #if self.limit_moves == 999:
-            #    print('Uu!', depth)
-            return -1
-        if sum([row.count('.') for row in node]) == 0 or depth == 0:
-            if self.limit_moves == 999:
-                [print(row) for row in node]
             
+    def max_value(self, node, move, depth, alpha, beta):
+        if self.board.is_winning_move(node, move[1], move[2], PIECES[not self.player_two]):
+            return -1
+        if sum([row.count('.') for row in node]) == 0:
             return 0
+        if  depth == 0:
+            return self.evaluate_move(node, move[1], move[2], PIECES[not self.player_two], PIECES[self.player_two]) ** (1/4)
         v = -999999
         for newmove in self.get_possible_moves(node, depth)[:self.limit_moves]:
             child = copy.deepcopy(node)
@@ -145,8 +129,13 @@ class AIPlayer:
     def min_value(self, node, move, depth, alpha, beta):
         if self.board.is_winning_move(node, move[1], move[2], PIECES[self.player_two]): 
             return 1
-        if sum([row.count('.') for row in node]) == 0 or depth == 0:
+        if sum([row.count('.') for row in node]) == 0:
             return 0
+        if  depth == 0:
+            if self.evaluate_move(node, move[1], move[2], PIECES[self.player_two], PIECES[not self.player_two]) > 150:
+                return 0.5
+            else:
+                return 0
         v = +999999
         for newmove in self.get_possible_moves(node, depth)[:self.limit_moves]:
             child = copy.deepcopy(node)

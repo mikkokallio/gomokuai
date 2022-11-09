@@ -2,3 +2,4 @@
 
 `poetry run python src/index.py`
 
+`pytest src`

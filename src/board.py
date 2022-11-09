@@ -2,7 +2,7 @@ PIECES = {False: 'X', True: 'O'}
 DIRECTIONS = [(1, 0), (0, 1), (1, 1), (-1, 1)]
 
 class Board:
-    def __init__ (self, size, row_len):
+    def __init__ (self, size, row_len, opening=True):
         self.size = size
         self.row_len = row_len
         self.state = [['.' for _ in range(size)] for _ in range(size)]
@@ -19,15 +19,17 @@ class Board:
         return self.size
     
     def add_piece(self, y, x, color):
-        # TODO: Check legality again?
-        self.state[y][x] = color
-        self.moves.append((y, x, color))
+        if self.is_legal_move(y, x, color):
+            self.state[y][x] = color
+            self.moves.append((y, x, color))
+        else:
+            raise ValueError
         return self.is_winning_move(self.state, y, x, color)
 
     def is_legal_move(self, y, x, color):
         if y < 0 or y >= self.size or x < 0 or x >= self.size:
             return False
-        if color not in PIECES:
+        if color not in [PIECES[False], PIECES[True]]:
             return False
         if self.state[y][x] != '.':
             return False
