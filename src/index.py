@@ -23,16 +23,17 @@ white_turn = False
 start_time = perf_counter()
 
 board.print()
-print('')
 
-for a in range(SIZE**2):
-    y, x = players[int(white_turn)].get_move(board, white_turn)
-    win = board.add_piece(y, x, color=PIECES[white_turn])
-    board.print()
-    print('')
-    if win:
-        print(f'{ROW} in a row!', white_turn)
-        break
-    white_turn = not white_turn
+for turn in range(SIZE**2):
+    try:
+        y, x = players[int(white_turn)].get_move(board, white_turn)
+        win = board.add_piece(y, x, color=PIECES[white_turn])
+        board.print()
+        if win:
+            print(f'{ROW} in a row!', white_turn)
+            break
+        white_turn = not white_turn
+    except ValueError:
+        print('Invalid move!')
 
 print(perf_counter() - start_time)

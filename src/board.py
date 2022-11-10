@@ -14,6 +14,7 @@ class Board:
         print('  ' + ''.join([f'{x:02d}'[1] for x in range(self.size)]))
         for y, row in enumerate(self.state):
             print(f'{y:02d}' + ''.join(row))
+        print('')
 
     def get_size(self):
         return self.size
