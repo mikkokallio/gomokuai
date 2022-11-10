@@ -9,6 +9,10 @@ from AI_player_03 import AIPlayerV3
 SIZE = 15
 ROW = 5
 board = Board(SIZE, ROW, opening=True)
+board.add_piece(6, 6, 'X')
+board.add_piece(6, 8, 'O')
+board.add_piece(6, 3, 'X')
+white_turn = True
 
 human_00 = HumanPlayer()
 human_01 = HumanPlayer()
@@ -17,8 +21,7 @@ computer_02 = AIPlayerV2(5, board)
 computer_03 = AIPlayerV3(7, 2, board)
 computer_04 = AIPlayer(depth=5, reach=2, limit_moves=3, board=board)
 
-players = [human_00, computer_04]
-white_turn = False
+players = [computer_03, computer_04]
 
 start_time = perf_counter()
 

@@ -1,4 +1,3 @@
-import random
 import copy
 from board import PIECES, DIRECTIONS
 
@@ -100,7 +99,7 @@ class AIPlayer:
                 best_value = 1
                 best_move = move
                 break
-            value = self.min_value(child, move, self.depth, -999999, 999999)
+            value = self.minimax(child, move, self.depth, -999999, 999999, False)
             if best_move is None or value > best_value:
                 best_value = value
                 best_move = move
@@ -108,51 +107,23 @@ class AIPlayer:
         self.update_proximity_map(y, x)
         #[print(row) for row in self.proximity_map]
         print(best_value)
-        if best_value in [-1, 1]:
-            yn = input('Try to solve?')
-            if yn == 'y':
-                print(state)
-                n = self.board.size
-                self.proximity_map = [[1 for _ in range(n)] for _ in range(n)]
-                self.limit_moves = 999
-                value = self.max_value(state, None, 7, -999999, 999999)
-                print('Solved value is: ', value)
-                if value == best_value:
-                    print('Yay!')
-                    #break
         return (y, x)
 
-    def max_value(self, node, move, depth, alpha, beta):
-        if move is not None and self.board.is_winning_move(node, move[1], move[2], PIECES[not self.player_two]):
-            #if self.limit_moves == 999:
-            #    print('Uu!', depth)
-            return -1
-        if sum([row.count('.') for row in node]) == 0 or depth == 0:
-            if self.limit_moves == 999:
-                [print(row) for row in node]
-            
-            return 0
-        v = -999999
-        for newmove in self.get_possible_moves(node, depth)[:self.limit_moves]:
-            child = copy.deepcopy(node)
-            child[newmove[1]][newmove[2]] = PIECES[self.player_two]
-            v = max(v, self.min_value(child, newmove, depth-1, alpha, beta))
-            alpha = max(alpha, v)
-            if alpha >= beta:
-                return v
-        return v
-
-    def min_value(self, node, move, depth, alpha, beta):
-        if self.board.is_winning_move(node, move[1], move[2], PIECES[self.player_two]): 
-            return 1
+    def minimax(self, node, move, depth, a, b, maxing):
+        if self.board.is_winning_move(node, move[1], move[2], PIECES[not maxing * self.player_two]):
+            return -1 if maxing else 1
         if sum([row.count('.') for row in node]) == 0 or depth == 0:
             return 0
-        v = +999999
+        v = -999999 if maxing else 999999
         for newmove in self.get_possible_moves(node, depth)[:self.limit_moves]:
             child = copy.deepcopy(node)
-            child[newmove[1]][newmove[2]] = PIECES[not self.player_two]
-            v = min(v, self.max_value(child, newmove, depth-1, alpha, beta))
-            beta = min(beta, v)
-            if alpha >= beta:
+            child[newmove[1]][newmove[2]] = PIECES[maxing * self.player_two]
+            recurse = self.minimax(child, newmove, depth-1, a, b, not maxing)
+            v = max(v, recurse) if maxing else min(v, recurse)
+            if maxing:
+                a = max(a, v)
+            else:
+                b = min(b, v)
+            if a >= b:
                 return v
         return v
