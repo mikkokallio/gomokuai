@@ -1,4 +1,5 @@
 import copy
+from concurrent.futures import ProcessPoolExecutor
 from board import PIECES, DIRECTIONS
 
 class AIPlayer:
@@ -82,27 +83,25 @@ class AIPlayer:
             for xx in range(max(0, x-r), min(x+(r+1), n)):
                 self.proximity_map[yy][xx] += 1
 
+    def get_async_branch(self, move):
+        child = copy.deepcopy(self.board.state)
+        child[move[1]][move[2]] = PIECES[self.player_two]
+        return self.minimax(child, move, self.depth, -999999, 999999, False)
+    
     def get_move(self, board, player_two):
         if len(self.board.moves) > 0:            
             y, x, _ = self.board.moves[-1]
             self.update_proximity_map(y, x)
         self.player_two = player_two
         state = board.state
-        moves = self.get_possible_moves(state, self.depth)[:self.limit_moves]
+        moves = self.get_possible_moves(state, self.depth)[:self.limit_moves+2]
         print(moves)
         best_move, best_value = None, -999999
-        for move in moves:
-            child = copy.deepcopy(state)
-            child[move[1]][move[2]] = PIECES[self.player_two]
-            #[print(row) for row in child]
-            if self.board.is_winning_move(state, move[1], move[2], PIECES[self.player_two]):
-                best_value = 1
-                best_move = move
-                break
-            value = self.minimax(child, move, self.depth, -999999, 999999, False)
-            if best_move is None or value > best_value:
-                best_value = value
-                best_move = move
+        with ProcessPoolExecutor() as ex:
+            for move, value in zip(moves, ex.map(self.get_async_branch, moves)):
+                if best_move is None or value > best_value:
+                    best_value = value
+                    best_move = move
         y, x = best_move[1:]
         self.update_proximity_map(y, x)
         #[print(row) for row in self.proximity_map]
