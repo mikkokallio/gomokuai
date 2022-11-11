@@ -13,20 +13,38 @@ class AIPlayer:
         self.proximity_map = [[0 for _ in range(n)] for _ in range(n)]
         self.proximity_map[int(n/2)][int(n/2)] = 1 # center square always available!
 
-    def get_possible_moves(self, state, depth):
-        moves = []
-        for y in range(self.board.get_size()):
-            for x in range(self.board.get_size()):
-                # TODO: Use either .get_size() or .size consistently!
-                if state[y][x] == '.' and self.proximity_map[y][x] >= 1:
-                    own, _, _ = self.evaluate_threat(state, y, x, PIECES[self.player_two], PIECES[not self.player_two])
-                    #if own >= 1000:
-                    #    return [(-99999, y, x)]
-                    foe, _, _ = self.evaluate_threat(state, y, x, PIECES[not self.player_two], PIECES[self.player_two])
-                    prio1 = -(1.1 * own + foe)
-                    prio2 = -(1.4 * own + 0.7 * foe)
-                    moves.append((max(prio1, prio2), y, x))
-        return sorted(moves)
+    def get_move(self, board, player_two):
+        defenses = None
+        self.player_two = player_two
+        state = board.state
+        if len(self.board.moves) > 0:
+            y, x, _ = self.board.moves[-1]
+            self.update_proximity_map(y, x)
+            points, threat, defenses = self.evaluate_threat(self.board.state, y, x, PIECES[not player_two], PIECES[player_two])
+            print('Threat: ', threat, 'Defend in positions: ', defenses)
+        if len(defenses) == 0:
+            moves = self.get_possible_moves(state, self.depth)[:self.limit_moves+8]
+        else:
+            moves = [(0, defense[0], defense[1]) for defense in defenses]
+        print(moves)
+        best_move, best_value = None, -999999
+        with ProcessPoolExecutor() as ex:
+            for move, value in zip(moves, ex.map(self.get_async_branch, moves)):
+                print(value)
+                if best_move is None or value > best_value:
+                    best_value = value
+                    best_move = move
+        y, x = best_move[1:]
+        self.update_proximity_map(y, x)
+        print('Best: ',best_value)
+        return (y, x)
+
+    def update_proximity_map(self, y, x):
+        n = self.board.size
+        r = self.reach
+        for yy in range(max(0, y-r), min(y+(r+1), n)):
+            for xx in range(max(0, x-r), min(x+(r+1), n)):
+                self.proximity_map[yy][xx] += 1
 
     def evaluate_threat(self, state, y, x, color, foe_color):
         '''Check if move completes 2s, 3s, 4s, or 5s'''
@@ -68,18 +86,8 @@ class AIPlayer:
                 points += 1 * open
             if count == 3:
                 points += 10 * open
-                if open == 2 and gap == 0:
-                    open_3 += 1
-            # TODO: rules for 4 -- ?
-            # TODO: rules for double 3 open & double 4 (semi-)open
             if count == 4 and gap <= 2:
                 points += 100 * open
-                if open == 1 and gap == 0:
-                    half_open_4 += 1
-            if count == 5 and gap == 0:
-                points += 1000
-
-
             if count == 2 and open + gap >= 2.5:
                 threats += 0.05
             elif count == 3 and open + gap in [1.5, 2]:
@@ -97,51 +105,35 @@ class AIPlayer:
             elif count == 5 and gap == 0:
                 #return (25, None)
                 threats += 25
+                points += 1000
+
             # TODO: 2x --xx--
 
-        if open_3 >= 2 or open_3 >= 1 and half_open_4 >= 1:
-        #if threats >= 4:
+        #if open_3 >= 2 or open_3 >= 1 and half_open_4 >= 1:
+        if threats >= 4:
             points += 100
         return (points, threats, defenses)
 
-    def update_proximity_map(self, y, x):
-        n = self.board.size
-        r = self.reach
-        for yy in range(max(0, y-r), min(y+(r+1), n)):
-            for xx in range(max(0, x-r), min(x+(r+1), n)):
-                self.proximity_map[yy][xx] += 1
+    def get_possible_moves(self, state, depth):
+        moves = []
+        for y in range(self.board.get_size()):
+            for x in range(self.board.get_size()):
+                # TODO: Use either .get_size() or .size consistently!
+                if state[y][x] == '.' and self.proximity_map[y][x] >= 1:
+                    own, _, _ = self.evaluate_threat(state, y, x, PIECES[self.player_two], PIECES[not self.player_two])
+                    #if own >= 1000:
+                    #    return [(-99999, y, x)]
+                    foe, _, _ = self.evaluate_threat(state, y, x, PIECES[not self.player_two], PIECES[self.player_two])
+                    prio1 = -(1.1 * own + foe)
+                    prio2 = -(1.4 * own + 0.7 * foe)
+                    moves.append((max(prio1, prio2), y, x))
+        return sorted(moves)
+
 
     def get_async_branch(self, move):
         child = copy.deepcopy(self.board.state)
         child[move[1]][move[2]] = PIECES[self.player_two]
         return self.minimax(child, move, self.depth, -999999, 999999, False)
-    
-    def get_move(self, board, player_two):
-        defenses = None
-        self.player_two = player_two
-        state = board.state
-        if len(self.board.moves) > 0:
-            y, x, _ = self.board.moves[-1]
-            self.update_proximity_map(y, x)
-            points, threat, defenses = self.evaluate_threat(self.board.state, y, x, PIECES[not player_two], PIECES[player_two])
-            print('Threat: ', threat, 'Defend in positions: ', defenses)
-        #if len(defenses) == 0:
-        moves = self.get_possible_moves(state, self.depth)[:self.limit_moves+8]
-        #else:
-        #moves = [(0, defense[0], defense[1]) for defense in defenses]
-        print(moves)
-        best_move, best_value = None, -999999
-        with ProcessPoolExecutor() as ex:
-            for move, value in zip(moves, ex.map(self.get_async_branch, moves)):
-                print(value)
-                if best_move is None or value > best_value:
-                    best_value = value
-                    best_move = move
-        y, x = best_move[1:]
-        self.update_proximity_map(y, x)
-        #[print(row) for row in self.proximity_map]
-        print('Best: ',best_value)
-        return (y, x)
 
     def minimax(self, node, move, depth, a, b, maxing):
         if self.board.is_winning_move(node, move[1], move[2], PIECES[not maxing * self.player_two]):
