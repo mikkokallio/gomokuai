@@ -31,6 +31,7 @@ class AIPlayer:
     def evaluate_threat(self, state, y, x, color, foe_color):
         '''Check if move completes 2s, 3s, 4s, or 5s'''
         threats = 0
+        openings = []
         for dir in DIRECTIONS:
             count, open, prev, gap = 1, 0, None, 0
             for sign in [-1, +1]:
@@ -51,23 +52,25 @@ class AIPlayer:
                         if prev == '.':
                             open += 1.5
                             break
-                        prev = '.'
+                        else:
+                            openings.append((yy, xx))
+                            prev = '.'
             if count == 2 and open + gap >= 2.5:
-                threats += 0.01
+                threats += 0.05
             elif count == 3 and open + gap in [1.5, 2]:
-                threats += 0.1
+                threats += 0.25
             elif count == 3 and (open > 2 or open + gap >= 3):
-                threats += 1
-            elif count == 4 and open + gap >= 1:
-                threats += 1
-            elif count == 4 and open >= 2 and gap == 0:
+#            elif count == 3 and (open > 2 or open >= 2 and gap == 1): <-- lost!
                 threats += 2
+            elif count == 4 and open + gap >= 1 and open + gap < 2:
+                threats += 2
+            elif count == 4 and open >= 2 and gap == 0:
+                threats += 5
             elif count == 5 and gap == 0:
-                return 10
-                #threats += 10
-            # 2x --xx--
+                return (25, None)
+            # TODO: 2x --xx--
 
-        return threats
+        return (threats, openings)
 
     def evaluate_move(self, state, y, x, color, foe_color):
         '''Check if move completes 2s, 3s, 4s, or 5s'''
@@ -113,12 +116,8 @@ class AIPlayer:
                     half_open_4 += 1
             if count == 5 and gap == 0:
                 return 1000
-                #points += 1000
         if open_3 >= 2 or open_3 >= 1 and half_open_4 >= 1:
             points += 100
-            #print(f'OUCH! {y} {x}')
-            #[print(row) for row in state]
-
         return points
 
     def update_proximity_map(self, y, x):
@@ -159,7 +158,8 @@ class AIPlayer:
             return -1 if maxing else 1
         if depth == 0:
             #return 0
-            threats = self.evaluate_threat(node, move[1], move[2], PIECES[not maxing * self.player_two], PIECES[maxing * self.player_two]) / 10
+            threats, _ = self.evaluate_threat(node, move[1], move[2], PIECES[not maxing * self.player_two], PIECES[maxing * self.player_two])
+            threats /= 10
             return -threats if maxing else threats
         v = -999999 if maxing else 999999
         for newmove in self.get_possible_moves(node, depth)[:self.limit_moves]:
