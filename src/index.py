@@ -12,10 +12,10 @@ ROW = 5
 def main():
     
     board = Board(SIZE, ROW, opening=True)
-    board.add_piece(6, 6, 'X')
-    board.add_piece(6, 8, 'O')
-    board.add_piece(6, 3, 'X')
-    white_turn = True
+    #board.add_piece(6, 6, 'X')
+    #board.add_piece(6, 8, 'O')
+    #board.add_piece(6, 3, 'X')
+    white_turn = False
 
     human_00 = HumanPlayer()
     human_01 = HumanPlayer()

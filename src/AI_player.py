@@ -19,10 +19,10 @@ class AIPlayer:
             for x in range(self.board.get_size()):
                 # TODO: Use either .get_size() or .size consistently!
                 if state[y][x] == '.' and self.proximity_map[y][x] >= 1:
-                    own = self.evaluate_move(state, y, x, PIECES[self.player_two], PIECES[not self.player_two])
+                    own, _, _ = self.evaluate_threat(state, y, x, PIECES[self.player_two], PIECES[not self.player_two])
                     #if own >= 1000:
                     #    return [(-99999, y, x)]
-                    foe = self.evaluate_move(state, y, x, PIECES[not self.player_two], PIECES[self.player_two])
+                    foe, _, _ = self.evaluate_threat(state, y, x, PIECES[not self.player_two], PIECES[self.player_two])
                     prio1 = -(1.1 * own + foe)
                     prio2 = -(1.4 * own + 0.7 * foe)
                     moves.append((max(prio1, prio2), y, x))
@@ -31,8 +31,11 @@ class AIPlayer:
     def evaluate_threat(self, state, y, x, color, foe_color):
         '''Check if move completes 2s, 3s, 4s, or 5s'''
         threats = 0
-        openings = []
+        points, pp = 0, 2
+        open_3, half_open_4 = 0, 0
+        defenses = []
         for dir in DIRECTIONS:
+            openings = []
             count, open, prev, gap = 1, 0, None, 0
             for sign in [-1, +1]:
                 yy, xx, prev = y, x, None
@@ -42,10 +45,14 @@ class AIPlayer:
                     if yy < 0 or xx < 0 or yy >= self.board.size or xx >= self.board.size or state[yy][xx] == foe_color:
                         if prev == '.':
                             open += 1
+                            pp -= 1
+                        else:
+                            pp -= 0.35
                         break
                     if state[yy][xx] == color:
                         if prev == '.':
                             gap += 1
+                            pp -= 0.25
                         count += 1
                         prev = color
                     elif state[yy][xx] == '.':
@@ -55,53 +62,8 @@ class AIPlayer:
                         else:
                             openings.append((yy, xx))
                             prev = '.'
-            if count == 2 and open + gap >= 2.5:
-                threats += 0.05
-            elif count == 3 and open + gap in [1.5, 2]:
-                threats += 0.25
-            elif count == 3 and (open > 2 or open + gap >= 3):
-#            elif count == 3 and (open > 2 or open >= 2 and gap == 1): <-- lost!
-                threats += 2
-            elif count == 4 and open + gap >= 1 and open + gap < 2:
-                threats += 2
-            elif count == 4 and open >= 2 and gap == 0:
-                threats += 5
-            elif count == 5 and gap == 0:
-                return (25, None)
-            # TODO: 2x --xx--
-
-        return (threats, openings)
-
-    def evaluate_move(self, state, y, x, color, foe_color):
-        '''Check if move completes 2s, 3s, 4s, or 5s'''
-        points = 0
-        open_3 = 0
-        half_open_4 = 0
-        for dir in DIRECTIONS:
-            count, open, prev, gap = 1, 2, None, 0
-            for sign in [-1, +1]:
-                yy, xx = y, x
-                prev = None
-                for _ in range(1, 5):
-                    yy += sign * dir[0]
-                    xx += sign * dir[1]
-                    if yy < 0 or xx < 0 or yy >= self.board.size or xx >= self.board.size or state[yy][xx] == foe_color:
-                        if prev != '.':
-                            open -= 1
-                        else:
-                            open -= 0.35 # Only one spot left!
-                        break
-                    if state[yy][xx] == color:
-                        if prev == '.':
-                            gap += 1
-                            open -= 0.25
-                        count += 1
-                        prev = color
-                    elif state[yy][xx] == '.':
-                        if prev == '.':
-                            break
-                        prev = '.'
-            open = max(0, open)
+            pp = max(0, pp)
+            #print(count, open, gap)
             if count == 2 and open == 2:
                 points += 1 * open
             if count == 3:
@@ -115,10 +77,32 @@ class AIPlayer:
                 if open == 1 and gap == 0:
                     half_open_4 += 1
             if count == 5 and gap == 0:
-                return 1000
+                points += 1000
+
+
+            if count == 2 and open + gap >= 2.5:
+                threats += 0.05
+            elif count == 3 and open + gap in [1.5, 2]:
+                threats += 0.25
+            elif count == 3 and (open > 2 or open + gap >= 3):
+#            elif count == 3 and (open > 2 or open >= 2 and gap == 1): <-- lost!
+                threats += 2
+                defenses.extend(openings)
+            elif count == 4 and open + gap >= 1 and open + gap < 2:
+                threats += 2
+                defenses.extend(openings)
+            elif count == 4 and open >= 2 and gap == 0:
+                threats += 5
+                defenses.extend(openings)
+            elif count == 5 and gap == 0:
+                #return (25, None)
+                threats += 25
+            # TODO: 2x --xx--
+
         if open_3 >= 2 or open_3 >= 1 and half_open_4 >= 1:
+        #if threats >= 4:
             points += 100
-        return points
+        return (points, threats, defenses)
 
     def update_proximity_map(self, y, x):
         n = self.board.size
@@ -133,12 +117,18 @@ class AIPlayer:
         return self.minimax(child, move, self.depth, -999999, 999999, False)
     
     def get_move(self, board, player_two):
+        defenses = None
+        self.player_two = player_two
+        state = board.state
         if len(self.board.moves) > 0:
             y, x, _ = self.board.moves[-1]
             self.update_proximity_map(y, x)
-        self.player_two = player_two
-        state = board.state
+            points, threat, defenses = self.evaluate_threat(self.board.state, y, x, PIECES[not player_two], PIECES[player_two])
+            print('Threat: ', threat, 'Defend in positions: ', defenses)
+        #if len(defenses) == 0:
         moves = self.get_possible_moves(state, self.depth)[:self.limit_moves+8]
+        #else:
+        #moves = [(0, defense[0], defense[1]) for defense in defenses]
         print(moves)
         best_move, best_value = None, -999999
         with ProcessPoolExecutor() as ex:
@@ -158,7 +148,7 @@ class AIPlayer:
             return -1 if maxing else 1
         if depth == 0:
             #return 0
-            threats, _ = self.evaluate_threat(node, move[1], move[2], PIECES[not maxing * self.player_two], PIECES[maxing * self.player_two])
+            _, threats, _ = self.evaluate_threat(node, move[1], move[2], PIECES[not maxing * self.player_two], PIECES[maxing * self.player_two])
             threats /= 10
             return -threats if maxing else threats
         v = -999999 if maxing else 999999
