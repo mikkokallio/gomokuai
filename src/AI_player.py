@@ -52,7 +52,6 @@ class AIPlayer:
                             open += 1.5
                             break
                         prev = '.'
-            # -xxx-- or -x-xx-
             if count == 2 and open + gap >= 2.5:
                 threats += 0.01
             elif count == 3 and open + gap in [1.5, 2]:
