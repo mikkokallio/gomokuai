@@ -20,8 +20,10 @@ class AIPlayer:
                 # TODO: Use either .get_size() or .size consistently!
                 if state[y][x] == '.' and self.proximity_map[y][x] >= 1:
                     own = self.evaluate_move(state, y, x, PIECES[self.player_two], PIECES[not self.player_two])
+                    #if own >= 1000:
+                    #    return [(-99999, y, x)]
                     foe = self.evaluate_move(state, y, x, PIECES[not self.player_two], PIECES[self.player_two])
-                    prio = -(1.1 * own + foe)
+                    prio = -(2 * own + foe)
                     moves.append((prio, y, x))
         return sorted(moves)
 
@@ -57,6 +59,7 @@ class AIPlayer:
             elif count == 4 and open >= 2 and gap == 0:
                 threats += 2
             elif count == 5 and gap == 0:
+                #return 10
                 threats += 10
             # 2x --xx--
 
@@ -105,6 +108,7 @@ class AIPlayer:
                 if open == 1 and gap == 0:
                     half_open_4 += 1
             if count == 5 and gap == 0:
+                #return 1000
                 points += 1000
         if open_3 >= 2 or open_3 >= 1 and half_open_4 >= 1:
             points += 100
@@ -136,13 +140,14 @@ class AIPlayer:
         best_move, best_value = None, -999999
         with ProcessPoolExecutor() as ex:
             for move, value in zip(moves, ex.map(self.get_async_branch, moves)):
+                print(value)
                 if best_move is None or value > best_value:
                     best_value = value
                     best_move = move
         y, x = best_move[1:]
         self.update_proximity_map(y, x)
         #[print(row) for row in self.proximity_map]
-        print(best_value)
+        print('Best: ',best_value)
         return (y, x)
 
     def minimax(self, node, move, depth, a, b, maxing):

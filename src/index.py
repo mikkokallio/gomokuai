@@ -12,16 +12,17 @@ ROW = 5
 def main():
     
     board = Board(SIZE, ROW, opening=True)
-    board.add_piece(6, 6, 'X')
-    board.add_piece(6, 8, 'O')
-    board.add_piece(6, 3, 'X')
-    white_turn = True
+    #board.add_piece(6, 6, 'X')
+    #board.add_piece(6, 8, 'O')
+    #board.add_piece(6, 3, 'X')
+    white_turn = False
 
     human_00 = HumanPlayer()
     human_01 = HumanPlayer()
     computer_01 = AIPlayerV1(3, board)
     computer_02 = AIPlayerV2(5, board)
     computer_03 = AIPlayerV3(7, 2, board)
+    computer_03b = AIPlayerV3(7, 2, board)
     computer_04 = AIPlayer(depth=11, reach=2, limit_moves=3, board=board)
 
     players = [computer_03, computer_04]
@@ -36,7 +37,7 @@ def main():
             win = board.add_piece(y, x, color=PIECES[white_turn])
             board.print()
             if win:
-                print(f'{ROW} in a row!', white_turn)
+                print(f'{PIECES[white_turn]} wins on turn {turn}!')
                 break
             white_turn = not white_turn
         except ValueError:
