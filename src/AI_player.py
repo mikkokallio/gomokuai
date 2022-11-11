@@ -23,8 +23,9 @@ class AIPlayer:
                     #if own >= 1000:
                     #    return [(-99999, y, x)]
                     foe = self.evaluate_move(state, y, x, PIECES[not self.player_two], PIECES[self.player_two])
-                    prio = -(2 * own + foe)
-                    moves.append((prio, y, x))
+                    prio1 = -(1.1 * own + foe)
+                    prio2 = -(1.4 * own + 0.7 * foe)
+                    moves.append((max(prio1, prio2), y, x))
         return sorted(moves)
 
     def evaluate_threat(self, state, y, x, color, foe_color):
@@ -52,15 +53,19 @@ class AIPlayer:
                             break
                         prev = '.'
             # -xxx-- or -x-xx-
-            if count == 3 and (open >= 2 or open + gap >= 3):
+            if count == 2 and open + gap >= 2.5:
+                threats += 0.01
+            elif count == 3 and open + gap in [1.5, 2]:
+                threats += 0.1
+            elif count == 3 and (open > 2 or open + gap >= 3):
                 threats += 1
             elif count == 4 and open + gap >= 1:
                 threats += 1
             elif count == 4 and open >= 2 and gap == 0:
                 threats += 2
             elif count == 5 and gap == 0:
-                #return 10
-                threats += 10
+                return 10
+                #threats += 10
             # 2x --xx--
 
         return threats
@@ -108,8 +113,8 @@ class AIPlayer:
                 if open == 1 and gap == 0:
                     half_open_4 += 1
             if count == 5 and gap == 0:
-                #return 1000
-                points += 1000
+                return 1000
+                #points += 1000
         if open_3 >= 2 or open_3 >= 1 and half_open_4 >= 1:
             points += 100
             #print(f'OUCH! {y} {x}')
@@ -135,7 +140,7 @@ class AIPlayer:
             self.update_proximity_map(y, x)
         self.player_two = player_two
         state = board.state
-        moves = self.get_possible_moves(state, self.depth)[:self.limit_moves+2]
+        moves = self.get_possible_moves(state, self.depth)[:self.limit_moves+8]
         print(moves)
         best_move, best_value = None, -999999
         with ProcessPoolExecutor() as ex:
