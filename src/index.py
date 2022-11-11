@@ -22,7 +22,7 @@ def main():
     computer_01 = AIPlayerV1(3, board)
     computer_02 = AIPlayerV2(5, board)
     computer_03 = AIPlayerV3(7, 2, board)
-    computer_04 = AIPlayer(depth=13, reach=2, limit_moves=3, board=board)
+    computer_04 = AIPlayer(depth=11, reach=2, limit_moves=3, board=board)
 
     players = [computer_03, computer_04]
 

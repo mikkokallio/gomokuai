@@ -25,6 +25,43 @@ class AIPlayer:
                     moves.append((prio, y, x))
         return sorted(moves)
 
+    def evaluate_threat(self, state, y, x, color, foe_color):
+        '''Check if move completes 2s, 3s, 4s, or 5s'''
+        threats = 0
+        for dir in DIRECTIONS:
+            count, open, prev, gap = 1, 0, None, 0
+            for sign in [-1, +1]:
+                yy, xx, prev = y, x, None
+                for _ in range(1, 5):
+                    yy += sign * dir[0]
+                    xx += sign * dir[1]
+                    if yy < 0 or xx < 0 or yy >= self.board.size or xx >= self.board.size or state[yy][xx] == foe_color:
+                        if prev == '.':
+                            open += 1
+                        break
+                    if state[yy][xx] == color:
+                        if prev == '.':
+                            gap += 1
+                        count += 1
+                        prev = color
+                    elif state[yy][xx] == '.':
+                        if prev == '.':
+                            open += 1.5
+                            break
+                        prev = '.'
+            # -xxx-- or -x-xx-
+            if count == 3 and (open >= 2 or open + gap >= 3):
+                threats += 1
+            elif count == 4 and open + gap >= 1:
+                threats += 1
+            elif count == 4 and open >= 2 and gap == 0:
+                threats += 2
+            elif count == 5 and gap == 0:
+                threats += 10
+            # 2x --xx--
+
+        return threats
+
     def evaluate_move(self, state, y, x, color, foe_color):
         '''Check if move completes 2s, 3s, 4s, or 5s'''
         points = 0
@@ -89,7 +126,7 @@ class AIPlayer:
         return self.minimax(child, move, self.depth, -999999, 999999, False)
     
     def get_move(self, board, player_two):
-        if len(self.board.moves) > 0:            
+        if len(self.board.moves) > 0:
             y, x, _ = self.board.moves[-1]
             self.update_proximity_map(y, x)
         self.player_two = player_two
@@ -111,8 +148,10 @@ class AIPlayer:
     def minimax(self, node, move, depth, a, b, maxing):
         if self.board.is_winning_move(node, move[1], move[2], PIECES[not maxing * self.player_two]):
             return -1 if maxing else 1
-        if sum([row.count('.') for row in node]) == 0 or depth == 0:
-            return 0
+        if depth == 0:
+            #return 0
+            threats = self.evaluate_threat(node, move[1], move[2], PIECES[not maxing * self.player_two], PIECES[maxing * self.player_two]) / 10
+            return -threats if maxing else threats
         v = -999999 if maxing else 999999
         for newmove in self.get_possible_moves(node, depth)[:self.limit_moves]:
             child = copy.deepcopy(node)
