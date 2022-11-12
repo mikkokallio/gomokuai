@@ -14,7 +14,7 @@ class AIPlayer:
         self.proximity_map[int(n/2)][int(n/2)] = 1 # center square always available!
 
     def get_move(self, board, player_two):
-        defenses = None
+        defenses = []
         self.player_two = player_two
         state = board.state
         if len(self.board.moves) > 0:
@@ -22,11 +22,7 @@ class AIPlayer:
             self.update_proximity_map(y, x)
             threat, defenses = self.evaluate_threat(self.board.state, y, x, PIECES[not player_two], PIECES[player_two])
             print('Threat: ', threat, 'Defend in positions: ', defenses)
-        if defenses is None or len(defenses) == 0:
-            moves = self.get_possible_moves(state, self.depth)[:self.limit_moves+8]
-        else:
-            moves = [(0, defense[0], defense[1], [], []) for defense in defenses] # no threat analysis?
-        print(moves)
+        moves = self.get_possible_moves(state, defenses, True)[:self.limit_moves+8]
         if len(moves) == 1:
             y, x = moves[0][1:3]
         else:
@@ -54,20 +50,18 @@ class AIPlayer:
             for xx in range(max(0, x-r), min(x+(r+1), n)):
                 self.proximity_map[yy][xx] += 1
 
-    def get_possible_moves(self, state, depth):
-        moves = []
-        for y in range(self.board.get_size()):
-            for x in range(self.board.get_size()):
-                # TODO: Use either .get_size() or .size consistently!
-                if state[y][x] == '.' and self.proximity_map[y][x] >= 1:
-                    own, defenses = self.evaluate_threat(state, y, x, PIECES[self.player_two], PIECES[not self.player_two])
-                    #if own >= 1000:
-                    #    return [(-99999, y, x)]
-                    foe, _ = self.evaluate_threat(state, y, x, PIECES[not self.player_two], PIECES[self.player_two])
-                    prio1 = -(1.1 * own + foe)
-                    prio2 = -(1.4 * own + 0.7 * foe)
-                    moves.append((max(prio1, prio2), y, x, own, defenses))
-        return sorted(moves)
+    def get_possible_moves(self, state, moves, max_node):
+        eval_moves = []
+        if len(moves) == 0:
+            n = self.board.get_size()
+            moves = [(y, x) for x in range(n) for y in range(n) if state[y][x] == '.' and self.proximity_map[y][x] >= 1]
+        for y, x in moves:
+            own, defenses = self.evaluate_threat(state, y, x, PIECES[max_node * self.player_two], PIECES[not max_node * self.player_two])
+            foe, _ = self.evaluate_threat(state, y, x, PIECES[not max_node * self.player_two], PIECES[max_node * self.player_two])
+            #if own >= 1000:
+            #    return [(-99999, y, x)]
+            eval_moves.append((-(2 * own + foe), y, x, own, defenses))
+        return sorted(eval_moves)
 
     def evaluate_threat(self, state, y, x, color, foe_color):
         '''Check if move completes 2s, 3s, 4s, or 5s'''
@@ -130,32 +124,23 @@ class AIPlayer:
 
         return (threats, defenses)
 
-    def minimax(self, node, move, depth, a, b, maxing):
-        if self.board.is_winning_move(node, move[1], move[2], PIECES[not maxing * self.player_two]):
-            return -1 if maxing else 1
+    def minimax(self, node, move, depth, a, b, max_node):
+        if self.board.is_winning_move(node, move[1], move[2], PIECES[not max_node * self.player_two]):
+            return -1 if max_node else 1
         if depth == 0:
             #return 0
-            threats, _ = self.evaluate_threat(node, move[1], move[2], PIECES[not maxing * self.player_two], PIECES[maxing * self.player_two])
+            threats, _ = self.evaluate_threat(node, move[1], move[2], PIECES[not max_node * self.player_two], PIECES[max_node * self.player_two])
             threats /= 10
-            return -threats if maxing else threats
-        v = -999999 if maxing else 999999
-        #_, self.evaluate_threat(node, move[1], move[2], PIECES[not maxing * self.player_two], PIECES[maxing * self.player_two])
-        if len(move[4]) == 0:
-            moves = self.get_possible_moves(node, self.depth)[:self.limit_moves]
-        else:
-            #moves = [(0, defense[0], defense[1], [], []) for defense in move[4]] # no reciprocated threat analysis?
-            moves = []
-            for defense in move[4]:
-                threats, defenses = self.evaluate_threat(node, defense[0], defense[1], PIECES[maxing * self.player_two], PIECES[not maxing * self.player_two])
-                moves.append((threats, defense[0],defense[1], threats, defenses))
-                moves = sorted(moves)
+            return -threats if max_node else threats
+        v = -999999 if max_node else 999999
+        moves = self.get_possible_moves(node, move[4], max_node)[:self.limit_moves]
         #for newmove in self.get_possible_moves(node, depth)[:self.limit_moves]:
         for newmove in moves:
             child = copy.deepcopy(node)
-            child[newmove[1]][newmove[2]] = PIECES[maxing * self.player_two]
-            recurse = self.minimax(child, newmove, depth-1, a, b, not maxing)
-            v = max(v, recurse) if maxing else min(v, recurse)
-            if maxing:
+            child[newmove[1]][newmove[2]] = PIECES[max_node * self.player_two]
+            recurse = self.minimax(child, newmove, depth-1, a, b, not max_node)
+            v = max(v, recurse) if max_node else min(v, recurse)
+            if max_node:
                 a = max(a, v)
             else:
                 b = min(b, v)
