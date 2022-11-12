@@ -1,4 +1,4 @@
-# Weekly report 1
+# Weekly report 2
 
 ## What did I do this week?
 
@@ -11,7 +11,7 @@ I also added some other things for the most relevant classes (not including old 
 
 ## What progress did I make?
 
-The main task was improving the AI -- to make it faster and also more "intelligent" i.e. winning with a higher likelihood. That's going really well.
+The main task was improving the AI -- to make it faster and also more "intelligent" i.e. winning with a higher likelihood. That's going really well. I develop the AI in iterations, where "graduating" to the next iteration requires that the newer version must play white (i.e. not go first) and still beat the older version. That gets tougher and tougher to do since black has a significant advantage.
 
 I started with a totally random bot that didn't know any rules other than legal placement of stones. Then I created a simple AI ('Iteration 1') that understood the rules, and tested that it could beat the random bot consistently.
 
@@ -23,11 +23,11 @@ The current one ('Iteration 4') also uses multiprocessing and has a much better 
 
 ## How is the program progressing?
 
-The basic structure is mostly there. I've also tried to make it easier to test different AI configurations.
+Besides the AI development, the basic structure of the program is mostly there. I've also parametrized the AI to make it easier to test different configurations.
 
 ## What did I learn this week?
 
-The most important learning is regarding how to make a-b pruning more effective. It's also very useful to simply remove branches that cannot win (you have to counter threats or you lose)
+The most important learning is regarding how to make a-b pruning more effective. It's also very useful to simply remove branches that don't respond to threats because a few turns later, that player would lose.
 
 ## What was unclear or has been challenging?
 
