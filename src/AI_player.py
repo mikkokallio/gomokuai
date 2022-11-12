@@ -14,6 +14,7 @@ class AIPlayer:
         self.proximity_map[int(n/2)][int(n/2)] = 1 # center square always available!
 
     def get_move(self, board, player_two):
+        '''Asks AI to compute an optimal move, given board state'''
         defenses = []
         self.player_two = player_two
         state = board.state
@@ -39,11 +40,13 @@ class AIPlayer:
         return (y, x)
 
     def async_search_branch(self, move):
+        '''Search game tree's first level in parallel'''
         child = copy.deepcopy(self.board.state)
         child[move[1]][move[2]] = PIECES[self.player_two]
         return self.minimax(child, move, self.depth, -999999, 999999, False)
 
     def update_proximity_map(self, y, x):
+        '''Updates heatmap that determines which moves are considered'''
         n = self.board.size
         r = self.reach
         for yy in range(max(0, y-r), min(y+(r+1), n)):
@@ -51,6 +54,7 @@ class AIPlayer:
                 self.proximity_map[yy][xx] += 1
 
     def get_possible_moves(self, state, moves, max_node):
+        '''Get a list of possible moves, given board state'''
         eval_moves = []
         if len(moves) == 0:
             n = self.board.get_size()
@@ -64,7 +68,7 @@ class AIPlayer:
         return sorted(eval_moves)
 
     def evaluate_threat(self, state, y, x, color, foe_color):
-        '''Check if move completes 2s, 3s, 4s, or 5s'''
+        '''Check if move creates a threat and score the new state'''
         threats = 0
         defenses = []
         for dir in DIRECTIONS:
@@ -125,6 +129,7 @@ class AIPlayer:
         return (threats, defenses)
 
     def minimax(self, node, move, depth, a, b, max_node):
+        '''Perform minimaxing with a-b pruning'''
         if self.board.is_winning_move(node, move[1], move[2], PIECES[not max_node * self.player_two]):
             return -1 if max_node else 1
         if depth == 0:

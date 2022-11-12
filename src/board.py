@@ -10,6 +10,7 @@ class Board:
         # TODO: Add info about turn black/white, turn number, other stats?
 
     def print(self):
+        '''Output board state with position numbering'''
         print('  ' + ''.join([f'{x:02d}'[0] for x in range(self.size)]))
         print('  ' + ''.join([f'{x:02d}'[1] for x in range(self.size)]))
         for y, row in enumerate(self.state):
@@ -17,9 +18,11 @@ class Board:
         print('')
 
     def get_size(self):
+        '''Number of squares per board's size'''
         return self.size
     
     def add_piece(self, y, x, color):
+        '''Places a new stone on the board if the move is legal and checks if the player wins'''
         if self.is_legal_move(y, x, color):
             self.state[y][x] = color
             self.moves.append((y, x, color))
@@ -28,6 +31,7 @@ class Board:
         return self.is_winning_move(self.state, y, x, color)
 
     def is_legal_move(self, y, x, color):
+        '''Checks the legality of a move'''
         if y < 0 or y >= self.size or x < 0 or x >= self.size:
             return False
         if color not in [PIECES[False], PIECES[True]]:
@@ -39,7 +43,7 @@ class Board:
         return True
 
     def is_winning_move(self, state, y, x, color):
-        '''Check if new piece forms a row of exactly 5 pieces'''
+        '''Checks if a move completes a row of exactly 5 stones'''
         for dir in DIRECTIONS:
             count = 1
             for sign in [-1, +1]:
