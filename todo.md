@@ -1,6 +1,5 @@
 Viikko 2:
 Palautus 2: lauantaina 12.11. klo 22:59
-Dokumentaatio: Kirjoitettu koodi on selkeää ja kommentoitua (esim. Javalla tehdyssä työssä Javadoc-kommentit).
 Viikkoraportti numero 2: ks. Palautukset
 Testaus: Koodin kattava yksikkötestaus. (esim. Javalla tehdyssä työssä JUnit)
 Varmista, että kun teet luokkia niin olet myös testannut ne mahdollisimman nopeasti/aikaisin (mieluiten testit samassa palautuksessa, kuin luokat on koodattu). Siten tiedät, että koodi, jonka juuri kirjoitit toimii kuten haluat. Tarvittaessa tutustu yksikkötestaukseen tukimateriaalissa.
