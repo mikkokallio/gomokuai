@@ -15,7 +15,7 @@ def main():
     #board.add_piece(6, 6, 'X')
     #board.add_piece(6, 8, 'O')
     #board.add_piece(6, 3, 'X')
-    white_turn = False
+    white_turn = True
 
     human_00 = HumanPlayer()
     human_01 = HumanPlayer()

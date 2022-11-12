@@ -22,7 +22,7 @@ class AIPlayer:
             self.update_proximity_map(y, x)
             threat, defenses = self.evaluate_threat(self.board.state, y, x, PIECES[not player_two], PIECES[player_two])
             print('Threat: ', threat, 'Defend in positions: ', defenses)
-        if len(defenses) == 0:
+        if defenses is None or len(defenses) == 0:
             moves = self.get_possible_moves(state, self.depth)[:self.limit_moves+8]
         else:
             moves = [(0, defense[0], defense[1], [], []) for defense in defenses] # no threat analysis?
@@ -143,8 +143,12 @@ class AIPlayer:
         if len(move[4]) == 0:
             moves = self.get_possible_moves(node, self.depth)[:self.limit_moves]
         else:
-            moves = [(0, defense[0], defense[1], [], []) for defense in move[4]] # no reciprocated threat analysis?
-    
+            #moves = [(0, defense[0], defense[1], [], []) for defense in move[4]] # no reciprocated threat analysis?
+            moves = []
+            for defense in move[4]:
+                threats, defenses = self.evaluate_threat(node, defense[0], defense[1], PIECES[maxing * self.player_two], PIECES[not maxing * self.player_two])
+                moves.append((threats, defense[0],defense[1], threats, defenses))
+                moves = sorted(moves)
         #for newmove in self.get_possible_moves(node, depth)[:self.limit_moves]:
         for newmove in moves:
             child = copy.deepcopy(node)
