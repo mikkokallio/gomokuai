@@ -22,15 +22,15 @@ def main():
     computer_01 = AIPlayerV1(3, board) # Old version!
     computer_02 = AIPlayerV2(5, board) # Old version!
     computer_03 = AIPlayerV3(7, 2, board, randomness=False) # Old version!
-    computer_05 = AIPlayer(depth=11, reach=2, limit_moves=3, board=board)
+    computer_05 = AIPlayer(depth=9, reach=2, limit_moves=5, board=board)
 
-    players = [computer_03, computer_05]
+    players = [computer_02, computer_05]
 
     start_time = perf_counter()
     clocks = [0.0, 0.0]
 
     for turn in range(SIZE**2):
-        #board.print()
+        board.print()
         try:
             clock_start = perf_counter()
             y, x = players[int(white_turn)].get_move(board, white_turn)
