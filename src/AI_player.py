@@ -69,11 +69,9 @@ class AIPlayer:
 
     def evaluate_threat(self, state, y, x, color, foe_color):
         '''Check if move creates a threat and score the new state'''
-        threats = 0
-        defenses = []
+        threats, defenses = 0, []
         for dir in DIRECTIONS:
-            openings = []
-            count, open, prev, gap = 1, 0, None, 0
+            count, open, gap, openings = 1, 0, 0, []
             for sign in [-1, +1]:
                 yy, xx, prev = y, x, None
                 for _ in range(1, 7):
@@ -87,7 +85,7 @@ class AIPlayer:
                         if prev == '.':
                             gap += 1
                             if len(openings) > 1:
-                                openings.reverse()
+                                openings.reverse() # blocking gaps is often more effective than open ends
                         count += 1
                         prev = color
                     elif state[yy][xx] == '.':
@@ -97,7 +95,6 @@ class AIPlayer:
                         else:
                             openings.append((yy, xx))
                             prev = '.'
-            #print(count, open, gap)
             if count == 2 and open + gap >= 2.5:
                 threats += 0.05
                 threats += 0.01 * (open + gap)
@@ -119,10 +116,9 @@ class AIPlayer:
                 defenses.extend(openings)
             elif count == 4 and open + gap >= 1:
                 threats += 2.75
-                defenses.extend(openings) # TODO: first only if gap?
+                defenses.extend(openings)
             elif count == 5 and gap == 0:
-                #return (25, None)
-                threats += 50
+                return (50, [])
 
             # TODO: 2x --xx--
 
@@ -133,14 +129,11 @@ class AIPlayer:
         if self.board.is_winning_move(node, move[1], move[2], PIECES[not max_node * self.player_two]):
             return -1 if max_node else 1
         if depth == 0:
-            #return 0
             threats, _ = self.evaluate_threat(node, move[1], move[2], PIECES[not max_node * self.player_two], PIECES[max_node * self.player_two])
             threats /= 10
             return -threats if max_node else threats
         v = -999999 if max_node else 999999
-        moves = self.get_possible_moves(node, move[4], max_node)[:self.limit_moves]
-        #for newmove in self.get_possible_moves(node, depth)[:self.limit_moves]:
-        for newmove in moves:
+        for newmove in self.get_possible_moves(node, move[4], max_node)[:self.limit_moves]:
             child = copy.deepcopy(node)
             child[newmove[1]][newmove[2]] = PIECES[max_node * self.player_two]
             recurse = self.minimax(child, newmove, depth-1, a, b, not max_node)
