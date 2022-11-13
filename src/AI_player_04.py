@@ -2,7 +2,7 @@ import copy
 from concurrent.futures import ProcessPoolExecutor
 from board import PIECES, DIRECTIONS
 
-class AIPlayer:
+class AIPlayerV4:
     def __init__ (self, depth, reach, limit_moves, board):
         self.depth = depth
         self.reach = reach
@@ -36,7 +36,7 @@ class AIPlayer:
                         best_move = move
             y, x = best_move[1:3]
             self.update_proximity_map(y, x)
-            #print('Best: ',best_value)
+            print('Best: ',best_value)
         return (y, x)
 
     def async_search_branch(self, move):
@@ -62,8 +62,8 @@ class AIPlayer:
         for y, x in moves:
             own, defenses = self.evaluate_threat(state, y, x, PIECES[max_node * self.player_two], PIECES[not max_node * self.player_two])
             foe, _ = self.evaluate_threat(state, y, x, PIECES[not max_node * self.player_two], PIECES[max_node * self.player_two])
-            if own >= 50:
-                return [(0, y, x, own, [])]
+            #if own >= 1000:
+            #    return [(-99999, y, x)]
             eval_moves.append((-(2 * own + foe), y, x, own, defenses))
         return sorted(eval_moves)
 
@@ -119,7 +119,7 @@ class AIPlayer:
                 defenses.extend(openings)
             elif count == 4 and open + gap >= 1:
                 threats += 2.75
-                defenses.extend(openings) # TODO: first only if gap?
+                defenses.extend(openings) # TODO: first only!
             elif count == 5 and gap == 0:
                 #return (25, None)
                 threats += 50

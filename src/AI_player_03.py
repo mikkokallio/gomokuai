@@ -3,10 +3,11 @@ import copy
 from board import PIECES, DIRECTIONS
 
 class AIPlayerV3:
-    def __init__ (self, depth, reach, board):
+    def __init__ (self, depth, reach, board, randomness):
         self.depth = depth
         self.reach = reach
         self.board = board
+        self.random = randomness
         self.player_two = None
         n = self.board.size
         self.proximity_map = [[0 for _ in range(n)] for _ in range(n)]
@@ -60,6 +61,8 @@ class AIPlayerV3:
                 points += 100 * open
             if count == 5 and gap == 0:
                 points += 1000
+        if self.random:
+            points += (points/10 * random.random())
         return points
 
     def update_proximity_map(self, y, x):
@@ -76,7 +79,7 @@ class AIPlayerV3:
         self.player_two = player_two
         state = board.state
         moves = self.get_possible_moves(state, self.depth)
-        print(moves)
+        #print(moves)
         best_move, best_value = None, -999999
         for move in moves:
             child = copy.deepcopy(state)
@@ -92,7 +95,7 @@ class AIPlayerV3:
         y, x = best_move[1:]
         self.update_proximity_map(y, x)
         #[print(row) for row in self.proximity_map]
-        print(best_value)
+        #print(best_value)
         return (y, x)
             
     def max_value(self, node, move, depth, alpha, beta):
