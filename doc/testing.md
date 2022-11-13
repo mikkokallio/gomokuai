@@ -1,5 +1,18 @@
 # Testing document
 
+## Branch coverage
+
+Week 2:
+
+Name                  Stmts   Miss Branch BrPart  Cover   Missing
+-----------------------------------------------------------------
+src\AI_player.py        124     36     72     14    69%   21->26, 28, 43-45, 58->61, 65, 76->74, 87, 90->76, 101-102, 104-105, 107-108, 112, 114-115, 117-118, 120, 128-146
+src\board.py             47      7     30      3    79%   14-18, 36, 38, 51->49
+src\human_player.py       5      0      4      0   100%
+src\scoring.py            0      0      0      0   100%
+-----------------------------------------------------------------
+TOTAL                   176     43    106     17    73%
+
 TBA!
 
 * Huomaa että jokaisen dokumentin pituus on n. 1-2 A4, poislukien kuvat ja taulukot (todellinen pituus voi olla siis merkittävästi suurempi).
