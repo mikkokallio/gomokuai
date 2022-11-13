@@ -32,11 +32,10 @@ class AIPlayer:
                 for move, value in zip(moves, ex.map(self.async_search_branch, moves)):
                     #print(value)
                     if best_move is None or value > best_value:
-                        best_value = value
-                        best_move = move
+                        best_value, best_move = value, move
             y, x = best_move[1:3]
-            self.update_proximity_map(y, x)
-            #print('Best: ',best_value)
+        self.update_proximity_map(y, x)
+        #print('Best: ',best_value)
         return (y, x)
 
     def async_search_branch(self, move):
@@ -47,7 +46,7 @@ class AIPlayer:
 
     def update_proximity_map(self, y, x):
         '''Updates heatmap that determines which moves are considered'''
-        n = self.board.size
+        n = self.board.get_size()
         r = self.reach
         for yy in range(max(0, y-r), min(y+(r+1), n)):
             for xx in range(max(0, x-r), min(x+(r+1), n)):
