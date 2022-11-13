@@ -12,10 +12,10 @@ ROW = 5
 def main():
     '''Set up board and run game loop'''
     board = Board(SIZE, ROW, opening=True)
-    #board.add_piece(6, 6, 'X')
-    #board.add_piece(6, 8, 'O')
-    #board.add_piece(6, 3, 'X')
-    white_turn = False
+    board.add_piece(6, 6, 'X')
+    board.add_piece(6, 8, 'O')
+    board.add_piece(6, 3, 'X')
+    white_turn = True
 
     human_00 = HumanPlayer()
     human_01 = HumanPlayer()

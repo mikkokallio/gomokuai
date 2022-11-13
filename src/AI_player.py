@@ -9,15 +9,30 @@ class AIPlayer:
         self.limit_moves = limit_moves
         self.board = board
         self.player_two = None
-        n = self.board.size
+        self.proximity_map = None
+
+    def init_proximity_map(self):
+        n = self.board.get_size()
         self.proximity_map = [[0 for _ in range(n)] for _ in range(n)]
-        self.proximity_map[int(n/2)][int(n/2)] = 1 # center square always available!
+        self.update_proximity_map(int(n/2), int(n/2)) # center of board always available!
+        for move in self.board.moves:
+            self.update_proximity_map(move[0], move[1])
+
+    def update_proximity_map(self, y, x):
+        '''Updates heatmap that determines which moves are considered'''
+        n = self.board.get_size()
+        r = self.reach
+        for yy in range(max(0, y-r), min(y+(r+1), n)):
+            for xx in range(max(0, x-r), min(x+(r+1), n)):
+                self.proximity_map[yy][xx] += 1
 
     def get_move(self, board, player_two):
         '''Asks AI to compute an optimal move, given board state'''
         defenses = []
         self.player_two = player_two
         state = board.state
+        if self.proximity_map is None:
+            self.init_proximity_map()
         if len(self.board.moves) > 0:
             y, x, _ = self.board.moves[-1]
             self.update_proximity_map(y, x)
@@ -44,16 +59,9 @@ class AIPlayer:
         child[move[1]][move[2]] = PIECES[self.player_two]
         return self.minimax(child, move, self.depth, -999999, 999999, False)
 
-    def update_proximity_map(self, y, x):
-        '''Updates heatmap that determines which moves are considered'''
-        n = self.board.get_size()
-        r = self.reach
-        for yy in range(max(0, y-r), min(y+(r+1), n)):
-            for xx in range(max(0, x-r), min(x+(r+1), n)):
-                self.proximity_map[yy][xx] += 1
-
     def get_possible_moves(self, state, moves, max_node):
         '''Get a list of possible moves, given board state'''
+        # TODO: Check first if possible to win! (Or remember if previous was threat)
         eval_moves = []
         if len(moves) == 0:
             n = self.board.get_size()
