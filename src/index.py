@@ -2,27 +2,24 @@ from time import perf_counter
 from board import Board, PIECES
 from human_player import HumanPlayer
 from AI_player import AIPlayer
-from AI_player_01 import AIPlayerV1
 from AI_player_02 import AIPlayerV2
 from AI_player_03 import AIPlayerV3
 from AI_player_04 import AIPlayerV4
 
 SIZE = 15
-ROW = 5
 
 def main():
     '''Set up board and run game loop'''
-    board = Board(SIZE, ROW, opening=True)
+    board = Board(SIZE)
     board.add_piece(6, 6, 'X')
     board.add_piece(6, 8, 'O')
     board.add_piece(6, 3, 'X')
     white_turn = True
 
-    human_00 = HumanPlayer()
-    human_01 = HumanPlayer()
-    computer_01 = AIPlayerV1(3, board) # Old version!
-    computer_02 = AIPlayerV2(5, board) # Old version!
-    computer_03 = AIPlayerV3(7, 2, board, randomness=True) # Old version!
+    #human_00 = HumanPlayer()
+    #human_01 = HumanPlayer()
+    #computer_02 = AIPlayerV2(5, board) # Old version!
+    #computer_03 = AIPlayerV3(7, 2, board, randomness=True) # Old version!
     computer_04 = AIPlayerV4(depth=9, reach=2, limit_moves=3, board=board)
     computer_05 = AIPlayer(depth=9, reach=2, limit_moves=3, board=board)
 

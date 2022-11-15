@@ -14,6 +14,6 @@ class Heatmap:
 
     def update(self, y, x):
         '''Updates heatmap that determines which moves are considered'''
-        for yy in range(max(0, y-self.reach), min(y+(self.reach+1), self.size)):
-            for xx in range(max(0, x-self.reach), min(x+(self.reach+1), self.size)):
-                self.heatmap[yy][xx] += 1
+        for y_pos in range(max(0, y-self.reach), min(y+(self.reach+1), self.size)):
+            for x_pos in range(max(0, x-self.reach), min(x+(self.reach+1), self.size)):
+                self.heatmap[y_pos][x_pos] += 1

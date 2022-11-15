@@ -2,23 +2,24 @@ import copy
 from concurrent.futures import ProcessPoolExecutor
 from heatmap import Heatmap
 from board import PIECES, DIRECTIONS, EMPTY
-from scoring import SCORES, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS
+from scoring import SCORES, SCORES2, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS
 
 BIG_NUM = 999999
 
+
 class AIPlayer:
-    def __init__ (self, depth, reach, limit_moves, board):
+    def __init__(self, depth, reach, limit_moves, board):
         self.depth = depth
         self.reach = reach
         self.limit_moves = limit_moves
         self.board = board
         self.size = board.size
-        self.player_two = None
+        self.white = None
         self.heatmap = None
 
-    def get_move(self, board, player_two):
+    def get_move(self, board, white):
         '''Asks AI to compute an optimal move, given board state'''
-        self.player_two = player_two
+        self.white = white
         state = board.state
         if self.heatmap is None:
             self.heatmap = Heatmap(self.size, self.reach, self.board.moves)
@@ -43,20 +44,23 @@ class AIPlayer:
     def async_search_branch(self, move):
         '''Search game tree's first level in parallel'''
         child = copy.deepcopy(self.board.state)
-        child[move[1]][move[2]] = PIECES[self.player_two]
+        child[move[1]][move[2]] = PIECES[self.white]
         return self.minimax(child, move, self.depth, -BIG_NUM, BIG_NUM, False)
 
     def get_possible_moves(self, state, max_node):
         '''Get a list of possible moves, given board state'''
         eval_moves = []
-        moves = [(y, x) for x in range(self.size) for y in range(self.size) if state[y][x] == EMPTY and self.heatmap.get()[y][x] >= 1]
+        moves = [(y, x) for x in range(self.size) for y in range(
+            self.size) if state[y][x] == EMPTY and self.heatmap.get()[y][x] >= 1]
         high_score = 0
 
         for y, x in moves:
-            own = self.evaluate_threat(state, y, x, PIECES[max_node == self.player_two], PIECES[max_node != self.player_two])
+            own = self.evaluate_threat(
+                state, y, x, PIECES[max_node == self.white], PIECES[max_node != self.white])
             if own >= VICTORY:
                 return [(0, y, x)]
-            foe = self.evaluate_threat(state, y, x, PIECES[max_node != self.player_two], PIECES[max_node == self.player_two])
+            foe = self.evaluate_threat(
+                state, y, x, PIECES[max_node != self.white], PIECES[max_node == self.white])
             score = OWN * own + foe
             if score > high_score:
                 high_score = score
@@ -73,7 +77,7 @@ class AIPlayer:
         '''Check if move creates a threat and score the new state'''
         threats = 0
         for dir in DIRECTIONS:
-            count, open, gap = 1, 0, 0
+            count, ends, gap = 1, 0, 0
             for sign in [-1, +1]:
                 yy, xx, prev = y, x, None
                 for _ in range(6):
@@ -81,7 +85,7 @@ class AIPlayer:
                     xx += sign * dir[1]
                     if yy < 0 or xx < 0 or yy >= self.size or xx >= self.size or state[yy][xx] == foe_color:
                         if prev == EMPTY:
-                            open += 1
+                            ends += 1
                         break
                     if state[yy][xx] == color:
                         if prev == EMPTY:
@@ -90,15 +94,14 @@ class AIPlayer:
                         prev = color
                     elif state[yy][xx] == EMPTY:
                         if prev == EMPTY:
-                            open += 1.5
+                            ends += 1.5
                             break
-                        else:
-                            prev = EMPTY
-            for score in SCORES:
-                if count == score[0] and open >= score[1] and gap == score[2]:
-                    threats += score[3]
+                        prev = EMPTY
+            for score in SCORES2.get(count, []):
+                if ends >= score[0] and gap == score[1]:
+                    threats += score[2]
                     break
-            threats += 0.01 * (open + gap) * count
+            threats += 0.01 * (ends + gap) * count
             if threats >= VICTORY:
                 return VICTORY
         if threats >= OPEN_FOUR:
@@ -109,15 +112,16 @@ class AIPlayer:
 
     def minimax(self, node, move, depth, a, b, max_node):
         '''Perform minimaxing with a-b pruning'''
-        if self.board.is_winning_move(node, move[1], move[2], PIECES[max_node != self.player_two]):
+        if self.board.is_winning_move(node, move[1], move[2], PIECES[max_node != self.white]):
             return -1 if max_node else 1
         if depth == 0:
-            threats = self.evaluate_threat(node, move[1], move[2], PIECES[max_node != self.player_two], PIECES[max_node == self.player_two]) / 100
+            threats = self.evaluate_threat(
+                node, move[1], move[2], PIECES[max_node != self.white], PIECES[max_node == self.white]) / 100
             return -threats if max_node else threats
         v = -BIG_NUM if max_node else BIG_NUM
         for newmove in self.get_possible_moves(node, max_node)[:self.limit_moves]:
             child = copy.deepcopy(node)
-            child[newmove[1]][newmove[2]] = PIECES[max_node == self.player_two]
+            child[newmove[1]][newmove[2]] = PIECES[max_node == self.white]
             recurse = self.minimax(child, newmove, depth-1, a, b, not max_node)
             v = max(v, recurse) if max_node else min(v, recurse)
             if max_node:

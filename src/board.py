@@ -1,11 +1,11 @@
 PIECES = {False: 'X', True: 'O'}
 EMPTY = '.'
+ROW = 5
 DIRECTIONS = [(1, 0), (0, 1), (1, 1), (-1, 1)]
 
 class Board:
-    def __init__ (self, size, row_len, opening=True):
+    def __init__ (self, size):
         self.size = size
-        self.row_len = row_len
         self.state = [[EMPTY for _ in range(size)] for _ in range(size)]
         self.moves = []
         # TODO: Add info about turn black/white, turn number, other stats?
@@ -21,7 +21,7 @@ class Board:
     def get_size(self):
         '''Number of squares per board's size'''
         return self.size
-    
+
     def add_piece(self, y, x, color):
         '''Places a new stone on the board if the move is legal and checks if the player wins'''
         if self.is_legal_move(y, x, color):
@@ -39,8 +39,6 @@ class Board:
             return False
         if self.state[y][x] != EMPTY:
             return False
-        if len(self.moves) == 2:
-            pass
         return True
 
     def is_winning_move(self, state, y, x, color):
@@ -49,7 +47,7 @@ class Board:
             count = 1
             for sign in [-1, +1]:
                 yy, xx = y, x
-                for _ in range(5):
+                for _ in range(ROW):
                     yy += sign * dir[0]
                     xx += sign * dir[1]
                     if yy < 0 or xx < 0 or yy >= self.size or xx >= self.size:
@@ -58,6 +56,6 @@ class Board:
                         count +=1
                     else:
                         break
-            if count == self.row_len:
+            if count == ROW:
                 return True
         return False
