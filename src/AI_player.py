@@ -38,13 +38,14 @@ class AIPlayer:
             y, x, _ = self.board.moves[-1]
             self.update_proximity_map(y, x)
         moves = self.get_possible_moves(state, True)[:self.limit_moves+8]
+        print(moves)
         if len(moves) == 1:
             y, x = moves[0][1:3]
         else:
             best_move, best_value = None, -999999
             with ProcessPoolExecutor() as ex:
                 for move, value in zip(moves, ex.map(self.async_search_branch, moves)):
-                    print(value)
+                    print(move, value)
                     if best_move is None or value > best_value:
                         best_value, best_move = value, move
             y, x = best_move[1:3]
@@ -62,22 +63,30 @@ class AIPlayer:
         eval_moves = []
         n = self.board.get_size()
         moves = [(y, x) for x in range(n) for y in range(n) if state[y][x] == '.' and self.proximity_map[y][x] >= 1]
-        threshold = 0
+        high_score = 0
         for y, x in moves:
             own = self.evaluate_threat(state, y, x, PIECES[max_node * self.player_two], PIECES[not max_node * self.player_two])
             if own >= 1000:
-                return [(0, y, x, own)]
+                return [(0, y, x)]
             foe = self.evaluate_threat(state, y, x, PIECES[not max_node * self.player_two], PIECES[max_node * self.player_two])
             score = 2 * own + foe
-            if score >= 1000:
-                threshold = 1000
-            elif score >= 200:
-                threshold = 200
-            elif score >= 100:
-                threshold = 100
-            #elif score >= 8:
-            #    threshold = 8
-            eval_moves.append((score, y, x, own))
+            if score > high_score:
+                high_score = score
+            eval_moves.append((score, y, x))
+        #threshold = [level for level in [1000, 200, 100, 0] if high_score >= level][0]
+        if high_score >= 1000:
+            threshold = 1000
+        elif score >= 200:
+            threshold = 200
+        elif score >= 100:
+            threshold = 100
+        elif score >= 20:
+            threshold = 20
+        elif score >= 10:
+            threshold = 10
+        else:
+            threshold = 0
+
         return sorted([move for move in eval_moves if move[0] >= threshold], reverse=True)
 
     def evaluate_threat(self, state, y, x, color, foe_color):
@@ -114,6 +123,8 @@ class AIPlayer:
                 return 1000
         if threats >= 100:
             return 100
+        if threats >= 4:
+            return 10
         return threats
 
     def minimax(self, node, move, depth, a, b, max_node):
