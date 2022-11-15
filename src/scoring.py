@@ -12,3 +12,15 @@ SCORES = [  # TODO: dict with count as key then list as value?
     (4, 0, 1, 2.75),
     (5, 0, 0, 1000)
 ]
+
+VICTORY = 1000
+OPEN_FOUR = 100
+DOUBLE_THREAT = 10
+OWN = 2
+
+THREAT_LEVELS = [
+    VICTORY, 
+    OWN * OPEN_FOUR, 
+    OPEN_FOUR, 
+    OWN * DOUBLE_THREAT, 
+    DOUBLE_THREAT]

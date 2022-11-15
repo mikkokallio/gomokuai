@@ -1,7 +1,9 @@
 import copy
 from concurrent.futures import ProcessPoolExecutor
 from board import PIECES, DIRECTIONS
-from scoring import SCORES
+from scoring import SCORES, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS
+
+BIG_NUM = 999999
 
 class AIPlayer:
     def __init__ (self, depth, reach, limit_moves, board):
@@ -56,7 +58,7 @@ class AIPlayer:
         '''Search game tree's first level in parallel'''
         child = copy.deepcopy(self.board.state)
         child[move[1]][move[2]] = PIECES[self.player_two]
-        return self.minimax(child, move, self.depth, -999999, 999999, False)
+        return self.minimax(child, move, self.depth, -BIG_NUM, BIG_NUM, False)
 
     def get_possible_moves(self, state, max_node):
         '''Get a list of possible moves, given board state'''
@@ -66,25 +68,17 @@ class AIPlayer:
         high_score = 0
         for y, x in moves:
             own = self.evaluate_threat(state, y, x, PIECES[max_node * self.player_two], PIECES[not max_node * self.player_two])
-            if own >= 1000:
+            if own >= VICTORY:
                 return [(0, y, x)]
             foe = self.evaluate_threat(state, y, x, PIECES[not max_node * self.player_two], PIECES[max_node * self.player_two])
             score = 2 * own + foe
             if score > high_score:
                 high_score = score
             eval_moves.append((score, y, x))
-        #threshold = [level for level in [1000, 200, 100, 0] if high_score >= level][0]
-        if high_score >= 1000:
-            threshold = 1000
-        elif score >= 200:
-            threshold = 200
-        elif score >= 100:
-            threshold = 100
-        elif score >= 20:
-            threshold = 20
-        elif score >= 10:
-            threshold = 10
-        else:
+        for level in THREAT_LEVELS:
+            if high_score >= level:
+                threshold = level
+                break
             threshold = 0
 
         return sorted([move for move in eval_moves if move[0] >= threshold], reverse=True)
@@ -119,12 +113,12 @@ class AIPlayer:
                     threats += score[3]
                     break
             threats += 0.01 * (open + gap) * count
-            if threats >= 1000:
-                return 1000
-        if threats >= 100:
-            return 100
+            if threats >= VICTORY:
+                return VICTORY
+        if threats >= OPEN_FOUR:
+            return OPEN_FOUR
         if threats >= 4:
-            return 10
+            return DOUBLE_THREAT
         return threats
 
     def minimax(self, node, move, depth, a, b, max_node):
@@ -132,10 +126,9 @@ class AIPlayer:
         if self.board.is_winning_move(node, move[1], move[2], PIECES[not max_node * self.player_two]):
             return -1 if max_node else 1
         if depth == 0:
-            threats = self.evaluate_threat(node, move[1], move[2], PIECES[not max_node * self.player_two], PIECES[max_node * self.player_two])
-            threats /= 100
+            threats = self.evaluate_threat(node, move[1], move[2], PIECES[not max_node * self.player_two], PIECES[max_node * self.player_two]) / 100
             return -threats if max_node else threats
-        v = -999999 if max_node else 999999
+        v = -BIG_NUM if max_node else BIG_NUM
         for newmove in self.get_possible_moves(node, max_node)[:self.limit_moves]:
             child = copy.deepcopy(node)
             child[newmove[1]][newmove[2]] = PIECES[max_node * self.player_two]

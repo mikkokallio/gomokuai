@@ -38,7 +38,7 @@ def main():
             turn_time = perf_counter() - clock_start
             clocks[white_turn] += turn_time
             win = board.add_piece(y, x, color=PIECES[white_turn])
-            
+
             if win:
                 board.print()
                 print(f'{PIECES[white_turn]} wins on turn {turn}!')
