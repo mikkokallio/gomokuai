@@ -1,7 +1,7 @@
 import copy
 from concurrent.futures import ProcessPoolExecutor
 from heatmap import Heatmap
-from board import PIECES, DIRECTIONS
+from board import PIECES, DIRECTIONS, EMPTY
 from scoring import SCORES, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS
 
 BIG_NUM = 999999
@@ -49,7 +49,7 @@ class AIPlayer:
         '''Get a list of possible moves, given board state'''
         eval_moves = []
         n = self.board.get_size()
-        moves = [(y, x) for x in range(n) for y in range(n) if state[y][x] == '.' and self.heatmap.get()[y][x] >= 1]
+        moves = [(y, x) for x in range(n) for y in range(n) if state[y][x] == EMPTY and self.heatmap.get()[y][x] >= 1]
         high_score = 0
 
         for y, x in moves:
@@ -80,20 +80,20 @@ class AIPlayer:
                     yy += sign * dir[0]
                     xx += sign * dir[1]
                     if yy < 0 or xx < 0 or yy >= self.board.size or xx >= self.board.size or state[yy][xx] == foe_color:
-                        if prev == '.':
+                        if prev == EMPTY:
                             open += 1
                         break
                     if state[yy][xx] == color:
-                        if prev == '.':
+                        if prev == EMPTY:
                             gap += 1
                         count += 1
                         prev = color
-                    elif state[yy][xx] == '.':
-                        if prev == '.':
+                    elif state[yy][xx] == EMPTY:
+                        if prev == EMPTY:
                             open += 1.5
                             break
                         else:
-                            prev = '.'
+                            prev = EMPTY
             for score in SCORES:
                 if count == score[0] and open >= score[1] and gap == score[2]:
                     threats += score[3]

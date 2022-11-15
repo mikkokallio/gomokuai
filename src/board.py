@@ -6,7 +6,7 @@ class Board:
     def __init__ (self, size, row_len, opening=True):
         self.size = size
         self.row_len = row_len
-        self.state = [['.' for _ in range(size)] for _ in range(size)]
+        self.state = [[EMPTY for _ in range(size)] for _ in range(size)]
         self.moves = []
         # TODO: Add info about turn black/white, turn number, other stats?
 
@@ -37,7 +37,7 @@ class Board:
             return False
         if color not in [PIECES[False], PIECES[True]]:
             return False
-        if self.state[y][x] != '.':
+        if self.state[y][x] != EMPTY:
             return False
         if len(self.moves) == 2:
             pass
