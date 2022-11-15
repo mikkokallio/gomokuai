@@ -9,6 +9,7 @@ class Heatmap:
             self.update(move[0], move[1])
 
     def get(self):
+        '''Get heatmap'''
         return self.heatmap
 
     def update(self, y, x):

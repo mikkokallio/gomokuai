@@ -22,10 +22,10 @@ def main():
     computer_01 = AIPlayerV1(3, board) # Old version!
     computer_02 = AIPlayerV2(5, board) # Old version!
     computer_03 = AIPlayerV3(7, 2, board, randomness=True) # Old version!
-    computer_04 = AIPlayer(depth=11, reach=2, limit_moves=3, board=board)
+    computer_04 = AIPlayer(depth=11, reach=2, limit_moves=5, board=board)
     computer_05 = AIPlayer(depth=11, reach=2, limit_moves=3, board=board)
 
-    players = [computer_03, computer_05]
+    players = [computer_04, computer_05]
 
     start_time = perf_counter()
     clocks = [0.0, 0.0]

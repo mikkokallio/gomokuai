@@ -51,12 +51,13 @@ class AIPlayer:
         n = self.board.get_size()
         moves = [(y, x) for x in range(n) for y in range(n) if state[y][x] == '.' and self.heatmap.get()[y][x] >= 1]
         high_score = 0
+
         for y, x in moves:
-            own = self.evaluate_threat(state, y, x, PIECES[max_node * self.player_two], PIECES[not max_node * self.player_two])
+            own = self.evaluate_threat(state, y, x, PIECES[max_node == self.player_two], PIECES[max_node != self.player_two])
             if own >= VICTORY:
                 return [(0, y, x)]
-            foe = self.evaluate_threat(state, y, x, PIECES[not max_node * self.player_two], PIECES[max_node * self.player_two])
-            score = 2 * own + foe
+            foe = self.evaluate_threat(state, y, x, PIECES[max_node != self.player_two], PIECES[max_node == self.player_two])
+            score = OWN * own + foe
             if score > high_score:
                 high_score = score
             eval_moves.append((score, y, x))
@@ -108,15 +109,15 @@ class AIPlayer:
 
     def minimax(self, node, move, depth, a, b, max_node):
         '''Perform minimaxing with a-b pruning'''
-        if self.board.is_winning_move(node, move[1], move[2], PIECES[not max_node * self.player_two]):
+        if self.board.is_winning_move(node, move[1], move[2], PIECES[max_node != self.player_two]):
             return -1 if max_node else 1
         if depth == 0:
-            threats = self.evaluate_threat(node, move[1], move[2], PIECES[not max_node * self.player_two], PIECES[max_node * self.player_two]) / 100
+            threats = self.evaluate_threat(node, move[1], move[2], PIECES[max_node != self.player_two], PIECES[max_node == self.player_two]) / 100
             return -threats if max_node else threats
         v = -BIG_NUM if max_node else BIG_NUM
         for newmove in self.get_possible_moves(node, max_node)[:self.limit_moves]:
             child = copy.deepcopy(node)
-            child[newmove[1]][newmove[2]] = PIECES[max_node * self.player_two]
+            child[newmove[1]][newmove[2]] = PIECES[max_node == self.player_two]
             recurse = self.minimax(child, newmove, depth-1, a, b, not max_node)
             v = max(v, recurse) if max_node else min(v, recurse)
             if max_node:
