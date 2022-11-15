@@ -1,5 +1,6 @@
 import copy
 from concurrent.futures import ProcessPoolExecutor
+from heatmap import Heatmap
 from board import PIECES, DIRECTIONS
 from scoring import SCORES, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS
 
@@ -12,33 +13,17 @@ class AIPlayer:
         self.limit_moves = limit_moves
         self.board = board
         self.player_two = None
-        self.proximity_map = None
-
-    def init_proximity_map(self):
-        '''Set up map to control moves and ensure that pre-game moves are included'''
-        n = self.board.get_size()
-        self.proximity_map = [[0 for _ in range(n)] for _ in range(n)]
-        self.update_proximity_map(int(n/2), int(n/2)) # center of board always available!
-        for move in self.board.moves:
-            self.update_proximity_map(move[0], move[1])
-
-    def update_proximity_map(self, y, x):
-        '''Updates heatmap that determines which moves are considered'''
-        n = self.board.get_size()
-        r = self.reach
-        for yy in range(max(0, y-r), min(y+(r+1), n)):
-            for xx in range(max(0, x-r), min(x+(r+1), n)):
-                self.proximity_map[yy][xx] += 1
+        self.heatmap = None
 
     def get_move(self, board, player_two):
         '''Asks AI to compute an optimal move, given board state'''
         self.player_two = player_two
         state = board.state
-        if self.proximity_map is None:
-            self.init_proximity_map()
+        if self.heatmap is None:
+            self.heatmap = Heatmap(board.size, self.reach, self.board.moves)
         elif len(self.board.moves) > 0:
             y, x, _ = self.board.moves[-1]
-            self.update_proximity_map(y, x)
+            self.heatmap.update(y, x)
         moves = self.get_possible_moves(state, True)[:self.limit_moves+8]
         print(moves)
         if len(moves) == 1:
@@ -51,7 +36,7 @@ class AIPlayer:
                     if best_move is None or value > best_value:
                         best_value, best_move = value, move
             y, x = best_move[1:3]
-        self.update_proximity_map(y, x)
+        self.heatmap.update(y, x)
         return (y, x)
 
     def async_search_branch(self, move):
@@ -64,7 +49,7 @@ class AIPlayer:
         '''Get a list of possible moves, given board state'''
         eval_moves = []
         n = self.board.get_size()
-        moves = [(y, x) for x in range(n) for y in range(n) if state[y][x] == '.' and self.proximity_map[y][x] >= 1]
+        moves = [(y, x) for x in range(n) for y in range(n) if state[y][x] == '.' and self.heatmap.get()[y][x] >= 1]
         high_score = 0
         for y, x in moves:
             own = self.evaluate_threat(state, y, x, PIECES[max_node * self.player_two], PIECES[not max_node * self.player_two])
