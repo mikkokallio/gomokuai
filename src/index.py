@@ -12,17 +12,17 @@ ROW = 5
 def main():
     '''Set up board and run game loop'''
     board = Board(SIZE, ROW, opening=True)
-    board.add_piece(6, 6, 'X')
-    board.add_piece(6, 8, 'O')
-    board.add_piece(6, 3, 'X')
-    white_turn = True
+    #board.add_piece(6, 6, 'X')
+    #board.add_piece(6, 8, 'O')
+    #board.add_piece(6, 3, 'X')
+    white_turn = False
 
     human_00 = HumanPlayer()
     human_01 = HumanPlayer()
     computer_01 = AIPlayerV1(3, board) # Old version!
     computer_02 = AIPlayerV2(5, board) # Old version!
-    computer_03 = AIPlayerV3(7, 2, board, randomness=False) # Old version!
-    computer_05 = AIPlayer(depth=9, reach=2, limit_moves=5, board=board)
+    computer_03 = AIPlayerV3(7, 2, board, randomness=True) # Old version!
+    computer_05 = AIPlayer(depth=9, reach=2, limit_moves=3, board=board)
 
     players = [computer_02, computer_05]
 

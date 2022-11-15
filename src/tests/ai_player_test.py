@@ -38,5 +38,5 @@ class TestAIPlayer(unittest.TestCase):
         self.board.add_piece(5, 8, 'O')
         self.board.add_piece(4, 8, 'X')
         y, x = self.ai.get_move(self.board, True)
-        #self.assertEqual(y, 5)
-        #self.assertEqual(x, 9)
+        self.assertEqual(y, 5)
+        self.assertIn(x, [4, 9])
