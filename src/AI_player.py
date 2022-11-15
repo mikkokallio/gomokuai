@@ -12,6 +12,7 @@ class AIPlayer:
         self.reach = reach
         self.limit_moves = limit_moves
         self.board = board
+        self.size = board.size
         self.player_two = None
         self.heatmap = None
 
@@ -20,7 +21,7 @@ class AIPlayer:
         self.player_two = player_two
         state = board.state
         if self.heatmap is None:
-            self.heatmap = Heatmap(board.size, self.reach, self.board.moves)
+            self.heatmap = Heatmap(self.size, self.reach, self.board.moves)
         elif len(self.board.moves) > 0:
             y, x, _ = self.board.moves[-1]
             self.heatmap.update(y, x)
@@ -48,8 +49,7 @@ class AIPlayer:
     def get_possible_moves(self, state, max_node):
         '''Get a list of possible moves, given board state'''
         eval_moves = []
-        n = self.board.get_size()
-        moves = [(y, x) for x in range(n) for y in range(n) if state[y][x] == EMPTY and self.heatmap.get()[y][x] >= 1]
+        moves = [(y, x) for x in range(self.size) for y in range(self.size) if state[y][x] == EMPTY and self.heatmap.get()[y][x] >= 1]
         high_score = 0
 
         for y, x in moves:
@@ -76,10 +76,10 @@ class AIPlayer:
             count, open, gap = 1, 0, 0
             for sign in [-1, +1]:
                 yy, xx, prev = y, x, None
-                for _ in range(1, 7):
+                for _ in range(6):
                     yy += sign * dir[0]
                     xx += sign * dir[1]
-                    if yy < 0 or xx < 0 or yy >= self.board.size or xx >= self.board.size or state[yy][xx] == foe_color:
+                    if yy < 0 or xx < 0 or yy >= self.size or xx >= self.size or state[yy][xx] == foe_color:
                         if prev == EMPTY:
                             open += 1
                         break
