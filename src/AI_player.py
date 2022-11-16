@@ -1,6 +1,7 @@
 import copy
 from concurrent.futures import ProcessPoolExecutor
 from heatmap import Heatmap
+from proximity_list import ProximityList
 from board import PIECES, DIRECTIONS, EMPTY
 from scoring import SCORES, SCORES2, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS
 
@@ -22,11 +23,11 @@ class AIPlayer:
         self.white = white
         state = board.state
         if self.heatmap is None:
-            self.heatmap = Heatmap(self.size, self.reach, self.board.moves)
+            self.heatmap = ProximityList(state, self.size, self.reach, self.board.moves)
         elif len(self.board.moves) > 0:
             y, x, _ = self.board.moves[-1]
-            self.heatmap.update(y, x)
-        moves = self.get_possible_moves(state, True)[:self.limit_moves+8]
+            self.heatmap.update(state, y, x)
+        moves = self.get_possible_moves(state, True)[:self.limit_moves+10]
         print(moves)
         if len(moves) == 1:
             y, x = moves[0][1:3]
@@ -38,7 +39,7 @@ class AIPlayer:
                     if best_move is None or value > best_value:
                         best_value, best_move = value, move
             y, x = best_move[1:3]
-        self.heatmap.update(y, x)
+        self.heatmap.update(state, y, x)
         return (y, x)
 
     def async_search_branch(self, move):
@@ -50,8 +51,7 @@ class AIPlayer:
     def get_possible_moves(self, state, max_node):
         '''Get a list of possible moves, given board state'''
         eval_moves = []
-        moves = [(y, x) for x in range(self.size) for y in range(
-            self.size) if state[y][x] == EMPTY and self.heatmap.get()[y][x] >= 1]
+        moves = [move for move in self.heatmap.get() if state[move[0]][move[1]] == EMPTY]
         high_score = 0
 
         for y, x in moves:

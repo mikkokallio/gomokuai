@@ -21,7 +21,7 @@ SCORES2 = {
     ]
 }
 
-SCORES= [
+SCORES = [
     (2, 2.5, 0, 0.05),
     (2, 1.5, 1, 0.05),
     (3, 3, 0, 2.50),
@@ -36,12 +36,12 @@ SCORES= [
     (5, 0, 0, 1000)
 ]
 
-VICTORY= 1000
-OPEN_FOUR= 100
-DOUBLE_THREAT= 10
-OWN= 2
+VICTORY = 1000
+OPEN_FOUR = 100
+DOUBLE_THREAT = 10
+OWN = 2
 
-THREAT_LEVELS= [
+THREAT_LEVELS = [
     VICTORY,
     OWN * OPEN_FOUR,
     OPEN_FOUR,

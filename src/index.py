@@ -20,8 +20,8 @@ def main():
     #human_01 = HumanPlayer()
     #computer_02 = AIPlayerV2(5, board) # Old version!
     #computer_03 = AIPlayerV3(7, 2, board, randomness=True) # Old version!
-    computer_04 = AIPlayerV4(depth=9, reach=2, limit_moves=3, board=board)
-    computer_05 = AIPlayer(depth=9, reach=2, limit_moves=3, board=board)
+    computer_04 = AIPlayerV4(depth=11, reach=2, limit_moves=3, board=board)
+    computer_05 = AIPlayer(depth=12, reach=2, limit_moves=3, board=board)
 
     players = [computer_04, computer_05]
 
@@ -43,8 +43,9 @@ def main():
                 print('X time:', clocks[0], 'O time:', clocks[1])
                 break
             white_turn = not white_turn
-        except ValueError:
+        except ValueError as e:
             print('Invalid move!')
+            print(e)
 
     print(perf_counter() - start_time)
 
