@@ -9,8 +9,9 @@ BIG_NUM = 999999
 
 
 class AIPlayer:
-    def __init__(self, depth, reach, limit_moves, board):
+    def __init__(self, depth, reach, limit_moves, deepen, board):
         self.depth = depth
+        self.deepen = deepen
         self.reach = reach
         self.limit_moves = limit_moves
         self.board = board
@@ -119,10 +120,12 @@ class AIPlayer:
                 node, move[1], move[2], PIECES[max_node != self.white], PIECES[max_node == self.white]) / 100
             return -threats if max_node else threats
         v = -BIG_NUM if max_node else BIG_NUM
-        for newmove in self.get_possible_moves(node, max_node)[:self.limit_moves]:
+        newmoves = self.get_possible_moves(node, max_node)[:self.limit_moves]
+        deepen = len(newmoves) == 1 and self.deepen
+        for newmove in newmoves:
             child = copy.deepcopy(node)
             child[newmove[1]][newmove[2]] = PIECES[max_node == self.white]
-            recurse = self.minimax(child, newmove, depth-1, a, b, not max_node)
+            recurse = self.minimax(child, newmove, depth-1+deepen, a, b, not max_node)
             v = max(v, recurse) if max_node else min(v, recurse)
             if max_node:
                 a = max(a, v)

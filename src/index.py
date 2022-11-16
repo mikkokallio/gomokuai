@@ -19,11 +19,11 @@ def main():
     #human_00 = HumanPlayer()
     #human_01 = HumanPlayer()
     #computer_02 = AIPlayerV2(5, board) # Old version!
-    #computer_03 = AIPlayerV3(7, 2, board, randomness=True) # Old version!
+    computer_03 = AIPlayerV3(7, 2, board, randomness=True) # Old version!
     computer_04 = AIPlayerV4(depth=11, reach=2, limit_moves=3, board=board)
-    computer_05 = AIPlayer(depth=12, reach=2, limit_moves=3, board=board)
+    computer_05 = AIPlayer(depth=7, reach=2, limit_moves=4, deepen=True, board=board)
 
-    players = [computer_04, computer_05]
+    players = [computer_03, computer_05]
 
     start_time = perf_counter()
     clocks = [0.0, 0.0]
