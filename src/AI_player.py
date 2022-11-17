@@ -19,7 +19,7 @@ class AIPlayer:
         self.white = None
         self.heatmap = None
 
-    def get_move(self, board, white):
+    def get_move(self, board, white, constraint):
         '''Asks AI to compute an optimal move, given board state'''
         self.white = white
         state = board.state
