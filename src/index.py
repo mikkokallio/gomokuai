@@ -1,4 +1,5 @@
 from time import perf_counter
+from random import randint
 from board import Board, PIECES
 from human_player import HumanPlayer
 from AI_player import AIPlayer
@@ -11,9 +12,10 @@ SIZE = 15
 def main():
     '''Set up board and run game loop'''
     board = Board(SIZE)
-    board.add_piece(6, 6, 'X')
-    board.add_piece(6, 8, 'O')
-    board.add_piece(6, 3, 'X')
+    r = lambda: randint(0, SIZE-1)
+    board.add_piece(r(), r(), 'X')
+    board.add_piece(r(), r(), 'O')
+    board.add_piece(r(), r(), 'X')
     white_turn = True
 
     #human_00 = HumanPlayer()
@@ -23,7 +25,7 @@ def main():
     computer_04 = AIPlayerV4(depth=11, reach=2, limit_moves=3, board=board)
     computer_05 = AIPlayer(depth=7, reach=2, limit_moves=4, deepen=True, board=board)
 
-    players = [computer_03, computer_05]
+    players = [computer_04, computer_05]
 
     start_time = perf_counter()
     clocks = [0.0, 0.0]
