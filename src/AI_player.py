@@ -1,5 +1,7 @@
 import copy
 from concurrent.futures import ProcessPoolExecutor
+from random import shuffle
+import csv
 from heatmap import Heatmap
 from proximity_list import ProximityList
 from board import PIECES, DIRECTIONS, EMPTY
@@ -9,7 +11,7 @@ BIG_NUM = 999999
 
 
 class AIPlayer:
-    def __init__(self, depth, reach, limit_moves, deepen, board):
+    def __init__(self, depth, reach, limit_moves, deepen, use_table, board):
         self.depth = depth
         self.deepen = deepen
         self.reach = reach
@@ -18,6 +20,13 @@ class AIPlayer:
         self.size = board.size
         self.white = None
         self.heatmap = None
+        self.tables = None
+        self.use_table = use_table
+        if use_table:
+            with open('games.csv', newline='\n') as file:
+                reader = csv.reader(file)
+                next(reader)
+                self.tables = dict(reader)
 
     def get_move(self, board, white, constraint):
         '''Asks AI to compute an optimal move, given board state'''
@@ -28,19 +37,26 @@ class AIPlayer:
         elif len(self.board.moves) > 0:
             y, x, _ = self.board.moves[-1]
             self.heatmap.update(state, y, x)
-        moves = self.get_possible_moves(state, True)[:self.limit_moves+10]
-        print(moves)
+        if constraint is not None:
+            #moves = [(0, move[0], move[1]) for move in constraint][:self.limit_moves+10]
+            #shuffle(constraint)
+            #moves = [moves[0]]
+            moves = self.get_possible_moves(state, constraint, True)[:self.limit_moves+10]
+        else:
+            moves = self.get_possible_moves(state, None, True)[:self.limit_moves+10]
+        #print(moves)
         if len(moves) == 1:
             y, x = moves[0][1:3]
         else:
             best_move, best_value = None, -999999
             with ProcessPoolExecutor() as ex:
                 for move, value in zip(moves, ex.map(self.async_search_branch, moves)):
-                    print(move, value)
+                    #print(move, value)
                     if best_move is None or value > best_value:
                         best_value, best_move = value, move
             y, x = best_move[1:3]
         self.heatmap.update(state, y, x)
+        #print(y, x)
         return (y, x)
 
     def async_search_branch(self, move):
@@ -49,10 +65,11 @@ class AIPlayer:
         child[move[1]][move[2]] = PIECES[self.white]
         return self.minimax(child, move, self.depth, -BIG_NUM, BIG_NUM, False)
 
-    def get_possible_moves(self, state, max_node):
+    def get_possible_moves(self, state, moves, max_node):
         '''Get a list of possible moves, given board state'''
         eval_moves = []
-        moves = [move for move in self.heatmap.get() if state[move[0]][move[1]] == EMPTY]
+        if moves is None:
+            moves = [move for move in self.heatmap.get() if state[move[0]][move[1]] == EMPTY]
         high_score = 0
 
         for y, x in moves:
@@ -115,12 +132,22 @@ class AIPlayer:
         '''Perform minimaxing with a-b pruning'''
         if self.board.is_winning_move(node, move[1], move[2], PIECES[max_node != self.white]):
             return -1 if max_node else 1
+        if self.use_table and len(self.board.moves) + (self.depth - depth) <= 15:
+            hashable = ''.join([''.join(row) for row in node])
+            #print('Search:',hashable.count(PIECES[self.white == max_node]) + hashable.count(PIECES[self.white != max_node]))
+            result = self.tables.get(hashable, '').strip()
+            if result != '':
+                #print('Found:',hashable.count(PIECES[self.white == max_node]) + hashable.count(PIECES[self.white != max_node]))
+                value = (result.count(PIECES[self.white == max_node]) - result.count(PIECES[self.white != max_node]))/len(result)
+                if value != 0.0:
+                    #print(max_node, result, value)
+                    return value if max_node else -value
         if depth == 0:
             threats = self.evaluate_threat(
-                node, move[1], move[2], PIECES[max_node != self.white], PIECES[max_node == self.white]) / 100
+                node, move[1], move[2], PIECES[max_node != self.white], PIECES[max_node == self.white]) / 101
             return -threats if max_node else threats
         v = -BIG_NUM if max_node else BIG_NUM
-        newmoves = self.get_possible_moves(node, max_node)[:self.limit_moves]
+        newmoves = self.get_possible_moves(node, None, max_node)[:self.limit_moves]
         deepen = len(newmoves) == 1 and self.deepen
         for newmove in newmoves:
             child = copy.deepcopy(node)

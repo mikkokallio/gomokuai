@@ -8,3 +8,5 @@
 `coverage report -m`
 
 `poetry run pylint src`
+
+`while ($true) {poetry run python src/index.py;}`

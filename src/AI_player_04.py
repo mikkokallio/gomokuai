@@ -1,5 +1,7 @@
 import copy
+import random
 from concurrent.futures import ProcessPoolExecutor
+from random import shuffle
 from heatmap import Heatmap
 from board import PIECES, DIRECTIONS, EMPTY
 from scoring import SCORES, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS
@@ -15,7 +17,7 @@ class AIPlayerV4:
         self.player_two = None
         self.heatmap = None
 
-    def get_move(self, board, player_two, constraints):
+    def get_move(self, board, player_two, constraint):
         '''Asks AI to compute an optimal move, given board state'''
         self.player_two = player_two
         state = board.state
@@ -24,15 +26,19 @@ class AIPlayerV4:
         elif len(self.board.moves) > 0:
             y, x, _ = self.board.moves[-1]
             self.heatmap.update(y, x)
-        moves = self.get_possible_moves(state, True)[:self.limit_moves+8]
-        print(moves)
+        if constraint is not None:
+            moves = [(0, move[0], move[1]) for move in constraint][:self.limit_moves+8]
+            shuffle(moves)
+        else:
+            moves = self.get_possible_moves(state, True)[:self.limit_moves+8]
+        #print(moves)
         if len(moves) == 1:
             y, x = moves[0][1:3]
         else:
             best_move, best_value = None, -999999
             with ProcessPoolExecutor() as ex:
                 for move, value in zip(moves, ex.map(self.async_search_branch, moves)):
-                    print(move, value)
+                    #print(move, value)
                     if best_move is None or value > best_value:
                         best_value, best_move = value, move
             y, x = best_move[1:3]
@@ -105,6 +111,7 @@ class AIPlayerV4:
             return OPEN_FOUR
         if threats >= 4:
             return DOUBLE_THREAT
+        #threats += (threats/10 * random.random())
         return threats
 
     def minimax(self, node, move, depth, a, b, max_node):
