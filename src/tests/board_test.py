@@ -4,7 +4,7 @@ from board import Board
 
 class TestBoard(unittest.TestCase):
     def setUp(self):
-        self.board = Board(size=15, row_len=5)
+        self.board = Board(size=15)
 
     def test_can_add_stone_to_empty_space(self):
         try:
