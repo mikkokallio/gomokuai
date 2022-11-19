@@ -10,7 +10,7 @@ Thw other new feature was the ability to use stored data about previous games to
 
 I also decided that there won't be more named iterations. Rather, "Iteration 5" will now only get new parameters that can be used to de/activate the different features. That way, it's possible to test any combination of features using otherwise identical AI's against each other.
 
-Other tasks included adding constraints to the three first moves. This makes the game a bit more even, though black still has an advantage.
+Other tasks included adding constraints to the first three moves. This makes the game a bit more even, though black still has an advantage.
 
 I also continued to improve docs/testing/quality and similar things.
 
