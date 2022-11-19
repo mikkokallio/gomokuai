@@ -1,6 +1,6 @@
 import copy
 from concurrent.futures import ProcessPoolExecutor
-from random import shuffle
+import random
 import csv
 from heatmap import Heatmap
 from proximity_list import ProximityList
@@ -11,7 +11,7 @@ BIG_NUM = 999999
 
 
 class AIPlayer:
-    def __init__(self, depth, reach, limit_moves, deepen, use_table, board):
+    def __init__(self, depth, reach, limit_moves, deepen, use_table, randomized, board):
         self.depth = depth
         self.deepen = deepen
         self.reach = reach
@@ -21,6 +21,7 @@ class AIPlayer:
         self.white = None
         self.heatmap = None
         self.tables = None
+        self.randomized = randomized
         self.use_table = use_table
         if use_table:
             with open('games.csv', newline='\n') as file:
@@ -126,6 +127,8 @@ class AIPlayer:
             return OPEN_FOUR
         if threats >= 4:
             return DOUBLE_THREAT
+        if self.randomized:
+            threats += (threats/10 * random.random())
         return threats
 
     def minimax(self, node, move, depth, a, b, max_node):

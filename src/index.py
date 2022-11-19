@@ -27,11 +27,11 @@ def main():
     #human_00 = HumanPlayer()
     #human_01 = HumanPlayer()
     computer_05 = AIPlayer(
-        depth=7, reach=2, limit_moves=4, deepen=True, use_table=True, board=board)
+        depth=7, reach=2, limit_moves=3, deepen=True, use_table=True, randomized=True, board=board)
     computer_06 = AIPlayer(
-        depth=5, reach=2, limit_moves=4, deepen=True, use_table=True, board=board)
+        depth=7, reach=2, limit_moves=3, deepen=True, use_table=True, randomized=False, board=board)
 
-    players = [computer_06, computer_05]
+    players = [computer_05, computer_06]
 
     start_time = perf_counter()
     clocks = [0.0, 0.0]
@@ -39,12 +39,12 @@ def main():
     OPENING_TURNS = [
         (BLACK, 0, 0),
         (WHITE, 1, 2),
-        (BLACK, 3, 3)
+        (BLACK, 3, 4)
     ]
     
     for turn in OPENING_TURNS:
         board.print()
-        print(f'{PIECES[turn[0]]} must be placed at least {turn[1]} and at most {turn[2]} squares from the center')
+        #print(f'{PIECES[turn[0]]} must be placed at least {turn[1]} and at most {turn[2]} squares from the center')
         y, x = players[turn[0]].get_move(board, turn[0], get_constraint(turn[1], turn[2]))
         board.add_piece(y, x, PIECES[turn[0]])
         states.add(''.join([''.join(row) for row in board.state]))    
@@ -52,7 +52,7 @@ def main():
     winner = EMPTY
 
     for turn in range(SIZE**2 - len(board.moves) - 125):
-        board.print()
+        #board.print()
         try:
             clock_start = perf_counter()
             y, x = players[int(player_turn)].get_move(board, player_turn, None)
@@ -73,6 +73,8 @@ def main():
             print('Invalid move!')
             print(e)
 
+    if winner == EMPTY:
+        print('Draw!')
     #print(perf_counter() - start_time)
 
     with open('games.csv', newline='\n') as file:
