@@ -13,25 +13,17 @@ The project uses pytest and coverage, which can be run with the commands below. 
 `coverage report -m`
 
 ### Branch coverage
-
+```
 Name                    Stmts   Miss Branch BrPart  Cover   Missing
-
 -------------------------------------------------------------------
-
 src\ai_player.py          135     40     80      8    68%   26-29, 39-41, 43, 63-65, 70->72, 112->100, 125, 127, 129, 134-161
-
 src\board.py               44      7     30      3    78%   11-15, 33, 35, 46->44
-
 src\human_player.py         5      0      4      0   100%
-
 src\proximity_list.py      18      0     12      0   100%
-
 src\scoring.py             15      0      0      0   100%
-
 -------------------------------------------------------------------
-
 TOTAL                     217     47    126     11    76%
-
+```
 ## Performance testing
 
 The program measures both players' time expenditure as well as the total length of each game. By changing each AI bot's parameters, it's easy to test how they affect performance. TBA
