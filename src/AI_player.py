@@ -9,23 +9,26 @@ BIG_NUM = 999999
 
 
 class AIPlayer:
-    def __init__(self, depth, reach, limit_moves, deepen, use_table, randomized, board):
-        self.depth = depth
-        self.deepen = deepen
-        self.reach = reach
-        self.limit_moves = limit_moves
+    def __init__(self, config, board):
+        self.depth = config['depth']
+        self.deepen = config['deepen']
+        self.reach = config['reach']
+        self.limit_moves = config['branching']
         self.board = board
         self.size = board.size
         self.white = None
         self.heatmap = None
-        self.tables = None
-        self.randomized = randomized
-        self.use_table = use_table
+        self.tables = self.load_tables(config['tables'])
+        self.randomized = config['random']
+
+    def load_tables(self, use_table):
         if use_table:
             with open('games.csv', encoding='utf8', newline='\n') as file:
                 reader = csv.reader(file)
                 next(reader)
                 self.tables = dict(reader)
+        else:
+            return None
 
     def get_move(self, board, white, constraint):
         '''Asks AI to compute an optimal move, given board state'''
@@ -37,9 +40,6 @@ class AIPlayer:
             y, x, _ = self.board.moves[-1]
             self.heatmap.update(state, y, x)
         if constraint is not None:
-            #moves = [(0, move[0], move[1]) for move in constraint][:self.limit_moves+10]
-            #shuffle(constraint)
-            #moves = [moves[0]]
             moves = self.get_possible_moves(state, [random.choice(constraint)], True)[:self.limit_moves+10]
         else:
             moves = self.get_possible_moves(state, None, True)[:self.limit_moves+10]
@@ -129,11 +129,11 @@ class AIPlayer:
             threats += (threats/10 * random.random())
         return threats
 
-    def minimax(self, node, move, depth, a, b, max_node):
+    def minimax(self, node, move, depth, alfa, beta, max_node):
         '''Perform minimaxing with a-b pruning'''
         if self.board.is_winning_move(node, move[1], move[2], PIECES[max_node != self.white]):
             return -1 if max_node else 1
-        if self.use_table and len(self.board.moves) + (self.depth - depth) <= 15:
+        if self.tables is not None and len(self.board.moves) + (self.depth - depth) <= 15:
             hashable = ''.join([''.join(row) for row in node])
             result = self.tables.get(hashable, '').strip()
             if result != '':
@@ -144,18 +144,18 @@ class AIPlayer:
             threats = self.evaluate_threat(
                 node, move[1], move[2], PIECES[max_node != self.white], PIECES[max_node == self.white]) / 101
             return -threats if max_node else threats
-        v = -BIG_NUM if max_node else BIG_NUM
+        value = -BIG_NUM if max_node else BIG_NUM
         newmoves = self.get_possible_moves(node, None, max_node)[:self.limit_moves]
         deepen = len(newmoves) == 1 and self.deepen
         for newmove in newmoves:
             child = copy.deepcopy(node)
             child[newmove[1]][newmove[2]] = PIECES[max_node == self.white]
-            recurse = self.minimax(child, newmove, depth-1+deepen, a, b, not max_node)
-            v = max(v, recurse) if max_node else min(v, recurse)
+            recurse = self.minimax(child, newmove, depth-1+deepen, alfa, beta, not max_node)
+            value = max(value, recurse) if max_node else min(value, recurse)
             if max_node:
-                a = max(a, v)
+                alfa = max(alfa, value)
             else:
-                b = min(b, v)
-            if a >= b:
-                return v
-        return v
+                beta = min(beta, value)
+            if alfa >= beta:
+                return value
+        return value

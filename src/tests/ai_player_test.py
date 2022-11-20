@@ -6,7 +6,8 @@ from AI_player import AIPlayer
 class TestAIPlayer(unittest.TestCase):
     def setUp(self):
         self.board = Board(size=15)
-        self.ai = AIPlayer(5, 2, 3, False, False, False, self.board)
+        config = {'depth': 5, 'reach': 2, 'branching': 3, 'deepen': False, 'tables': False, 'random': False}
+        self.ai = AIPlayer(config, self.board)
 
     def test_ai_gives_a_move(self):
         self.board.add_piece(0, 0, 'X')

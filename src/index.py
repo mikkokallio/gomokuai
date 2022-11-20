@@ -3,7 +3,7 @@ import csv
 from board import Board
 from human_player import HumanPlayer
 from AI_player import AIPlayer
-from scoring import CENTER, SIZE, PIECES, BLACK, WHITE, EMPTY, OPENING_TURNS
+from scoring import CENTER, SIZE, PIECES, WHITE, EMPTY, OPENING_TURNS
 states = set()
 
 def get_constraint(min_dist, max_dist):
@@ -18,15 +18,10 @@ def get_constraint(min_dist, max_dist):
 def main():
     '''Set up board and run game loop'''
     board = Board(SIZE)
-
-    #human_00 = HumanPlayer()
-    #human_01 = HumanPlayer()
-    computer_05 = AIPlayer(
-        depth=7, reach=2, limit_moves=3, deepen=True, use_table=True, randomized=True, board=board)
-    computer_06 = AIPlayer(
-        depth=7, reach=2, limit_moves=3, deepen=True, use_table=True, randomized=False, board=board)
-
-    players = [computer_05, computer_06]
+    
+    config_a = {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': True, 'random': True}
+    config_b = {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': True, 'random': True}
+    players = [AIPlayer(config_a, board), AIPlayer(config_b, board)]
 
     start_time = perf_counter()
     clocks = [0.0, 0.0]
