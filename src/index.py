@@ -1,9 +1,9 @@
 from time import perf_counter
 import csv
-from board import Board, PIECES, EMPTY
+from board import Board
 from human_player import HumanPlayer
 from AI_player import AIPlayer
-from scoring import CENTER, SIZE, BLACK, WHITE
+from scoring import CENTER, SIZE, PIECES, BLACK, WHITE, EMPTY
 states = set()
 
 def get_constraint(min_dist, max_dist):
