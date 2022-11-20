@@ -1,4 +1,4 @@
-SCORES2 = {
+SCORES = {
     2: [
         (2.5, 0, 0.05),
         (1.5, 1, 0.05),
@@ -21,21 +21,6 @@ SCORES2 = {
     ]
 }
 
-SCORES = [
-    (2, 2.5, 0, 0.05),
-    (2, 1.5, 1, 0.05),
-    (3, 3, 0, 2.50),
-    (3, 2.5, 0, 2.25),
-    (3, 2, 1, 2.00),
-    (3, 0, 2, 0.25),
-    (3, 2, 0, 0.25),
-    (3, 1, 1, 0.25),
-    (4, 2, 0, 100),
-    (4, 1, 0, 2.75),
-    (4, 0, 1, 2.75),
-    (5, 0, 0, 1000)
-]
-
 VICTORY = 1000
 OPEN_FOUR = 100
 DOUBLE_THREAT = 10
@@ -47,3 +32,12 @@ THREAT_LEVELS = [
     OPEN_FOUR,
     OWN * DOUBLE_THREAT,
     DOUBLE_THREAT]
+
+SIZE = 15
+CENTER = int(SIZE/2)
+BLACK, WHITE = False, True
+
+PIECES = {False: 'X', True: 'O'}
+EMPTY = '.'
+ROW = 5
+DIRECTIONS = [(1, 0), (0, 1), (1, 1), (-1, 1)]

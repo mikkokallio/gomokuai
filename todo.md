@@ -1,14 +1,6 @@
-Viikko 2:
-Palautus 2: lauantaina 12.11. klo 22:59
-Myös checkstyle tai muu vastaava olisi hyvä olla konffattuna jo tässä vaiheessa. Kannattaa jutella ohjaajan kanssa jos laadun seuraamisessa on jotain epäselvää.
-
-
-
-
 Viikko 3:
 Palautus 3: lauantaina 19.11. klo 22:59
 Dokumentaatio: Kirjoitettu koodi selkeää ja kommentoitua. Aloitettu kirjoittamaan testausdokumenttia.
-Viikkoraportti numero 3
 Ohjelma: Ohjelman ydinalue edennyt, aloitettu ehkä jo omien tietorakenteiden toteutus, mikäli työhön kuuluu sellaisia.
 Testaus: Koodin kattava yksikkötestaus.
 Viimeistään tässä vaiheessa testikattavuuden olisi oltava käytettävissä, ja testausdokumentissa on ainakin testikattavuusraportti kuvana / taulukkona.

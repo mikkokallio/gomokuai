@@ -2,10 +2,9 @@ import copy
 from concurrent.futures import ProcessPoolExecutor
 import random
 import csv
-from heatmap import Heatmap
 from proximity_list import ProximityList
 from board import PIECES, DIRECTIONS, EMPTY
-from scoring import SCORES, SCORES2, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS
+from scoring import SCORES, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS
 
 BIG_NUM = 999999
 
@@ -24,7 +23,7 @@ class AIPlayer:
         self.randomized = randomized
         self.use_table = use_table
         if use_table:
-            with open('games.csv', newline='\n') as file:
+            with open('games.csv', encoding='utf8', newline='\n') as file:
                 reader = csv.reader(file)
                 next(reader)
                 self.tables = dict(reader)
@@ -42,7 +41,7 @@ class AIPlayer:
             #moves = [(0, move[0], move[1]) for move in constraint][:self.limit_moves+10]
             #shuffle(constraint)
             #moves = [moves[0]]
-            moves = self.get_possible_moves(state, constraint, True)[:self.limit_moves+10]
+            moves = self.get_possible_moves(state, [random.choice(constraint)], True)[:self.limit_moves+10]
         else:
             moves = self.get_possible_moves(state, None, True)[:self.limit_moves+10]
         #print(moves)
@@ -95,28 +94,28 @@ class AIPlayer:
     def evaluate_threat(self, state, y, x, color, foe_color):
         '''Check if move creates a threat and score the new state'''
         threats = 0
-        for dir in DIRECTIONS:
+        for line in DIRECTIONS:
             count, ends, gap = 1, 0, 0
             for sign in [-1, +1]:
-                yy, xx, prev = y, x, None
+                y_pos, x_pos, prev = y, x, None
                 for _ in range(6):
-                    yy += sign * dir[0]
-                    xx += sign * dir[1]
-                    if yy < 0 or xx < 0 or yy >= self.size or xx >= self.size or state[yy][xx] == foe_color:
+                    y_pos += sign * line[0]
+                    x_pos += sign * line[1]
+                    if y_pos < 0 or x_pos < 0 or y_pos >= self.size or x_pos >= self.size or state[y_pos][x_pos] == foe_color:
                         if prev == EMPTY:
                             ends += 1
                         break
-                    if state[yy][xx] == color:
+                    if state[y_pos][x_pos] == color:
                         if prev == EMPTY:
                             gap += 1
                         count += 1
                         prev = color
-                    elif state[yy][xx] == EMPTY:
+                    elif state[y_pos][x_pos] == EMPTY:
                         if prev == EMPTY:
                             ends += 1.5
                             break
                         prev = EMPTY
-            for score in SCORES2.get(count, []):
+            for score in SCORES.get(count, []):
                 if ends >= score[0] and gap == score[1]:
                     threats += score[2]
                     break
@@ -137,13 +136,10 @@ class AIPlayer:
             return -1 if max_node else 1
         if self.use_table and len(self.board.moves) + (self.depth - depth) <= 15:
             hashable = ''.join([''.join(row) for row in node])
-            #print('Search:',hashable.count(PIECES[self.white == max_node]) + hashable.count(PIECES[self.white != max_node]))
             result = self.tables.get(hashable, '').strip()
             if result != '':
-                #print('Found:',hashable.count(PIECES[self.white == max_node]) + hashable.count(PIECES[self.white != max_node]))
                 value = (result.count(PIECES[self.white == max_node]) - result.count(PIECES[self.white != max_node]))/len(result)
                 if value != 0.0:
-                    #print(max_node, result, value)
                     return value if max_node else -value
         if depth == 0:
             threats = self.evaluate_threat(

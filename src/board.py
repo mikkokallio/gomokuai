@@ -1,14 +1,10 @@
-PIECES = {False: 'X', True: 'O'}
-EMPTY = '.'
-ROW = 5
-DIRECTIONS = [(1, 0), (0, 1), (1, 1), (-1, 1)]
+from scoring import PIECES, EMPTY, DIRECTIONS, ROW
 
 class Board:
     def __init__ (self, size):
         self.size = size
         self.state = [[EMPTY for _ in range(size)] for _ in range(size)]
         self.moves = []
-        # TODO: Add info about turn black/white, turn number, other stats?
 
     def print(self):
         '''Output board state with position numbering'''
@@ -43,16 +39,16 @@ class Board:
 
     def is_winning_move(self, state, y, x, color):
         '''Checks if a move completes a row of exactly 5 stones'''
-        for dir in DIRECTIONS:
+        for line in DIRECTIONS:
             count = 1
             for sign in [-1, +1]:
-                yy, xx = y, x
+                y_pos, x_pos = y, x
                 for _ in range(ROW):
-                    yy += sign * dir[0]
-                    xx += sign * dir[1]
-                    if yy < 0 or xx < 0 or yy >= self.size or xx >= self.size:
+                    y_pos += sign * line[0]
+                    x_pos += sign * line[1]
+                    if y_pos < 0 or x_pos < 0 or y_pos >= self.size or x_pos >= self.size:
                         break
-                    if state[yy][xx] == color:
+                    if state[y_pos][x_pos] == color:
                         count +=1
                     else:
                         break

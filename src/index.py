@@ -1,14 +1,9 @@
 from time import perf_counter
 import csv
-import random
 from board import Board, PIECES, EMPTY
 from human_player import HumanPlayer
 from AI_player import AIPlayer
-
-SIZE = 15
-CENTER = int(SIZE/2)
-BLACK, WHITE = False, True
-
+from scoring import CENTER, SIZE, BLACK, WHITE
 states = set()
 
 def get_constraint(min_dist, max_dist):
@@ -41,15 +36,16 @@ def main():
         (WHITE, 1, 2),
         (BLACK, 3, 4)
     ]
-    
+
     for turn in OPENING_TURNS:
-        board.print()
-        #print(f'{PIECES[turn[0]]} must be placed at least {turn[1]} and at most {turn[2]} squares from the center')
+        #board.print()
+        #print(f'Place {PIECES[turn[0]]} at least {turn[1]} and at most {turn[2]} squares from the center')
         y, x = players[turn[0]].get_move(board, turn[0], get_constraint(turn[1], turn[2]))
         board.add_piece(y, x, PIECES[turn[0]])
-        states.add(''.join([''.join(row) for row in board.state]))    
+        states.add(''.join([''.join(row) for row in board.state]))
     player_turn = WHITE
     winner = EMPTY
+    board.print()
 
     for turn in range(SIZE**2 - len(board.moves) - 125):
         #board.print()
@@ -69,15 +65,15 @@ def main():
             player_turn = not player_turn
             if turn <= 10:
                 states.add(''.join([''.join(row) for row in board.state]))
-        except ValueError as e:
+        except ValueError as error:
             print('Invalid move!')
-            print(e)
+            print(error)
 
     if winner == EMPTY:
         print('Draw!')
     #print(perf_counter() - start_time)
 
-    with open('games.csv', newline='\n') as file:
+    with open('games.csv', encoding='utf8', newline='\n') as file:
         reader = csv.reader(file)
         next(reader)
         results = dict(reader)
@@ -88,7 +84,7 @@ def main():
         else:
             results[state] = EMPTY + winner
 
-    with open('games.csv', 'w') as file:
+    with open('games.csv', 'w', encoding='utf8') as file:
         for result in results.keys():
             file.write(f'{result},{results[result].strip()}\n')
 
