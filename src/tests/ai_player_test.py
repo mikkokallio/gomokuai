@@ -1,6 +1,6 @@
 import unittest
 from board import Board
-from AI_player import AIPlayer
+from ai_player import AIPlayer
 
 
 class TestAIPlayer(unittest.TestCase):

@@ -47,3 +47,11 @@ OPENING_TURNS = [
     (WHITE, 1, 2),
     (BLACK, 3, 4)
 ]
+
+OPENING_CONSTRAINTS = [
+    (0, 0),
+    (1, 2),
+    (3, 4)
+]
+
+TABLES_FILE = 'games.csv'

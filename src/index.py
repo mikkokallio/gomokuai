@@ -2,8 +2,8 @@ from time import perf_counter
 import csv
 from board import Board
 from human_player import HumanPlayer
-from AI_player import AIPlayer
-from scoring import CENTER, SIZE, PIECES, WHITE, EMPTY, OPENING_TURNS
+from ai_player import AIPlayer
+from scoring import CENTER, SIZE, PIECES, BLACK, EMPTY, OPENING_TURNS, TABLES_FILE, OPENING_CONSTRAINTS
 states = set()
 
 def get_constraint(min_dist, max_dist):
@@ -18,33 +18,18 @@ def get_constraint(min_dist, max_dist):
 def main():
     '''Set up board and run game loop'''
     board = Board(SIZE)
-    
-    config_a = {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': True, 'random': True}
-    config_b = {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': True, 'random': True}
-    players = [AIPlayer(config_a, board), AIPlayer(config_b, board)]
-
-    start_time = perf_counter()
-    clocks = [0.0, 0.0]
-
-    for turn in OPENING_TURNS:
-        #board.print()
-        #print(f'Place {PIECES[turn[0]]} at least {turn[1]} and at most {turn[2]} squares from the center')
-        y, x = players[turn[0]].get_move(board, turn[0], get_constraint(turn[1], turn[2]))
-        board.add_piece(y, x, PIECES[turn[0]])
-        states.add(''.join([''.join(row) for row in board.state]))
-    player_turn = WHITE
+    black = {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': True, 'random': True}
+    white = {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': True, 'random': False}
+    players = [AIPlayer(black, board), AIPlayer(white, board)]
+    player_turn = BLACK
     winner = EMPTY
-    board.print()
+    clocks = [0.0, 0.0]
+    start_time = perf_counter()
 
     for turn in range(SIZE**2 - len(board.moves) - 125):
-        #board.print()
+        board.print()
         try:
-            clock_start = perf_counter()
-            y, x = players[int(player_turn)].get_move(board, player_turn, None)
-            turn_time = perf_counter() - clock_start
-            clocks[player_turn] += turn_time
-            win = board.add_piece(y, x, color=PIECES[player_turn])
-
+            win = play_turn(board, players, turn, player_turn, clocks)
             if win:
                 #board.print()
                 print(f'{PIECES[player_turn]} wins on turn {turn}!')
@@ -62,6 +47,20 @@ def main():
         print('Draw!')
     #print(perf_counter() - start_time)
 
+    store_route(states, winner)
+
+def play_turn(board, players, turn, player_turn, clocks):
+    clock_start = perf_counter()
+    if turn < len(OPENING_CONSTRAINTS):
+        print(f'Place {PIECES[player_turn]} between {OPENING_CONSTRAINTS[turn]} steps from the center')
+        y, x = players[int(player_turn)].get_move(board, player_turn, get_constraint(*OPENING_CONSTRAINTS[turn]))
+    else:
+        y, x = players[int(player_turn)].get_move(board, player_turn, None)
+    turn_time = perf_counter() - clock_start
+    clocks[player_turn] += turn_time
+    return board.add_piece(y, x, color=PIECES[player_turn])
+
+def store_route(states, winner):
     with open('games.csv', encoding='utf8', newline='\n') as file:
         reader = csv.reader(file)
         next(reader)
@@ -76,7 +75,7 @@ def main():
     with open('games.csv', 'w', encoding='utf8') as file:
         for result in results.keys():
             file.write(f'{result},{results[result].strip()}\n')
-
+    
 
 if __name__ == '__main__':
     main()
