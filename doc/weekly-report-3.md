@@ -21,3 +21,8 @@ I'll still probably experiment with new features that either make calculating po
 ## How many hours did I spend?
 
 Probably around 30 hours.
+
+## Code quality
+
+------------------------------------------------------------------
+Your code has been rated at 9.11/10 (previous run: 9.07/10, +0.04)
