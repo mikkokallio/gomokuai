@@ -33,6 +33,7 @@ The project uses pytest and coverage, which can be run with the commands below. 
 `poetry run pytest src`
 
 `poetry run coverage run --branch -m pytest src`
+
 `coverage report -m`
 
 ## Performance testing
