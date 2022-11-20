@@ -41,3 +41,9 @@ PIECES = {False: 'X', True: 'O'}
 EMPTY = '.'
 ROW = 5
 DIRECTIONS = [(1, 0), (0, 1), (1, 1), (-1, 1)]
+
+OPENING_TURNS = [
+    (BLACK, 0, 0),
+    (WHITE, 1, 2),
+    (BLACK, 3, 4)
+]

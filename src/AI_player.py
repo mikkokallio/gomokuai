@@ -3,8 +3,7 @@ from concurrent.futures import ProcessPoolExecutor
 import random
 import csv
 from proximity_list import ProximityList
-from board import PIECES, DIRECTIONS, EMPTY
-from scoring import SCORES, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS
+from scoring import SCORES, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS, PIECES, DIRECTIONS, EMPTY
 
 BIG_NUM = 999999
 

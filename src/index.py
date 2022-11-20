@@ -3,7 +3,7 @@ import csv
 from board import Board
 from human_player import HumanPlayer
 from AI_player import AIPlayer
-from scoring import CENTER, SIZE, PIECES, BLACK, WHITE, EMPTY
+from scoring import CENTER, SIZE, PIECES, BLACK, WHITE, EMPTY, OPENING_TURNS
 states = set()
 
 def get_constraint(min_dist, max_dist):
@@ -30,12 +30,6 @@ def main():
 
     start_time = perf_counter()
     clocks = [0.0, 0.0]
-
-    OPENING_TURNS = [
-        (BLACK, 0, 0),
-        (WHITE, 1, 2),
-        (BLACK, 3, 4)
-    ]
 
     for turn in OPENING_TURNS:
         #board.print()
