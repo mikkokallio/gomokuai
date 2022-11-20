@@ -3,7 +3,7 @@ from concurrent.futures import ProcessPoolExecutor
 import random
 import csv
 from proximity_list import ProximityList
-from scoring import SCORES, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS, PIECES, DIRECTIONS, EMPTY
+from scoring import SCORES, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS, PIECES, DIRECTIONS, EMPTY, TABLES_FILE
 
 BIG_NUM = 999999
 
@@ -23,10 +23,10 @@ class AIPlayer:
 
     def load_tables(self, use_table):
         if use_table:
-            with open('games.csv', encoding='utf8', newline='\n') as file:
+            with open(TABLES_FILE, encoding='utf8', newline='\n') as file:
                 reader = csv.reader(file)
                 next(reader)
-                self.tables = dict(reader)
+                return dict(reader)
         else:
             return None
 
@@ -137,7 +137,7 @@ class AIPlayer:
             hashable = ''.join([''.join(row) for row in node])
             result = self.tables.get(hashable, '').strip()
             if result != '':
-                value = (result.count(PIECES[self.white == max_node]) - result.count(PIECES[self.white != max_node]))/len(result)
+                value = (result.count(PIECES[self.white == max_node]) - result.count(PIECES[self.white != max_node]))/max(10, len(result))
                 if value != 0.0:
                     return value if max_node else -value
         if depth == 0:
