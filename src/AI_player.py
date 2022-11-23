@@ -3,7 +3,7 @@ from concurrent.futures import ProcessPoolExecutor
 import random
 import csv
 from proximity_list import ProximityList
-from scoring import SCORES, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS, PIECES, DIRECTIONS, EMPTY, TABLES_FILE
+from config import SCORES, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS, PIECES, DIRECTIONS, EMPTY, TABLES_FILE
 
 BIG_NUM = 999999
 
@@ -40,8 +40,8 @@ class AIPlayer:
             y, x, _ = self.board.moves[-1]
             self.heatmap.update(state, y, x)
         if constraint is not None:
-            #moves = self.get_possible_moves(state, constraint, True)[:self.limit_moves+10]
-            moves = self.get_possible_moves(state, [random.choice(constraint)], True)[:self.limit_moves+10]
+            moves = self.get_possible_moves(state, constraint, True)[:self.limit_moves+10]
+            #moves = self.get_possible_moves(state, [random.choice(constraint)], True)[:self.limit_moves+10]
         else:
             moves = self.get_possible_moves(state, None, True)[:self.limit_moves+10]
         #print(moves)

@@ -1,4 +1,4 @@
-from scoring import PIECES, EMPTY, DIRECTIONS, ROW
+from config import PIECES, EMPTY, DIRECTIONS, ROW
 
 class Board:
     def __init__ (self, size):
