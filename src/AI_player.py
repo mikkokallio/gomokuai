@@ -40,6 +40,7 @@ class AIPlayer:
             y, x, _ = self.board.moves[-1]
             self.heatmap.update(state, y, x)
         if constraint is not None:
+            #moves = self.get_possible_moves(state, constraint, True)[:self.limit_moves+10]
             moves = self.get_possible_moves(state, [random.choice(constraint)], True)[:self.limit_moves+10]
         else:
             moves = self.get_possible_moves(state, None, True)[:self.limit_moves+10]
@@ -133,17 +134,21 @@ class AIPlayer:
         '''Perform minimaxing with a-b pruning'''
         if self.board.is_winning_move(node, move[1], move[2], PIECES[max_node != self.white]):
             return -1 if max_node else 1
+        precog = 0
         if self.tables is not None and len(self.board.moves) + (self.depth - depth) <= 15:
             hashable = ''.join([''.join(row) for row in node])
             result = self.tables.get(hashable, '').strip()
             if result != '':
-                value = (result.count(PIECES[self.white == max_node]) - result.count(PIECES[self.white != max_node]))/max(10, len(result))
-                if value != 0.0:
-                    return value if max_node else -value
+                precog = (result.count(PIECES[self.white == max_node]) - result.count(PIECES[self.white != max_node]))/max(3, len(result))
+                #print(PIECES[self.white], 'remembers!', move, max_node, precog)
+                if precog != 0.0:
+                    print(min(len(result),9), end='')
+                    #print('-', end='')
+                    precog /= 10 #(precog if max_node else -precog) / 10
         if depth == 0:
             threats = self.evaluate_threat(
                 node, move[1], move[2], PIECES[max_node != self.white], PIECES[max_node == self.white]) / 101
-            return -threats if max_node else threats
+            return (-threats if max_node else threats) #- precog
         value = -BIG_NUM if max_node else BIG_NUM
         newmoves = self.get_possible_moves(node, None, max_node)[:self.limit_moves]
         deepen = len(newmoves) == 1 and self.deepen
@@ -151,7 +156,7 @@ class AIPlayer:
             child = copy.deepcopy(node)
             child[newmove[1]][newmove[2]] = PIECES[max_node == self.white]
             recurse = self.minimax(child, newmove, depth-1+deepen, alfa, beta, not max_node)
-            value = max(value, recurse) if max_node else min(value, recurse)
+            value = (max(value, recurse - precog) if max_node else min(value, recurse - precog))
             if max_node:
                 alfa = max(alfa, value)
             else:

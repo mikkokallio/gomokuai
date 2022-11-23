@@ -1,10 +1,7 @@
 Viikko 3:
 Palautus 3: lauantaina 19.11. klo 22:59
-Dokumentaatio: Kirjoitettu koodi selkeää ja kommentoitua. Aloitettu kirjoittamaan testausdokumenttia.
-Ohjelma: Ohjelman ydinalue edennyt, aloitettu ehkä jo omien tietorakenteiden toteutus, mikäli työhön kuuluu sellaisia.
+Dokumentaatio: Kirjoitettu koodi selkeää ja kommentoitua.
 Testaus: Koodin kattava yksikkötestaus.
-Viimeistään tässä vaiheessa testikattavuuden olisi oltava käytettävissä, ja testausdokumentissa on ainakin testikattavuusraportti kuvana / taulukkona.
-Viimeistään tässä vaiheessa checkstylen tai vastaavan koodin laadun seurannan tulisi olla käytössä.
 
 
 

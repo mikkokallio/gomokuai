@@ -9,22 +9,23 @@ states = set()
 def main():
     '''Set up board and run game loop'''
     board = Board(SIZE)
-    black = {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': False, 'random': True}
-    white = {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': True, 'random': False}
+    black = {'depth': 11, 'reach': 2, 'branching': 3, 'deepen': False, 'tables': False, 'random': False}
+    white = {'depth': 11, 'reach': 2, 'branching': 3, 'deepen': False, 'tables': True, 'random': False}
     players = [AIPlayer(black, board), AIPlayer(white, board)]
     player_turn = BLACK
     winner = EMPTY
     clocks = [0.0, 0.0]
-    start_time = perf_counter()
 
-    for turn in range(SIZE**2 - 125):
+    for turn in range(SIZE**2 - 165):
         #board.print()
+        #if turn == 4:
+        #    board.print()
         try:
             win = play_turn(board, players, turn, player_turn, clocks)
             if win:
                 #board.print()
-                print(f'{PIECES[player_turn]} wins on turn {turn}!')
-                print('X time:', clocks[0], 'O time:', clocks[1])
+                print(f'{PIECES[player_turn]} wins on turn {turn}! Clocks: X {clocks[0]} O {clocks[1]}')
+                #print('X time:', clocks[0], 'O time:', clocks[1])
                 winner = PIECES[player_turn]
                 break
             player_turn = not player_turn
@@ -36,7 +37,6 @@ def main():
 
     if winner == EMPTY:
         print('Draw!')
-    print(perf_counter() - start_time)
 
     store_route(states, winner)
 
