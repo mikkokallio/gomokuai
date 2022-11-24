@@ -21,6 +21,14 @@ class TestBoard(unittest.TestCase):
             self.board.add_piece(3, 3, 'X')
             self.board.add_piece(3, 3, 'X')
 
+    def test_cannot_add_stone_outside_board(self):
+        with self.assertRaises(ValueError):
+            self.board.add_piece(15, 3, 'X')
+
+    def test_cannot_add_weird_stone(self):
+        with self.assertRaises(ValueError):
+            self.board.add_piece(15, 3, 'Q')
+
     def test_five_in_a_row_wins(self):
         moves = [(1,1,'X'), (1,2,'X'), (1,3,'X'), (1,4,'X')]
         [self.board.add_piece(*move) for move in moves]
