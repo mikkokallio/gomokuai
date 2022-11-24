@@ -55,6 +55,23 @@ class TestAIPlayer(unittest.TestCase):
         self.assertEqual(y, 5)
         self.assertEqual(x, 9)
 
+    def test_ai_prevents_double_three(self):
+        self.board.add_piece(4, 4, 'X')
+        self.board.add_piece(4, 5, 'X')
+        self.board.add_piece(5, 6, 'X')
+        self.board.add_piece(6, 6, 'X')
+        y, x = self.ai.get_move(self.board, True, None)
+        self.assertEqual(y, 4)
+        self.assertEqual(x, 6)
+
+    def test_ai_prevents_open_four(self):
+        self.board.add_piece(4, 4, 'X')
+        self.board.add_piece(4, 5, 'X')
+        self.board.add_piece(4, 6, 'X')
+        y, x = self.ai.get_move(self.board, True, None)
+        self.assertEqual(y, 4)
+        self.assertIn(x, [3, 7])
+
     def test_ai_finishes_row_despite_threat(self):
         self.board.add_piece(5, 5, 'O')
         self.board.add_piece(4, 5, 'X')
@@ -67,3 +84,18 @@ class TestAIPlayer(unittest.TestCase):
         y, x = self.ai.get_move(self.board, True, None)
         self.assertEqual(y, 5)
         self.assertIn(x, [4, 9])
+
+    def test_ai_seeks_to_build_row_of_5(self):
+        y, x = self.ai.get_move(self.board, True, None)
+        self.board.add_piece(y, x, 'X')
+        y, x = self.ai.get_move(self.board, True, None)
+        self.board.add_piece(y, x, 'X')
+        y, x = self.ai.get_move(self.board, True, None)
+        self.board.add_piece(y, x, 'X')
+        y, x = self.ai.get_move(self.board, True, None)
+        self.board.add_piece(y, x, 'X')
+        y, x = self.ai.get_move(self.board, True, None)
+        self.board.add_piece(y, x, 'X')
+        y, x = self.ai.get_move(self.board, True, None)
+        win = self.board.add_piece(y, x, 'X')
+        self.assertTrue(win)
