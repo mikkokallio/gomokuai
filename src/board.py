@@ -15,14 +15,6 @@ class Board:
         output+=''
         return output
 
-    def print(self):
-        '''Output board state with position numbering'''
-        print('  ' + ''.join([f'{x:02d}'[0] for x in range(self.size)]))
-        print('  ' + ''.join([f'{x:02d}'[1] for x in range(self.size)]))
-        for y, row in enumerate(self.state):
-            print(f'{y:02d}' + ''.join(row))
-        print('')
-
     def get_size(self):
         '''Number of squares per board's size'''
         return self.size
