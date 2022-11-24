@@ -21,9 +21,9 @@ class AIPlayer:
         self.tables = self.load_tables(config['tables'])
         self.randomized = config['random']
 
-    def load_tables(self, use_table):
-        if use_table:
-            with open(TABLES_FILE, encoding='utf8', newline='\n') as file:
+    def load_tables(self, table_file):
+        if table_file is not None:
+            with open(table_file, encoding='utf8', newline='\n') as file:
                 reader = csv.reader(file)
                 next(reader)
                 return dict(reader)

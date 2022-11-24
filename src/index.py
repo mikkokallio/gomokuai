@@ -9,8 +9,8 @@ states = set()
 def main():
     '''Set up board and run game loop'''
     board = Board(SIZE)
-    black = {'depth': 11, 'reach': 2, 'branching': 3, 'deepen': False, 'tables': False, 'random': False}
-    white = {'depth': 11, 'reach': 2, 'branching': 3, 'deepen': False, 'tables': True, 'random': False}
+    black = {'depth': 9, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': None, 'random': True}
+    white = {'depth': 9, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': TABLES_FILE, 'random': False}
     players = [AIPlayer(black, board), AIPlayer(white, board)]
     #players = [AIPlayer(white, board), HumanPlayer()]
     player_turn = BLACK
@@ -18,11 +18,11 @@ def main():
     clocks = [0.0, 0.0]
 
     for turn in range(SIZE**2 - 165):
-        board.print()
+        #board.print()
         try:
             win = play_turn(board, players, turn, player_turn, clocks)
             if win:
-                board.print()
+                #board.print()
                 print(f'{PIECES[player_turn]} wins on turn {turn}! Clocks: X {clocks[0]} O {clocks[1]}')
                 #print('X time:', clocks[0], 'O time:', clocks[1])
                 winner = PIECES[player_turn]
