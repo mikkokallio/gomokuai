@@ -49,3 +49,13 @@ OPENING_CONSTRAINTS = [
 ]
 
 TABLES_FILE = 'games.csv'
+
+AI_PLAYERS = {
+    'Robert': {'depth': 3, 'reach': 3, 'branching': 9, 'deepen': True, 'tables': None, 'random': True},
+    'Anna': {'depth': 3, 'reach': 3, 'branching': 7, 'deepen': True, 'tables': TABLES_FILE, 'random': True},
+    'Donald': {'depth': 5, 'reach': 2, 'branching': 3, 'deepen': False, 'tables': TABLES_FILE, 'random': True},
+    'Maisie': {'depth': 5, 'reach': 3, 'branching': 7, 'deepen': False, 'tables': None, 'random': True},
+    'Andrew': {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': TABLES_FILE, 'random': True},
+    'Norma': {'depth': 9, 'reach': 2, 'branching': 3, 'deepen': False, 'tables': None, 'random': True},
+    'Pierre': {'depth': 11, 'reach': 2, 'branching': 3, 'deepen': False, 'tables': None, 'random': True},
+}

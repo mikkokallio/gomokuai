@@ -142,7 +142,7 @@ class AIPlayer:
                 precog = (result.count(PIECES[self.white == max_node]) - result.count(PIECES[self.white != max_node]))/max(3, len(result))
                 #print(PIECES[self.white], 'remembers!', move, max_node, precog)
                 if precog != 0.0:
-                    print(min(len(result),9), end='')
+                    #print(min(len(result),9), end='')
                     #print('-', end='')
                     precog /= 10 #(precog if max_node else -precog) / 10
         if depth == 0:

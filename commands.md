@@ -10,3 +10,6 @@
 `poetry run pylint src`
 
 `while ($true) {poetry run python src/index.py;}`
+
+# Alternate colors between two players
+`while ($true) {poetry run python src/index.py Maisie Robert; poetry run python src/index.py Robert Maisie;}`

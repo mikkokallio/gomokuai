@@ -1,29 +1,34 @@
+import sys
 from time import perf_counter
 import csv
 from board import Board
 from human_player import HumanPlayer
 from ai_player import AIPlayer
-from config import CENTER, SIZE, PIECES, BLACK, EMPTY, TABLES_FILE, OPENING_CONSTRAINTS
+from config import CENTER, SIZE, PIECES, BLACK, EMPTY, TABLES_FILE, OPENING_CONSTRAINTS, AI_PLAYERS
 states = set()
 
 def main():
     '''Set up board and run game loop'''
+    names = sys.argv[-2:]
+    if len(names) < 2 or any([name not in AI_PLAYERS for name in names]):
+        print("Supply two names from the following list:")
+        print(list(AI_PLAYERS.keys()))
+        sys.exit()
     board = Board(SIZE)
-    black = {'depth': 9, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': None, 'random': True}
-    white = {'depth': 9, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': TABLES_FILE, 'random': False}
-    players = [AIPlayer(black, board), AIPlayer(white, board)]
-    #players = [AIPlayer(white, board), HumanPlayer()]
+    players = [AIPlayer(AI_PLAYERS[names[0]], board), AIPlayer(AI_PLAYERS[names[1]], board)]
     player_turn = BLACK
     winner = EMPTY
     clocks = [0.0, 0.0]
+    silent = True
+    print(f'{names[0]} vs {names[1]}', end='\t' if silent else '\n')
 
     for turn in range(SIZE**2 - 165):
-        #print(board)
+        if not silent: print(board)
         try:
             win = play_turn(board, players, turn, player_turn, clocks)
             if win:
-                #print(board)
-                print(f'{PIECES[player_turn]} wins on turn {turn}! Clocks: X {clocks[0]} O {clocks[1]}')
+                if not silent: print(board)
+                print(f'{names[player_turn]} ({PIECES[player_turn]}) wins on turn {turn}! Clocks: X {clocks[0]} O {clocks[1]}')
                 #print('X time:', clocks[0], 'O time:', clocks[1])
                 winner = PIECES[player_turn]
                 break
