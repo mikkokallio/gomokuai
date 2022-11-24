@@ -6,6 +6,15 @@ class Board:
         self.state = [[EMPTY for _ in range(size)] for _ in range(size)]
         self.moves = []
 
+    def __str__(self):
+        '''Output board state with position numbering'''
+        output = '  ' + ''.join([f'{x:02d}'[0] for x in range(self.size)]) + '\n'
+        output +='  ' + ''.join([f'{x:02d}'[1] for x in range(self.size)]) + '\n'
+        for y, row in enumerate(self.state):
+            output+=f'{y:02d}' + ''.join(row) + '\n'
+        output+=''
+        return output
+
     def print(self):
         '''Output board state with position numbering'''
         print('  ' + ''.join([f'{x:02d}'[0] for x in range(self.size)]))

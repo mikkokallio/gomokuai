@@ -12,6 +12,10 @@ class TestBoard(unittest.TestCase):
         except ValueError:
             assert False
 
+    def test_board_prints_correctly(self):
+        output = str(self.board)
+        self.assertEqual(output, '  000000000011111\n  012345678901234\n00...............\n01...............\n02...............\n03...............\n04...............\n05...............\n06...............\n07...............\n08...............\n09...............\n10...............\n11...............\n12...............\n13...............\n14...............\n')
+
     def test_cannot_add_stone_to_taken_space(self):
         with self.assertRaises(ValueError):
             self.board.add_piece(3, 3, 'X')

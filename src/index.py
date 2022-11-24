@@ -18,11 +18,11 @@ def main():
     clocks = [0.0, 0.0]
 
     for turn in range(SIZE**2 - 165):
-        #board.print()
+        print(board)
         try:
             win = play_turn(board, players, turn, player_turn, clocks)
             if win:
-                #board.print()
+                print(board)
                 print(f'{PIECES[player_turn]} wins on turn {turn}! Clocks: X {clocks[0]} O {clocks[1]}')
                 #print('X time:', clocks[0], 'O time:', clocks[1])
                 winner = PIECES[player_turn]
