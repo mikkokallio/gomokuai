@@ -1,10 +1,3 @@
-Viikko 3:
-Palautus 3: lauantaina 19.11. klo 22:59
-Dokumentaatio: Kirjoitettu koodi selkeää ja kommentoitua.
-Testaus: Koodin kattava yksikkötestaus.
-
-
-
 Viikko 4:
 Ensimmäiset vertaisarvioinnit jaetaan viikon palautuksen jälkeen. Katso labtoolista linkki katselmoitavaan repoon. Vertaisarvioinnin deadline on sama kuin viikon 5 deadline.
 Ohjeet vertaisarviointiin täällä
