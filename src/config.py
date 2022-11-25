@@ -42,7 +42,7 @@ EMPTY = '.'
 ROW = 5
 DIRECTIONS = [(1, 0), (0, 1), (1, 1), (-1, 1)]
 
-OPENING_CONSTRAINTS = [
+CONSTRAINTS = [
     (0, 0),
     (1, 2),
     (3, 3)
@@ -51,11 +51,18 @@ OPENING_CONSTRAINTS = [
 TABLES_FILE = 'games.csv'
 
 AI_PLAYERS = {
-    'Robert': {'depth': 3, 'reach': 13, 'branching': 13, 'deepen': True, 'tables': None, 'random': True},
-    'Anna': {'depth': 4, 'reach': 3, 'branching': 7, 'deepen': True, 'tables': TABLES_FILE, 'random': True},
-    'Donald': {'depth': 4, 'reach': 3, 'branching': 7, 'deepen': True, 'tables': None, 'random': True},
-    'Maisie': {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': TABLES_FILE, 'random': True},
-    'Andrew': {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': TABLES_FILE, 'random': True},
-    'Norma': {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True, 'tables': None, 'random': True},
-    'Pierre': {'depth': 11, 'reach': 2, 'branching': 3, 'deepen': False, 'tables': None, 'random': True},
+    'Robert': {'depth': 3, 'reach': 13, 'branching': 13, 'deepen': True,
+               'tables': None, 'random': True},
+    'Anna': {'depth': 4, 'reach': 3, 'branching': 7, 'deepen': True,
+             'tables': TABLES_FILE, 'random': True},
+    'Donald': {'depth': 4, 'reach': 3, 'branching': 7, 'deepen': True,
+               'tables': None, 'random': True},
+    'Maisie': {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True,
+               'tables': TABLES_FILE, 'random': True},
+    'Andrew': {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True,
+               'tables': TABLES_FILE, 'random': True},
+    'Norma': {'depth': 7, 'reach': 2, 'branching': 3, 'deepen': True,
+              'tables': None, 'random': True},
+    'Pierre': {'depth': 11, 'reach': 2, 'branching': 3, 'deepen': False,
+               'tables': None, 'random': True},
 }

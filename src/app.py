@@ -1,10 +1,10 @@
 from time import perf_counter
 import csv
 from board import Board
-from human_player import HumanPlayer
+#from human_player import HumanPlayer
 from ai_player import AIPlayer
-from config import CENTER, SIZE, PIECES, BLACK, EMPTY, TABLES_FILE, OPENING_CONSTRAINTS, AI_PLAYERS
-states = set()
+from config import CENTER, SIZE, PIECES, BLACK, EMPTY, TABLES_FILE, CONSTRAINTS, AI_PLAYERS
+
 
 class App:
     def __init__(self, names):
@@ -14,26 +14,25 @@ class App:
             AIPlayer(AI_PLAYERS[names[0]], self.board),
             AIPlayer(AI_PLAYERS[names[1]], self.board)
             ]
-        self.winner = EMPTY
+        self.winner = None
         self.clocks = [0.0, 0.0]
         self.silent = False
 
     def run(self):
         '''Run game loop'''
-        end = '\t' if self.silent else '\n'
-        print(f'{self.names[0]} vs {self.names[1]}', end=end)
+        if not self.silent:
+            print(f'{self.names[0]} vs {self.names[1]}')
 
         player_turn = BLACK
+        states = set()
 
         for turn in range(SIZE**2 - 165):
-            if not self.silent: print(self.board)
+            if not self.silent:
+                print(self.board)
             try:
                 win = self.play_turn(self.board, self.players, turn, player_turn, self.clocks)
                 if win:
-                    if not self.silent: print(self.board)
-                    print(f'{self.names[player_turn]} ({PIECES[player_turn]}) wins on turn {turn}!', end=end)
-                    print(f'X time: {self.clocks[0]} O time: {self.clocks[1]}')
-                    winner = PIECES[player_turn]
+                    winner = player_turn
                     break
                 player_turn = not player_turn
                 if turn <= 10:
@@ -42,9 +41,7 @@ class App:
                 print('Invalid move!')
                 print(error)
 
-        if winner == EMPTY:
-            print('Draw!')
-
+        self.declare_winner(winner, turn)
         self.store_route(states, winner)
 
     def get_constraint(self, min_dist, max_dist):
@@ -58,18 +55,31 @@ class App:
         return moves
 
     def play_turn(self, board, players, turn, player_turn, clocks):
+        '''Play and clock one player's turn'''
         clock_start = perf_counter()
-        if turn < len(OPENING_CONSTRAINTS):
+        if turn < len(CONSTRAINTS):
             if not self.silent:
-                print(f'Place {PIECES[player_turn]} between {OPENING_CONSTRAINTS[turn]} steps from the center')
-            y, x = players[int(player_turn)].get_move(board, player_turn, self.get_constraint(*OPENING_CONSTRAINTS[turn]))
+                print(f'Place {PIECES[player_turn]} {CONSTRAINTS[turn]} steps from the center')
+            y, x = players[int(player_turn)].get_move(board, player_turn, self.get_constraint(*CONSTRAINTS[turn]))
         else:
             y, x = players[int(player_turn)].get_move(board, player_turn, None)
         turn_time = perf_counter() - clock_start
         clocks[player_turn] += turn_time
         return board.add_piece(y, x, color=PIECES[player_turn])
 
+    def declare_winner(self, winner, turn):
+        if not self.silent:
+            print(self.board)
+            if winner is None:
+                print('Draw!')
+            else:
+                print(f'{self.names[winner]} ({PIECES[winner]}) wins on turn {turn}!')
+            print(f'X time: {self.clocks[0]} O time: {self.clocks[1]}')
+        else:
+            print('test!')
+
     def store_route(self, states, winner):
+        '''Save data about finished game'''
         with open(TABLES_FILE, encoding='utf8', newline='\n') as file:
             reader = csv.reader(file)
             next(reader)
@@ -77,9 +87,9 @@ class App:
 
         for state in states:
             if state in results:
-                results[state] += winner
+                results[state] += PIECES[winner]
             else:
-                results[state] = EMPTY + winner
+                results[state] = EMPTY + PIECES[winner]
 
         with open(TABLES_FILE, 'w', encoding='utf8') as file:
             for result in results.keys():
