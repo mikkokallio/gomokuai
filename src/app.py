@@ -14,7 +14,6 @@ class App:
             AIPlayer(AI_PLAYERS[names[0]], self.board),
             AIPlayer(AI_PLAYERS[names[1]], self.board)
             ]
-        self.winner = None
         self.clocks = [0.0, 0.0]
         self.silent = False
 
@@ -24,6 +23,7 @@ class App:
             print(f'{self.names[0]} vs {self.names[1]}')
 
         player_turn = BLACK
+        winner = None
         states = set()
 
         for turn in range(SIZE**2 - 165):
