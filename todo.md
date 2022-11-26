@@ -5,7 +5,6 @@ Salli issuet vertaisarviointia varten, katso Issueiden luonnin salliminen repoon
 
 Palautus 4: lauantaina 26.11. klo 22:59
 Dokumentaatio: Koodi kommentoitua. Aloitettu kirjoittamaan toteutusraporttia.
-Viikkoraportti numero 4
 Ohjelma: Ohjelman ydintoiminta valmis.
 Testaus: Koodin kattava yksikkötestaus. Aloitettu suorituskyky- tai muu aiheeseen sopiva testaus (kirjoita näistä testausdokumenttiin).
 

@@ -51,6 +51,14 @@ CONSTRAINTS = [
 TABLES_FILE = 'games.csv'
 
 AI_PLAYERS = {
+    'WeakAI': {'depth': 5, 'reach': 2, 'branching': 3, 'deepen': True,
+               'tables': None, 'random': True},
+    'WeakAI2': {'depth': 5, 'reach': 3, 'branching': 5, 'deepen': True,
+               'tables': None, 'random': True},
+    'AverageAI': {'depth': 5, 'reach': 2, 'branching': 4, 'deepen': False,
+               'tables': None, 'random': True},
+    'AverageAI2': {'depth': 5, 'reach': 5, 'branching': 9, 'deepen': False,
+               'tables': None, 'random': True},
     'Robert': {'depth': 3, 'reach': 13, 'branching': 13, 'deepen': True,
                'tables': None, 'random': True},
     'Anna': {'depth': 4, 'reach': 3, 'branching': 7, 'deepen': True,

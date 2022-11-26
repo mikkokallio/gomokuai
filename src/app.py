@@ -1,21 +1,24 @@
 from time import perf_counter
 import csv
+import json
 from board import Board
 #from human_player import HumanPlayer
 from ai_player import AIPlayer
-from config import CENTER, SIZE, PIECES, BLACK, EMPTY, TABLES_FILE, CONSTRAINTS, AI_PLAYERS
+from config import CENTER, SIZE, PIECES, BLACK, WHITE, EMPTY, TABLES_FILE, CONSTRAINTS, AI_PLAYERS
 
 
 class App:
-    def __init__(self, names):
+    def __init__(self, names, rounds, silent, save):
         self.board = Board(SIZE)
         self.names = names
+        self.rounds = rounds
         self.players = [
             AIPlayer(AI_PLAYERS[names[0]], self.board),
             AIPlayer(AI_PLAYERS[names[1]], self.board)
             ]
         self.clocks = [0.0, 0.0]
-        self.silent = False
+        self.silent = silent
+        self.save = save
 
     def run(self):
         '''Run game loop'''
@@ -26,7 +29,7 @@ class App:
         winner = None
         states = set()
 
-        for turn in range(SIZE**2 - 165):
+        for turn in range(self.rounds):
             if not self.silent:
                 print(self.board)
             try:
@@ -42,7 +45,8 @@ class App:
                 print(error)
 
         self.declare_winner(winner, turn)
-        self.store_route(states, winner)
+        if self.save:
+            self.store_route(states, winner)
 
     def get_constraint(self, min_dist, max_dist):
         '''For initial moves, get list of allowed moves'''
@@ -76,7 +80,13 @@ class App:
                 print(f'{self.names[winner]} ({PIECES[winner]}) wins on turn {turn}!')
             print(f'X time: {self.clocks[0]} O time: {self.clocks[1]}')
         else:
-            print('test!')
+            print(json.dumps({
+                'players': [{'name': self.names[player],
+                             'color': PIECES[player],
+                             'time': self.clocks[player]} for player in [BLACK, WHITE]], #{PIECES[BLACK]: self.names[BLACK]},
+                'winner': self.names[winner] if winner is not None else 'draw',
+                'color': PIECES[winner] if winner is not None else EMPTY,
+                'round': turn}))
 
     def store_route(self, states, winner):
         '''Save data about finished game'''
