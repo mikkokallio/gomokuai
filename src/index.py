@@ -15,12 +15,15 @@ def main():
     parser.add_argument('player1', choices=AI_PLAYERS)
     parser.add_argument('player2', choices=AI_PLAYERS)
     args = parser.parse_args()
-    for _ in range(args.repeat):
-        app = App([args.player1, args.player2], 60, args.csv, args.store)
-        app.run()
-        if args.alternate:
-            app = App([args.player2, args.player1], 60, args.csv, args.store)
-            app.run()
+    n = args.repeat * 2 if args.alternate else args.repeat
+    flipped = False
+    for _ in range(n):
+        players = [args.player2, args.player1] if flipped else [args.player1, args.player2]
+        app = App(players, 60, args.csv, args.store)
+        result = app.run()
+        if args.csv:
+            print(result)
+        flipped = not flipped
 
 if __name__ == '__main__':
     main()

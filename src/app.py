@@ -1,6 +1,5 @@
 from time import perf_counter
 import csv
-import json
 from board import Board
 #from human_player import HumanPlayer
 from ai_player import AIPlayer
@@ -47,6 +46,7 @@ class App:
         self.declare_winner(winner, turn)
         if self.save:
             self.store_route(states, winner)
+        return f'{self.names[BLACK]},{self.names[WHITE]},{self.clocks[BLACK]},{self.clocks[WHITE]},{self.names[winner]},{turn}'
 
     def get_constraint(self, min_dist, max_dist):
         '''For initial moves, get list of allowed moves'''
@@ -79,14 +79,6 @@ class App:
             else:
                 print(f'{self.names[winner]} ({PIECES[winner]}) wins on turn {turn}!')
             print(f'X time: {self.clocks[0]} O time: {self.clocks[1]}')
-        else:
-            print(json.dumps({
-                'players': [{'name': self.names[player],
-                             'color': PIECES[player],
-                             'time': self.clocks[player]} for player in [BLACK, WHITE]], #{PIECES[BLACK]: self.names[BLACK]},
-                'winner': self.names[winner] if winner is not None else 'draw',
-                'color': PIECES[winner] if winner is not None else EMPTY,
-                'round': turn}))
 
     def store_route(self, states, winner):
         '''Save data about finished game'''
