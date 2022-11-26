@@ -23,4 +23,6 @@ Then you can make two bots fight one another by running e.g. `poetry run python 
 ## Other documentation
 
 * [Project specification](https://github.com/mikkokallio/tiralabra/blob/main/doc/specification.md)
+* [Testing document](https://github.com/mikkokallio/tiralabra/blob/main/doc/testing.md)
+* [Implementation report](https://github.com/mikkokallio/tiralabra/blob/main/doc/implementation.md)
 * TBA
