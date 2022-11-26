@@ -5,7 +5,7 @@ from ai_player import AIPlayer
 
 class TestApp(unittest.TestCase):
     def setUp(self):
-        self.app = App(['Robert', 'Pierre'], 5)
+        self.app = App(['Robert', 'Pierre'], 5, True, False)
 
     def test_app_is_created(self):
         self.assertEqual(self.app.names, ['Robert', 'Pierre'])
