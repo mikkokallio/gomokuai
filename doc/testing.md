@@ -16,14 +16,15 @@ The project uses pytest and coverage, which can be run with the commands below. 
 ```
 Name                    Stmts   Miss Branch BrPart  Cover   Missing
 -------------------------------------------------------------------
-src\ai_player.py          135     40     80      8    68%   26-29, 39-41, 43, 63-65, 70->72, 112->100, 125, 127, 129, 134-161
-src\board.py               44      7     30      3    78%   11-15, 33, 35, 46->44
+src\ai_player.py          136     31     80      3    76%   39->42, 64-66, 113->101, 130, 135-166
+src\app.py                 75     25     36      7    64%   25, 33, 37-38, 40->31, 42-44, 48, 66, 76-81, 85-98
+src\board.py               45      1     30      2    96%   36, 47->45
+src\config.py              16      0      0      0   100%
 src\human_player.py         5      0      4      0   100%
 src\proximity_list.py      18      0     12      0   100%
-src\scoring.py             15      0      0      0   100%
 -------------------------------------------------------------------
-TOTAL                     217     47    126     11    76%
-```
+TOTAL                     295     57    162     12    79%```
+
 ## Performance testing
 
 Optimizing gomoku AI means finding a balance between the speed (measured in average milliseconds / turn) and skill of the AI (percentage of winning vs losing vs draws).
