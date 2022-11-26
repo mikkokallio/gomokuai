@@ -12,4 +12,5 @@ class TestApp(unittest.TestCase):
         self.assertIsInstance(self.app.players[0], AIPlayer)
 
     def test_app_can_run_short_game(self):
-        pass
+        result = self.app.run()
+        print(result)
