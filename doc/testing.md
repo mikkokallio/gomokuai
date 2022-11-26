@@ -23,7 +23,8 @@ src\config.py              16      0      0      0   100%
 src\human_player.py         5      0      4      0   100%
 src\proximity_list.py      18      0     12      0   100%
 -------------------------------------------------------------------
-TOTAL                     295     57    162     12    79%```
+TOTAL                     295     57    162     12    79%
+```
 
 ## Performance testing
 
