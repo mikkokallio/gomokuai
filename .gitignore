@@ -1,6 +1,6 @@
 scratch.txt
 past_games/
-games.csv
+#games.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

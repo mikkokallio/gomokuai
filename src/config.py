@@ -51,6 +51,8 @@ CONSTRAINTS = [
 TABLES_FILE = 'games.csv'
 
 AI_PLAYERS = {
+    'Tester': {'depth': 3, 'reach': 2, 'branching': 3, 'deepen': False,
+               'tables': None, 'random': False},
     'WeakAI': {'depth': 5, 'reach': 2, 'branching': 3, 'deepen': True,
                'tables': None, 'random': True},
     'WeakAI2': {'depth': 5, 'reach': 3, 'branching': 5, 'deepen': True,
