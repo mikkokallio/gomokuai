@@ -59,13 +59,23 @@ Conclusions: Not surprisingly, increases in depth increase the bot's skill but d
 
 Since we've established that PTD is a good idea, we'll use it consistently in the next set of matches. This time the idea is to test how much constraints on branching affect speed and skill. The bots have two parameters related to branching: reach and branching. To limit the number of possible moves, only squares near existing stones are considered. Reach determines how many steps away from an existing stone a new stone can be placed. Brnaching, on the other hand, determines the maximum number of different moves evaluated at each depth. The number of positions evaluated is equal to branching to the power of max depth. Alpha-beta pruning removes some branches, but it alone is not necessarily enough, so setting a hard limit may be useful. Note: The bot adds +10 branches at the root level. This is because the 
 
-* Eric: depth 3 with reach 2 and branching 3; xxx wins, xxx draws, xxx losses, avg time: xxx s
-* Robert: depth 3 with reach 13 and branching 13; xxx wins, xxx draws, xxx losses, avg time: xxx s
-* Jane: depth 5 with reach 2 and branching 3; xxx wins, xxx draws, xxx losses, avg time: xxx s
-* Anna: depth 5 with reach 3 and branching 7; xxx wins, xxx draws, xxx losses, avg time: xxx s
+* Eric: depth 3 with reach 2 and branching 3; 11 wins, 2 draws, 46 losses, avg time: xxx s
+* Robert: depth 3 with reach 13 and branching 13; 20 wins, 7 draws, 42 losses, avg time: xxx s
+* Jane: depth 5 with reach 2 and branching 3; 31 wins, 2 draws, 27 losses, avg time: xxx s
+* Anna: depth 5 with reach 3 and branching 7; 50 wins, 3 draws, 7 losses, avg time: xxx s
 
-
-TBA
+Robert's statistics
+2.9083791728637562
+2.3739910156255295
+Eric's statistics
+0.3627762712742559
+0.368488914354168
+Jane's statistics
+0.6562872535869722
+0.6136383212354478
+Anna's statistics
+5.805989505513161
+6.469999981719729
 
 ## To be processed!
 
