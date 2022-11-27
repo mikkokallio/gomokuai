@@ -36,11 +36,28 @@ The program measures both players' time expenditure as well as the total length 
 
 Tavoitteena on havaita kaikki virheet ohjelman toiminnassa. Kannattaa kirjoittaa mahdollisimman pieniä yksikkötestejä mahdollisimman paljon. Ideana on, että jos koodissa on virhe, tulisi vähintään yhden testin havaita se, ja virheen kohta koodissa tulisi olla mahdollisimman selkeä. Tämä on tärkeää, jotta virheiden korjaaminen on tehokasta.
 
-### Skills
+### Skill
 
 As part of the performance testing is determining how good the AI is at playing gomoku. Benchmarking can be done e.g. against other versions of the AI, using a different set of parameters. For example, if one player has depth 9, it should quite easily defeat another player with depth 5, of course taking into account the first player advantage when comparing win percentages. Ideally, each player plays both as many games as black and white and the winning % from e.g. 100 games determines which version is better. TBA: script that runs e.g. 100 games and automatically calculates performance.
 
-## 
+### Test results
+
+#### Test 1: Compare depth values and pass-through deepening
+
+Four bots each fought 10 matches against each foe in both colors, for a total of 10*2*4!=120 matches. Only two parameters were varied: max depth and pass-through deepening, which effectively increases max depth whenever a node has only one child (i.e. no branching occurs). The bots were configured as shown below, and they had the following win statistic and time used per round:
+
+* Eric: depth 3 with PTD; 9 wins, 26 draws, 25 losses, avg time: 0.45 s
+* Philip: depth 5 without PTD; 17 wins, 18 draws, 25 losses, avg time: 0.35 s
+* Jane: depth 5 with PTD; 35 wins, 14 draws, 11 losses, avg time: 0.72 s
+* Emma: depth 7 without PTD; 16 wins, 28 draws, 16 losses, avg time: 0.81 s
+
+Going from depth 5 to 7 without PTD (Philip vs Emma) surprisingly didn't increase wins, but it did decrease losses significantly. Going from depth 3 to 5 with PTD (Eric vs Jane) made a huge difference, increasing successes. Meanwhile, enabling PTD with depth 5 (Philip vs Jane) doubled the length of each turn, but it also greatly improved the bot's odds of winning. It's worth noting PTD makes Jane significantly better than Emma, but Jane's time/round is still less than that of Emma.
+
+Conclusions: Not surprisingly, increases in depth increase the bot's skill but decrease speed, so it's a trade-off. PTD also increases skill and decreases speed, but the ratio is much more favorable than that of increasing depth. In other words, it is a good idea to enable PTD.
+
+## Test 2: Compare branching factor
+
+TBA
 
 ## To be processed!
 
