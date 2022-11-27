@@ -55,7 +55,9 @@ Going from depth 5 to 7 without PTD (Philip vs Emma) surprisingly didn't increas
 
 Conclusions: Not surprisingly, increases in depth increase the bot's skill but decrease speed, so it's a trade-off. PTD also increases skill and decreases speed, but the ratio is much more favorable than that of increasing depth. In other words, it is a good idea to enable PTD.
 
-## Test 2: Compare branching factor
+### Test 2: Compare branching factor
+
+Since we've established that PTD is a good idea, we'll use it consistently in the next set of matches. This time the idea is to test how much constraints on branching affect speed and skill. The bots have two parameters related to branching: reach and branching. To limit the number of possible moves, only squares near existing stones are considered. Reach determines how many steps away from an existing stone a new stone can be placed. Brnaching, on the other hand, determines the maximum number of different moves evaluated at each depth. The number of positions evaluated is equal to branching to the power of max depth. Alpha-beta pruning removes some branches, but it alone is not necessarily enough, so setting a hard limit may be useful.
 
 TBA
 
