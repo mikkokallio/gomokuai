@@ -42,6 +42,8 @@ As part of the performance testing is determining how good the AI is at playing 
 
 ### Test results
 
+The app supports outputting game results as .csv, so it's possible to store them in a file. With enough game data stored, it's possible to get insights with the data. The script `tools/analyze.py` put game results in a pandas data frame so it's easy to make calculations. The following performance tests leverage that script.
+
 #### Test 1: Compare depth values and pass-through deepening
 
 Four bots each fought 10 matches against each foe in both colors, for a total of 10*2*4!=120 matches. Only two parameters were varied: max depth and pass-through deepening, which effectively increases max depth whenever a node has only one child (i.e. no branching occurs). The bots were configured as shown below, and they had the following win statistic and time used per round:
@@ -63,6 +65,10 @@ Since we've established that PTD is a good idea, we'll use it consistently in th
 * Robert: depth 3 with reach 13 and branching 13; 20 wins, 7 draws, 42 losses, avg time: 2.64 s
 * Jane: depth 5 with reach 2 and branching 3; 31 wins, 2 draws, 27 losses, avg time: 0.63 s
 * Anna: depth 5 with reach 3 and branching 7; 50 wins, 3 draws, 7 losses, avg time: 6.14 s
+
+From the results, it's obvious that bots with higher reach and branching (Robert and Anna) do better than their more constrained counterparts. However, the average time per round was multiplied greatly. What's more, Jane still clearly beats Robert despite the difference in branching limits and is much faster, too.
+
+Conclusions: Reach and branching increase a bot's skill, but at a heavy cost. Increasing depth seems to be a better way to increase skill.
 
 ## To be processed!
 
