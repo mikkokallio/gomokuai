@@ -70,6 +70,17 @@ From the results, it's obvious that bots with higher reach and branching (Robert
 
 Conclusions: Reach and branching increase a bot's skill, but at a heavy cost. Increasing depth seems to be a better way to increase skill.
 
+#### Test 3: Test transposition tables
+
+This time there are two depth 5 (Jane, Donald) and two depth 7 bots (George, Maisie) that are otherwise identical except Donald and Maisie have access to data from hundreds of previous games, spesifically first 10 moves and the results (black win, white win, draw) of those games.
+
+* Jane: depth 5, no tables; 15 wins, 5 draws, 40 losses, 0.94 s
+* Donald, depth 5, uses tables; 28 wins, 5 draws, 27 losses, 1,82 s
+* George: depth 7, no tables; 33 wins, 7 draws, 20 losses, 2.82 s
+* Maisie, depth 7, uses tables; 31 wins, 9 draws, 20 losses, 3.73 s
+
+This is curious: Donald plays clearly better than Jane, but George and Maisie are pretty equal. The sample is small, but perhaps the predictive power of greater depth (combined with deepening) is overlapping with the use of tables.
+
 ## To be processed!
 
 * Mitä on testattu, miten tämä tehtiin?
@@ -78,6 +89,3 @@ Conclusions: Reach and branching increase a bot's skill, but at a heavy cost. In
 * Ohjelman toiminnan empiirisen testauksen tulosten esittäminen graafisessa muodossa.
 
 Yksikkötesteillä tulee testata kaikki paitsi käyttöliittymä, suorituskykytestit ja mahdollisesti tiedostojen luku ja kirjoittaminen riippuen projektista.
-
-Mieti mitä oman sovelluksesi toiminnan oikeellisuus tarkoittaa. Reitinhakualgoritmin tulee löytää lyhin reitti, ja reitin ja sen etsinnän etenemisen pitää olla sen kaltainen kuin on tarkoitus. Labyrintin tai luolaston tulee yleensä olla yhtenäinen. Miinaharavabotti ei saa koskaan osua miinaan silloin, kun ruutua pidetään turvallisena. rkautua alkuperäiseksi - tai näyttää / kuulostaa oikealta, jos kyseessä on häviöllinen pakkaus. "Shakkibotti ei saa tehdä laittomia siirtoja, ja sen on osattava tehdä matti, mikäli se on mahdollista sillä laskentasyvyydellä, jota käytetään. Jos kattava oikeellisuustesti vie liikaa aikaa, kannattaa laittaa yksikkötesteihin vain pari edustavaa testitapausta, ja tehdä lisäksi erillinen testiohjelma."
-
