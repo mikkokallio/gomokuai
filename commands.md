@@ -17,11 +17,12 @@ poetry run python src/index.py Jane Maisie -c -a -r 10 >> playa.csv
 poetry run python src/index.py George Donald -c -a -r 10 >> playa.csv
 
 
-poetry run python src/index.py Eric Jane -c -a -r 5 >> playas.csv
-poetry run python src/index.py Eric Jane -c -a -r 5 >> playas.csv
-poetry run python src/index.py Eric Jane -c -a -r 5 >> playas.csv
-poetry run python src/index.py Eric Jane -c -a -r 5 >> playas.csv
-poetry run python src/index.py Eric Erica -c -a -r 5 >> playas.csv
-poetry run python src/index.py Eric Erica -c -a -r 5 >> playas.csv
-poetry run python src/index.py Eric Erica -c -a -r 5 >> playas.csv
-poetry run python src/index.py Eric Erica -c -a -r 5 >> playas.csv
+poetry run python src/index.py Janos Jay -c -a -r 5 >> pla.csv
+poetry run python src/index.py Jay Jane -c -a -r 5 >> pla.csv
+poetry run python src/index.py Jane Janos -c -a -r 5 >> pla.csv
+poetry run python src/index.py Janos Jay -c -a -r 5 >> pla.csv
+poetry run python src/index.py Jay Jane -c -a -r 5 >> pla.csv
+poetry run python src/index.py Jane Janos -c -a -r 5 >> pla.csv
+poetry run python src/index.py Janos Jay -c -a -r 5 >> pla.csv
+poetry run python src/index.py Jay Jane -c -a -r 5 >> pla.csv
+poetry run python src/index.py Jane Janos -c -a -r 5 >> pla.csv
