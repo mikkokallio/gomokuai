@@ -1,6 +1,7 @@
 # tiralabra
 Tiralabra-harjoitustyö 2022 p2
 
+![GHA workflow badge](https://github.com/mikkokallio/tiralabra/workflows/pipe/badge.svg)
 
 ## Usage
 
