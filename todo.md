@@ -1,16 +1,3 @@
-Viikko 4:
-Ensimmäiset vertaisarvioinnit jaetaan viikon palautuksen jälkeen. Katso labtoolista linkki katselmoitavaan repoon. Vertaisarvioinnin deadline on sama kuin viikon 5 deadline.
-Ohjeet vertaisarviointiin täällä
-Salli issuet vertaisarviointia varten, katso Issueiden luonnin salliminen repoon
-
-Palautus 4: lauantaina 26.11. klo 22:59
-Dokumentaatio: Koodi kommentoitua. Aloitettu kirjoittamaan toteutusraporttia.
-Ohjelma: Ohjelman ydintoiminta valmis.
-Testaus: Koodin kattava yksikkötestaus. Aloitettu suorituskyky- tai muu aiheeseen sopiva testaus (kirjoita näistä testausdokumenttiin).
-
-
-
-
 Viikko 5:
 Toiset vertaisarvioinnit jaetaan viikon palautuksen jälkeen. Katso labtoolista linkki katselmoitavaan repoon. Vertaisarvioinnin deadline on sama kuin DL 6.
 
@@ -20,7 +7,7 @@ Ensimmäinen vertaisarviointi tehtynä (Löydät linkin katselmoitavaan repoon l
 Dokumentaatio: Koodi kommentoitua. Toteutus- ja testausdokumentaatiota kirjoitettu.
 Viikkoraportti numero 5
 Ohjelma: Ohjelman ydintoiminta valmis.
-Testaus: Koodin kattava yksikkötestaus. Aloitettu suorituskyky- tai muu aiheeseen sopiva testaus.
+Testaus: Koodin kattava yksikkötestaus. Aloitettu suorituskyky- tai muu aiheeseen sopiva testaus (kirjoita näistä testausdokumenttiin).
 
 
 
