@@ -3,7 +3,7 @@ from concurrent.futures import ProcessPoolExecutor
 import random
 import csv
 from proximity_list import ProximityList
-from config import SCORES, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS, PIECES, DIRECTIONS, EMPTY, TABLES_FILE
+from config import SCORES, VICTORY, OPEN_FOUR, DOUBLE_THREAT, OWN, THREAT_LEVELS, PIECES, DIRECTIONS, EMPTY
 
 BIG_NUM = 999999
 
@@ -51,7 +51,7 @@ class AIPlayer:
             best_move, best_value = None, -999999
             with ProcessPoolExecutor() as ex:
                 for move, value in zip(moves, ex.map(self.async_search_branch, moves)):
-                    #print(move, value)
+                    print(move, value)
                     if best_move is None or value > best_value:
                         best_value, best_move = value, move
             y, x = best_move[1:3]
