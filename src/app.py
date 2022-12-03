@@ -46,7 +46,7 @@ class App:
         self.declare_winner(winner, turn)
         if self.save:
             self.store_route(states, winner)
-        return f'{self.names[BLACK]},{self.names[WHITE]},{self.clocks[BLACK]},{self.clocks[WHITE]},{self.names[winner] if winner else "draw"},{turn}'
+        return f'{self.names[BLACK]},{self.names[WHITE]},{self.clocks[BLACK]},{self.clocks[WHITE]},{self.names[winner] if winner is not None else "draw"},{turn}'
 
     def get_constraint(self, min_dist, max_dist):
         '''For initial moves, get list of allowed moves'''

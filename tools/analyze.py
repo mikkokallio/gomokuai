@@ -1,6 +1,6 @@
 import pandas as pd
 
-csv_data = pd.read_csv('tools/study3b.csv')
+csv_data = pd.read_csv('tools/study4.csv')
 df = pd.DataFrame(csv_data)
 df['b_t_rnd'] = df['b_time'] / df['rounds'] * 2
 df['w_t_rnd'] = df['w_time'] / df['rounds'] * 2
