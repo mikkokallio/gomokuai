@@ -26,7 +26,7 @@ When combined with the `-a` switch, the total number of games is twice the numbe
 * [Week 3](https://github.com/mikkokallio/tiralabra/blob/main/doc/weekly-report-3.md)
 * [Week 4](https://github.com/mikkokallio/tiralabra/blob/main/doc/weekly-report-4.md)
 * [Week 5](https://github.com/mikkokallio/tiralabra/blob/main/doc/weekly-report-5.md)
-* TBA
+* [Week 6](https://github.com/mikkokallio/tiralabra/blob/main/doc/weekly-report-6.md)
 * TBA
 
 ## Other documentation
