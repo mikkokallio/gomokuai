@@ -2,6 +2,8 @@
 
 The project has been designed to be used with poetry.
 
+## Getting started
+
 1. Install poetry.
 2. Clone the project.
 3. Install dependencies with `poetry install`.
