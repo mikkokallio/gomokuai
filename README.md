@@ -1,5 +1,6 @@
-# tiralabra
-Tiralabra-harjoitustyö 2022 p2
+# Gomoku AI project
+
+The goal of this project was to build an AI capable of playing Gomoku, a game similar to tic-tac-toe. The project was made for the "tiralabra" course in period 2 of 2022.
 
 ![GHA workflow badge](https://github.com/mikkokallio/tiralabra/workflows/pipe/badge.svg)
 
@@ -15,7 +16,6 @@ See the [user instructions](https://github.com/mikkokallio/tiralabra/blob/main/d
 * [Week 4](https://github.com/mikkokallio/tiralabra/blob/main/doc/weekly-report-4.md)
 * [Week 5](https://github.com/mikkokallio/tiralabra/blob/main/doc/weekly-report-5.md)
 * [Week 6](https://github.com/mikkokallio/tiralabra/blob/main/doc/weekly-report-6.md)
-* TBA
 
 ## Other documentation
 
