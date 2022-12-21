@@ -26,6 +26,4 @@ Testaus:
 Koodin kattava yksikkötestaus
 Dokumentoitu ohjelman testaus testausdokumenttiin
 Graafinen esitys esim. aikavaativuuksien toteutumisesta empiirisen testauksen perusteella
-
-- poetryn aliakset käytössä?
 - repoon kaikki kilkkeet

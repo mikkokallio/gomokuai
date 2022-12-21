@@ -39,24 +39,17 @@ class AIPlayer:
         elif len(self.board.moves) > 0:
             y, x, _ = self.board.moves[-1]
             self.heatmap.update(state, y, x)
-        if constraint is not None:
-            moves = self.get_possible_moves(state, constraint, True)[:self.limit_moves+10]
-            #moves = self.get_possible_moves(state, [random.choice(constraint)], True)[:self.limit_moves+10]
-        else:
-            moves = self.get_possible_moves(state, None, True)[:self.limit_moves+10]
-        #print(moves)
+        moves = self.get_possible_moves(state, constraint, True)[:self.limit_moves+10]
         if len(moves) == 1:
             y, x = moves[0][1:3]
         else:
             best_move, best_value = None, -999999
             with ProcessPoolExecutor() as ex:
                 for move, value in zip(moves, ex.map(self.async_search_branch, moves)):
-                    #print(move, value)
                     if best_move is None or value > best_value:
                         best_value, best_move = value, move
             y, x = best_move[1:3]
         self.heatmap.update(state, y, x)
-        #print(y, x)
         return (y, x)
 
     def async_search_branch(self, move):
@@ -101,7 +94,8 @@ class AIPlayer:
                 for _ in range(6):
                     y_pos += sign * line[0]
                     x_pos += sign * line[1]
-                    if y_pos < 0 or x_pos < 0 or y_pos >= self.size or x_pos >= self.size or state[y_pos][x_pos] == foe_color:
+                    if y_pos < 0 or x_pos < 0 or y_pos >= self.size or x_pos >= self.size \
+                        or state[y_pos][x_pos] == foe_color:
                         if prev == EMPTY:
                             ends += 1
                         break
@@ -140,11 +134,8 @@ class AIPlayer:
             result = self.tables.get(hashable, '').strip()
             if result != '':
                 precog = (result.count(PIECES[self.white == max_node]) - result.count(PIECES[self.white != max_node]))/max(3, len(result))
-                #print(PIECES[self.white], 'remembers!', move, max_node, precog)
                 if precog != 0.0:
-                    #print(min(len(result),9), end='')
-                    #print('-', end='')
-                    precog /= 10 #(precog if max_node else -precog) / 10
+                    precog /= 10
         if depth == 0:
             threats = self.evaluate_threat(
                 node, move[1], move[2], PIECES[max_node != self.white], PIECES[max_node == self.white]) / 101

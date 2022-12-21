@@ -8,6 +8,7 @@ authors = ["Mikko Kallio <mikko.m.kallio@gmail.com>"]
 python = "^3.9"
 pandas = "^1.5.1"
 colorama = "^0.4.6"
+invoke = "^1.7.3"
 
 [tool.poetry.dev-dependencies]
 

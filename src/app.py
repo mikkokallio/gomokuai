@@ -1,7 +1,6 @@
 from time import perf_counter
 import csv
 from board import Board
-#from human_player import HumanPlayer
 from ai_player import AIPlayer
 from config import CENTER, SIZE, PIECES, BLACK, WHITE, EMPTY, TABLES_FILE, CONSTRAINTS, AI_PLAYERS
 
@@ -46,7 +45,8 @@ class App:
         self.declare_winner(winner, turn)
         if self.save:
             self.store_route(states, winner)
-        return f'{self.names[BLACK]},{self.names[WHITE]},{self.clocks[BLACK]},{self.clocks[WHITE]},{self.names[winner] if winner is not None else "draw"},{turn}'
+        winner_name = self.names[winner] if winner is not None else "draw"
+        return f'{self.names[BLACK]},{self.names[WHITE]},{self.clocks[BLACK]},{self.clocks[WHITE]},{winner_name},{turn}'
 
     def get_constraint(self, min_dist, max_dist):
         '''For initial moves, get list of allowed moves'''
@@ -64,9 +64,10 @@ class App:
         if turn < len(CONSTRAINTS):
             if not self.silent:
                 print(f'Place {PIECES[player_turn]} {CONSTRAINTS[turn]} steps from the center')
-            y, x = players[int(player_turn)].get_move(board, player_turn, self.get_constraint(*CONSTRAINTS[turn]))
+            constraint = self.get_constraint(*CONSTRAINTS[turn])
         else:
-            y, x = players[int(player_turn)].get_move(board, player_turn, None)
+            constraint = None
+        y, x = players[int(player_turn)].get_move(board, player_turn, constraint)
         turn_time = perf_counter() - clock_start
         clocks[player_turn] += turn_time
         return board.add_piece(y, x, color=PIECES[player_turn])
