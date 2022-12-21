@@ -1,20 +1,5 @@
-Viikko 5:
-Toiset vertaisarvioinnit jaetaan viikon palautuksen jälkeen. Katso labtoolista linkki katselmoitavaan repoon. Vertaisarvioinnin deadline on sama kuin DL 6.
-
-Palautus 5: lauantaina 3.12. klo 22:59
-
-Ensimmäinen vertaisarviointi tehtynä (Löydät linkin katselmoitavaan repoon labtoolista)
-Dokumentaatio: Koodi kommentoitua. Toteutus- ja testausdokumentaatiota kirjoitettu.
-Viikkoraportti numero 5
-Ohjelma: Ohjelman ydintoiminta valmis.
-Testaus: Koodin kattava yksikkötestaus. Aloitettu suorituskyky- tai muu aiheeseen sopiva testaus (kirjoita näistä testausdokumenttiin).
-
-
-
-
 Viikko 6:
 Palautus 6: lauantaina 10.12. klo 22:59
-Toinen vertaisarviointi tehtynä (löydät linkin katselmoitavaan repoon labtoolista)
 Dokumentaatio: Kirjoitettu koodi kommentoitua. Toteutus- ja testausdokumentaatiota kirjoitettu.
 Viikkoraportti numero 6
 Ohjelma: Tietorakenteiden ja algoritmien omat toteutukset käytössä siltä osin mitä on sovittu tehtäväksi itse.
@@ -41,3 +26,6 @@ Testaus:
 Koodin kattava yksikkötestaus
 Dokumentoitu ohjelman testaus testausdokumenttiin
 Graafinen esitys esim. aikavaativuuksien toteutumisesta empiirisen testauksen perusteella
+
+- poetryn aliakset käytössä?
+- repoon kaikki kilkkeet

@@ -7,8 +7,8 @@ from config import CENTER, SIZE, PIECES, BLACK, WHITE, EMPTY, TABLES_FILE, CONST
 
 
 class App:
-    def __init__(self, names, rounds, silent, save):
-        self.board = Board(SIZE)
+    def __init__(self, names, rounds, silent, save, colors):
+        self.board = Board(SIZE, colors)
         self.names = names
         self.rounds = rounds
         self.players = [

@@ -51,7 +51,7 @@ class AIPlayer:
             best_move, best_value = None, -999999
             with ProcessPoolExecutor() as ex:
                 for move, value in zip(moves, ex.map(self.async_search_branch, moves)):
-                    print(move, value)
+                    #print(move, value)
                     if best_move is None or value > best_value:
                         best_value, best_move = value, move
             y, x = best_move[1:3]

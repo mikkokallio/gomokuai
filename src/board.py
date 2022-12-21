@@ -1,16 +1,24 @@
+import colorama
 from config import PIECES, EMPTY, DIRECTIONS, ROW
 
 class Board:
-    def __init__ (self, size):
+    def __init__ (self, size, colors):
         self.size = size
+        self.colors = colors
         self.state = [[EMPTY for _ in range(size)] for _ in range(size)]
         self.moves = []
+        if colors:
+            colorama.init(autoreset=True)
 
     def __str__(self):
         '''Output board state with position numbering'''
+        cols = {'.': colorama.Fore.BLUE, 'X': colorama.Fore.MAGENTA, 'O': colorama.Fore.YELLOW}
         output = '  ' + ''.join([f'{x:02d}'[0] for x in range(self.size)]) + '\n'
         output +='  ' + ''.join([f'{x:02d}'[1] for x in range(self.size)]) + '\n'
         for y, row in enumerate(self.state):
+            if self.colors:
+                row = [cols[item] + item for item in row]
+                output+=colorama.Fore.WHITE
             output+=f'{y:02d}' + ''.join(row) + '\n'
         output+=''
         return output
