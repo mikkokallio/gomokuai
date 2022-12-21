@@ -5,7 +5,7 @@ from ai_player import AIPlayer
 
 class TestAIPlayer(unittest.TestCase):
     def setUp(self):
-        self.board = Board(size=15)
+        self.board = Board(size=15, colors=False)
         config = {'depth': 5, 'reach': 2, 'branching': 3, 'deepen': False, 'tables': 'src/tests/test.csv', 'random': False}
         config2 = {'depth': 5, 'reach': 2, 'branching': 3, 'deepen': False, 'tables': None, 'random': False}
         self.ai = AIPlayer(config, self.board)

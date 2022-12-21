@@ -6,7 +6,7 @@ from human_player import HumanPlayer
 
 class TestHumanPlayer(unittest.TestCase):
     def setUp(self):
-        self.board = Board(size=15)
+        self.board = Board(size=15, colors=False)
         self.human = HumanPlayer()
 
     @patch('builtins.input', side_effect=['9 9'])
