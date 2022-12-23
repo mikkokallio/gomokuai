@@ -14,7 +14,7 @@ The AI players must follow the following rules:
 * The player to get 5 stones in a row wins. These may be positioned horizontally, vertically, or diagonally.
 * If there is no winner after 60 turns, the game ends as a draw.
 
-![Gomoku board](https://github.com/mikkokallio/tiralabra/blob/main/doc/images/board.png "Opening moves"){width=60%}
+![Gomoku board](https://github.com/mikkokallio/tiralabra/blob/main/doc/images/board.png "Opening moves")
 
 ## User instructions
 
