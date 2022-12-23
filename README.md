@@ -1,8 +1,11 @@
 # Gomoku AI project
 
+![GHA workflow badge](https://github.com/mikkokallio/tiralabra/workflows/pipe/badge.svg)
+
 The goal of this project was to build an AI capable of playing Gomoku, a game similar to tic-tac-toe. The project was made for the "tiralabra" course in period 2 of 2022.
 
-![GHA workflow badge](https://github.com/mikkokallio/tiralabra/workflows/pipe/badge.svg)
+![Gomoku board](https://github.com/mikkokallio/tiralabra/blob/main/doc/images/board.png "Opening moves")
+
 
 ## Game rules
 
@@ -13,8 +16,6 @@ The AI players must follow the following rules:
 * The first 3 moves are restricted: 1st is at the center of the board, 2nd is within the center 5 x 5 positions, and 3rd is outside the center 5 x 5.
 * The player to get 5 stones in a row wins. These may be positioned horizontally, vertically, or diagonally.
 * If there is no winner after 60 turns, the game ends as a draw.
-
-![Gomoku board](https://github.com/mikkokallio/tiralabra/blob/main/doc/images/board.png "Opening moves")
 
 ## User instructions
 
