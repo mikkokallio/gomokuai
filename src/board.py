@@ -1,6 +1,7 @@
 import colorama
 from config import PIECES, EMPTY, DIRECTIONS, ROW
 
+
 class Board:
     def __init__ (self, size, colors):
         self.size = size
