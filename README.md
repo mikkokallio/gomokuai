@@ -8,8 +8,8 @@ The goal of this project was to build an AI capable of playing Gomoku, a game si
 
 The AI players must follow the following rules:
 
-* The game board has 15 x 15 positions for stones.
-* Two players take turns to place stones.
+* The game board size is 15 x 15.
+* Two players take turns to place stones on the board.
 * The first 3 moves are restricted: 1st is at the center of the board, 2nd is within the center 5 x 5 positions, and 3rd is outside the center 5 x 5.
 * The player to get 5 stones in a row wins. These may be positioned horizontally, vertically, or diagonally.
 * If there is no winner after 60 turns, the game ends as a draw.
