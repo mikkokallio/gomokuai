@@ -15,6 +15,7 @@ The AI players must follow the following rules:
 * Two players take turns to place stones on the board.
 * The first 3 moves are restricted: 1st is at the center of the board, 2nd is within the center 5 x 5 positions, and 3rd is outside the center 5 x 5.
 * The player to get 5 stones in a row wins. These may be positioned horizontally, vertically, or diagonally.
+* However, overlines (6 or more stones in a row) don't count as a win.
 * If there is no winner after 60 turns, the game ends as a draw.
 
 ## AI optimization methods implemented
