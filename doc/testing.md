@@ -11,6 +11,8 @@ The project uses pytest and coverage, which can be run with the commands below.
 `coverage run --branch -m pytest src` and then `coverage report -m`
 
 ### Branch coverage
+
+All main functionality in the project is unit tested. The following report was generated on December 30th 2022 with the above commands:
 ```
 Name                    Stmts   Miss Branch BrPart  Cover   Missing
 -------------------------------------------------------------------
