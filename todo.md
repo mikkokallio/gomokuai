@@ -7,7 +7,6 @@ Ohjelma:
 Mielellään suoritettava ohjelma github releasena (esim. jar-tiedosto)
 Työ valmis ja hiottu
 Testaus:
-Koodin kattava yksikkötestaus
 Dokumentoitu ohjelman testaus testausdokumenttiin
 Graafinen esitys esim. aikavaativuuksien toteutumisesta empiirisen testauksen perusteella
 - repoon kaikki kilkkeet? testausautomaatio yms.

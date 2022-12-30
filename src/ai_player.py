@@ -128,14 +128,9 @@ class AIPlayer:
         '''Perform minimaxing with a-b pruning'''
         if self.board.is_winning_move(node, move[1], move[2], PIECES[max_node != self.white]):
             return -1 if max_node else 1
-        precog = 0
-        if self.tables is not None and len(self.board.moves) + (self.depth - depth) <= 15:
-            hashable = ''.join([''.join(row) for row in node])
-            result = self.tables.get(hashable, '').strip()
-            if result != '':
-                precog = (result.count(PIECES[self.white == max_node]) - result.count(PIECES[self.white != max_node]))/max(3, len(result))
-                if precog != 0.0:
-                    precog /= 10
+
+        precog = 0 if self.tables is None else self.consult_tables(depth, node, max_node)
+
         if depth == 0:
             threats = self.evaluate_threat(
                 node, move[1], move[2], PIECES[max_node != self.white], PIECES[max_node == self.white]) / 101
@@ -155,3 +150,14 @@ class AIPlayer:
             if alfa >= beta:
                 return value
         return value
+
+    def consult_tables(self, depth, node, max_node):
+        '''If transposition tables are enabled, return weight based on previous games'''
+        if len(self.board.moves) + (self.depth - depth) <= 15:
+            hashable = ''.join([''.join(row) for row in node])
+            result = self.tables.get(hashable, '').strip()
+            if result != '':
+                precog = (result.count(PIECES[self.white == max_node]) - result.count(PIECES[self.white != max_node]))/max(3, len(result))
+                if precog != 0.0:
+                    return precog / 10
+        return 0
