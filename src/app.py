@@ -73,6 +73,7 @@ class App:
         return board.add_piece(y, x, color=PIECES[player_turn])
 
     def declare_winner(self, winner, turn):
+        '''If output is enabled, print out who won'''
         if not self.silent:
             print(self.board)
             if winner is None:
