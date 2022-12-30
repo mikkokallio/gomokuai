@@ -28,7 +28,7 @@ TOTAL                     303     17    156      9    93%
 
 ## Performance testing
 
-Optimizing gomoku AI means finding a balance between the speed (measured in average milliseconds / turn) and skill of the AI (percentage of winning vs losing vs draws).
+Optimizing gomoku AI's performance means finding a balance between the speed (measured in average milliseconds / turn) and skill of the AI (percentage of winning vs losing vs draws).
 
 ### Speed
 
