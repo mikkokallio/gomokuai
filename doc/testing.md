@@ -26,6 +26,15 @@ src\proximity_list.py      18      0     10      0   100%
 TOTAL                     305     17    156      9    93%
 ```
 
+## Code quality
+
+Code quality is tested with the command `pylint src`. Overall, code quality is very good (as of December 30th 2022):
+
+```
+------------------------------------------------------------------
+Your code has been rated at 9.51/10 (previous run: 9.06/10, +0.45)
+```
+
 ## Performance testing
 
 Optimizing gomoku AI's performance means finding a balance between the speed (measured in average milliseconds / turn) and skill of the AI (percentage of winning vs losing vs draws).
@@ -44,7 +53,7 @@ The app supports outputting game results as `.csv`, so it's possible to store th
 
 #### Test 1: Compare depth values and pass-through deepening
 
-Four bots each fought 10 matches against each foe in both colors, for a total of 10*2*4!=120 matches. Only two parameters were varied: max depth and pass-through deepening, which effectively increases max depth whenever a node has only one child (i.e. no branching occurs). The bots were configured as shown below, and they had the following win statistic and time used per round:
+In this [study](https://github.com/mikkokallio/tiralabra/blob/main/tools/study1.csv), four bots each fought 10 matches against each foe in both colors, for a total of 10 x 2 x 4! = 120 matches. Only two parameters were varied: max depth and pass-through deepening, which effectively increases max depth whenever a node has only one child (i.e. no branching occurs). The bots were configured as shown below, and they had the following win statistic and time used per round:
 
 * Eric: depth 3 with PTD; 9 wins, 26 draws, 25 losses, avg time: 0.45 s
 * Philip: depth 5 without PTD; 17 wins, 18 draws, 25 losses, avg time: 0.35 s
@@ -57,7 +66,7 @@ Conclusions: Not surprisingly, increases in depth increase the bot's skill but d
 
 #### Test 2: Compare branching factor
 
-Since we've established that PTD is a good idea, we'll use it consistently in the next set of matches. This time the idea is to test how much constraints on branching affect speed and skill. The bots have two parameters related to branching: reach and branching. To limit the number of possible moves, only squares near existing stones are considered. Reach determines how many steps away from an existing stone a new stone can be placed. Brnaching, on the other hand, determines the maximum number of different moves evaluated at each depth. The number of positions evaluated is equal to branching to the power of max depth. Alpha-beta pruning removes some branches, but it alone is not necessarily enough, so setting a hard limit may be useful. Note: The bot adds +10 branches at the root level. This is because the 
+Since we've established that PTD is a good idea, we'll use it consistently in the next set of matches. In this [study](https://github.com/mikkokallio/tiralabra/blob/main/tools/study2.csv), the idea is to test how much constraints on branching affect speed and skill. The bots have two parameters related to branching: reach and branching. To limit the number of possible moves, only squares near existing stones are considered. Reach determines how many steps away from an existing stone a new stone can be placed. Brnaching, on the other hand, determines the maximum number of different moves evaluated at each depth. The number of positions evaluated is equal to branching to the power of max depth. Alpha-beta pruning removes some branches, but it alone is not necessarily enough, so setting a hard limit may be useful. Note: The bot adds +10 branches at the root level. This is because the 
 
 * Eric: depth 3 with reach 2 and branching 3; 11 wins, 2 draws, 46 losses, avg time: 0.37 s
 * Robert: depth 3 with reach 13 and branching 13; 20 wins, 7 draws, 42 losses, avg time: 2.64 s
@@ -79,11 +88,12 @@ This time there are two depth 5 (Jane, Donald) and two depth 7 bots (George, Mai
 
 This is curious: Donald plays clearly better than Jane, but George and Maisie are pretty equal. The sample is small, but perhaps the predictive power of greater depth (combined with deepening) is overlapping with the use of tables.
 
-## To be processed!
+#### Test: Multiprocessing
 
-* Mitä on testattu, miten tämä tehtiin?
-* Minkälaisilla syötteillä testaus tehtiin (vertailupainotteisissa töissä tärkeää)?
-* Miten testit voidaan toistaa?
-* Ohjelman toiminnan empiirisen testauksen tulosten esittäminen graafisessa muodossa.
+The bots default to using multiprocessing, and so, the code doesn't currently support using parameters to not to use multiple cores, if available. However, changing manually in the code the line `with ProcessPoolExecutor(max_workers=None) as ex:` to only have `max_workers=1` does the thing. Initial testing with a fast, deterministic bot showed a decrease in computing times of 45% for black player and 30% for white player. In all other ways, the AIs played the games exactly the same way.
 
-Yksikkötesteillä tulee testata kaikki paitsi käyttöliittymä, suorituskykytestit ja mahdollisesti tiedostojen luku ja kirjoittaminen riippuen projektista.
+It was discussed in the demo session that the minimax algorithm doesn't leverage parallel computation very well, but I think a reduction of 30-45% is significant.
+
+With a non-deterministic pairing of bots, the results are the following (with a sample of 40 mathces): Black player's time was cut by 25% and white's only by 1%.
+
+Conclusion: The amount of reduction seems to vary, but if it's in some scenarios as high as 45%, and in others 30%, 25%, or close to 0% is in any case an improvement.
