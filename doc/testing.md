@@ -1,6 +1,6 @@
 # Testing document
 
-Work in progress.
+This document describes the different testing types used in this project.
 
 ## Unit testing
 
@@ -8,9 +8,7 @@ The project uses pytest and coverage, which can be run with the commands below.
 
 `pytest src`
 
-`coverage run --branch -m pytest src`
-
-`coverage report -m`
+`coverage run --branch -m pytest src` and then `coverage report -m`
 
 ### Branch coverage
 ```
