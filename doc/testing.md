@@ -88,6 +88,16 @@ This time there are two depth 5 (Jane, Donald) and two depth 7 bots (George, Mai
 
 This is curious: Donald plays clearly better than Jane, but George and Maisie are pretty equal. The sample is small, but perhaps the predictive power of greater depth (combined with deepening) is overlapping with the use of tables.
 
+#### Test: Multiprocessing
+
+The bots default to using multiprocessing, and so, the code doesn't currently support using parameters to not to use multiple cores, if available. However, changing manually in the code the line `with ProcessPoolExecutor(max_workers=None) as ex:` to only have `max_workers=1` does the thing. Initial testing with a fast, deterministic bot showed a decrease in computing times of 45% for black player and 30% for white player. In all other ways, the AIs played the games exactly the same way.
+
+It was discussed in the demo session that the minimax algorithm doesn't leverage parallel computation very well, but I think a reduction of 30-45% is significant.
+
+With a non-deterministic pairing of bots, the results are the following (with a sample of 40 mathces): Black player's time was cut by 25% and white's only by 1%.
+
+Conclusion: The amount of reduction seems to vary, but if it's in some scenarios as high as 45%, and in others 30%, 25%, or close to 0% is in any case an improvement.
+
 ## To be processed!
 
 * Mitä on testattu, miten tämä tehtiin?
