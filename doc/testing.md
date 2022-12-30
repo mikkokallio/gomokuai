@@ -16,14 +16,14 @@ All main functionality in the project is unit tested. The following report was g
 ```
 Name                    Stmts   Miss Branch BrPart  Cover   Missing
 -------------------------------------------------------------------
-src\ai_player.py          134      5     76      6    94%   39->42, 107->94, 124, 130, 132->139, 136-138
+src\ai_player.py          136      5     76      6    94%   39->42, 107->94, 124, 130, 156->163, 160-162
 src\app.py                 77     12     34      2    82%   39->30, 47, 87-100
 src\board.py               53      0     34      1    99%   56->54
 src\config.py              16      0      0      0   100%
 src\human_player.py         5      0      2      0   100%
 src\proximity_list.py      18      0     10      0   100%
 -------------------------------------------------------------------
-TOTAL                     303     17    156      9    93%
+TOTAL                     305     17    156      9    93%
 ```
 
 ## Performance testing
