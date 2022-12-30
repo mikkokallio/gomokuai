@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 csv_data = pd.read_csv('tools/study4.csv')
 df = pd.DataFrame(csv_data)
 df['b_t_rnd'] = df['b_time'] / df['rounds'] * 2
@@ -18,3 +19,4 @@ for player in df['black'].unique():
         foes = {key: value for key, value in total.items() if key not in [player, 'draw']}
         losses = sum(foes.values())
         print(f'{wins} wins, {draws} draws, {losses} losses {foes}')
+    print('')

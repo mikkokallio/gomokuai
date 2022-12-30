@@ -139,7 +139,7 @@ class AIPlayer:
         if depth == 0:
             threats = self.evaluate_threat(
                 node, move[1], move[2], PIECES[max_node != self.white], PIECES[max_node == self.white]) / 101
-            return (-threats if max_node else threats) #- precog
+            return (-threats if max_node else threats)
         value = -BIG_NUM if max_node else BIG_NUM
         newmoves = self.get_possible_moves(node, None, max_node)[:self.limit_moves]
         deepen = len(newmoves) == 1 and self.deepen

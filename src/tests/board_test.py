@@ -13,8 +13,14 @@ class TestBoard(unittest.TestCase):
             assert False
 
     def test_board_prints_correctly(self):
+        layout = '  000000000011111\n  012345678901234\n00...............\n01...............\n02...............\n03...............\n04...............\n05...............\n06...............\n07...............\n08...............\n09...............\n10...............\n11...............\n12...............\n13...............\n14...............\n'
         output = str(self.board)
-        self.assertEqual(output, '  000000000011111\n  012345678901234\n00...............\n01...............\n02...............\n03...............\n04...............\n05...............\n06...............\n07...............\n08...............\n09...............\n10...............\n11...............\n12...............\n13...............\n14...............\n')
+        self.assertEqual(output, layout)
+
+        self.color_board = Board(size=15, colors=True)
+        output = str(self.color_board)
+        self.assertNotEqual(output, layout)
+
 
     def test_cannot_add_stone_to_taken_space(self):
         with self.assertRaises(ValueError):
@@ -27,7 +33,7 @@ class TestBoard(unittest.TestCase):
 
     def test_cannot_add_weird_stone(self):
         with self.assertRaises(ValueError):
-            self.board.add_piece(15, 3, 'Q')
+            self.board.add_piece(10, 3, 'Q')
 
     def test_five_in_a_row_wins(self):
         moves = [(1,1,'X'), (1,2,'X'), (1,3,'X'), (1,4,'X')]
