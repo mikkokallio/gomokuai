@@ -44,7 +44,7 @@ The app supports outputting game results as `.csv`, so it's possible to store th
 
 #### Test 1: Compare depth values and pass-through deepening
 
-Four bots each fought 10 matches against each foe in both colors, for a total of 10*2*4!=120 matches. Only two parameters were varied: max depth and pass-through deepening, which effectively increases max depth whenever a node has only one child (i.e. no branching occurs). The bots were configured as shown below, and they had the following win statistic and time used per round:
+In this [study](https://github.com/mikkokallio/tiralabra/blob/main/tools/study1.csv), four bots each fought 10 matches against each foe in both colors, for a total of 10*2*4!=120 matches. Only two parameters were varied: max depth and pass-through deepening, which effectively increases max depth whenever a node has only one child (i.e. no branching occurs). The bots were configured as shown below, and they had the following win statistic and time used per round:
 
 * Eric: depth 3 with PTD; 9 wins, 26 draws, 25 losses, avg time: 0.45 s
 * Philip: depth 5 without PTD; 17 wins, 18 draws, 25 losses, avg time: 0.35 s
