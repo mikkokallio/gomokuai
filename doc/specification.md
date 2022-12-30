@@ -17,4 +17,4 @@
 * The following are some sources that explain how the game is played and some related to AI:
   - https://en.wikipedia.org/wiki/Gomoku
   - https://gomocup.org/
-  - [Go-Moku and Threat-Space Search] (https://www.bing.com/ck/a?!&&p=ca281f984ef1b35aJmltdHM9MTY3MjM1ODQwMCZpZ3VpZD0yZmQzZjU2MS02MjVlLTYxNWEtMzAyMS1lNTUyNjNiNTYwNGUmaW5zaWQ9NTIwMQ&ptn=3&hsh=3&fclid=2fd3f561-625e-615a-3021-e55263b5604e&psq=threat+space+analysis+gomoku&u=a1aHR0cHM6Ly93d3cucmVzZWFyY2hnYXRlLm5ldC9wdWJsaWNhdGlvbi8yMjUyNDQ3X0dvLU1va3VfYW5kX1RocmVhdC1TcGFjZV9TZWFyY2g&ntb=1)
+  - [Go-Moku and Threat-Space Search](https://www.bing.com/ck/a?!&&p=ca281f984ef1b35aJmltdHM9MTY3MjM1ODQwMCZpZ3VpZD0yZmQzZjU2MS02MjVlLTYxNWEtMzAyMS1lNTUyNjNiNTYwNGUmaW5zaWQ9NTIwMQ&ptn=3&hsh=3&fclid=2fd3f561-625e-615a-3021-e55263b5604e&psq=threat+space+analysis+gomoku&u=a1aHR0cHM6Ly93d3cucmVzZWFyY2hnYXRlLm5ldC9wdWJsaWNhdGlvbi8yMjUyNDQ3X0dvLU1va3VfYW5kX1RocmVhdC1TcGFjZV9TZWFyY2g&ntb=1)
