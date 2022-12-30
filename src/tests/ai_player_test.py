@@ -99,3 +99,9 @@ class TestAIPlayer(unittest.TestCase):
         y, x = self.ai.get_move(self.board, True, None)
         win = self.board.add_piece(y, x, 'X')
         self.assertTrue(win)
+
+    def test_async_branch_search_gets_result(self):
+        y, x = self.ai.get_move(self.board, True, None)
+        minimax = self.ai.async_search_branch((0,1,2))
+        self.assertGreaterEqual(minimax, -1)
+        self.assertLessEqual(minimax, 1)
