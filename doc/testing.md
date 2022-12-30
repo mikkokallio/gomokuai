@@ -26,6 +26,15 @@ src\proximity_list.py      18      0     10      0   100%
 TOTAL                     305     17    156      9    93%
 ```
 
+## Code quality
+
+Code quality is tested with the command `pylint src`. Overall, code quality is very good (as of December 30th 2022):
+
+```
+------------------------------------------------------------------
+Your code has been rated at 9.51/10 (previous run: 9.06/10, +0.45)
+```
+
 ## Performance testing
 
 Optimizing gomoku AI's performance means finding a balance between the speed (measured in average milliseconds / turn) and skill of the AI (percentage of winning vs losing vs draws).
