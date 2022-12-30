@@ -4,11 +4,11 @@ Work in progress.
 
 ## Unit testing
 
-The project uses pytest and coverage, which can be run with the commands below. Unit testing is underway but still needs to cover more code.
+The project uses pytest and coverage, which can be run with the commands below.
 
-`poetry run pytest src`
+`pytest src`
 
-`poetry run coverage run --branch -m pytest src`
+`coverage run --branch -m pytest src`
 
 `coverage report -m`
 
@@ -16,14 +16,14 @@ The project uses pytest and coverage, which can be run with the commands below. 
 ```
 Name                    Stmts   Miss Branch BrPart  Cover   Missing
 -------------------------------------------------------------------
-src\ai_player.py          136     31     80      3    76%   39->42, 64-66, 113->101, 130, 135-166
-src\app.py                 75     25     36      7    64%   25, 33, 37-38, 40->31, 42-44, 48, 66, 76-81, 85-98
-src\board.py               45      1     30      2    96%   36, 47->45
+src\ai_player.py          134      5     76      6    94%   39->42, 107->94, 124, 130, 132->139, 136-138
+src\app.py                 77     12     34      2    82%   39->30, 47, 87-100
+src\board.py               53      0     34      1    99%   56->54
 src\config.py              16      0      0      0   100%
-src\human_player.py         5      0      4      0   100%
-src\proximity_list.py      18      0     12      0   100%
+src\human_player.py         5      0      2      0   100%
+src\proximity_list.py      18      0     10      0   100%
 -------------------------------------------------------------------
-TOTAL                     295     57    162     12    79%
+TOTAL                     303     17    156      9    93%
 ```
 
 ## Performance testing
