@@ -36,11 +36,11 @@ The program measures both players' time expenditure as well as the total length 
 
 ### Skill
 
-Besides speed, the other part of the performance testing is determining how good the AI is at playing gomoku. Benchmarking can be done e.g. against other versions of the AI, using a different set of parameters. For example, if one player has depth 9, it should quite easily defeat another player with depth 5, of course taking into account the first player advantage when comparing win percentages. Ideally, each player plays both as many games as black and white and the winning % from e.g. 100 games determines which version is better. TBA: script that runs e.g. 100 games and automatically calculates performance.
+Besides speed, the other part of the performance testing is determining how good the AI is at playing gomoku. Benchmarking can be done e.g. against other versions of the AI, using a different set of parameters. For example, if one player has depth 9, it should quite easily defeat another player with depth 5, of course taking into account the first player advantage when comparing win percentages. The tooling included in the project can analyze from game outputs how well different bots do over e.g. 100 or 1000 games.
 
 ### Test results
 
-The app supports outputting game results as .csv, so it's possible to store them in a file. With enough game data stored, it's possible to get insights with the data. The script `tools/analyze.py` put game results in a pandas data frame so it's easy to make calculations. The following performance tests leverage that script.
+The app supports outputting game results as `.csv`, so it's possible to store them in a file. With enough game data stored, it's possible to get insights with the data. The script `tools/analyze.py` put game results in a pandas data frame so it's easy to make calculations. The following performance tests leverage that script.
 
 #### Test 1: Compare depth values and pass-through deepening
 
