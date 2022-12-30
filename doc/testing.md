@@ -97,12 +97,3 @@ It was discussed in the demo session that the minimax algorithm doesn't leverage
 With a non-deterministic pairing of bots, the results are the following (with a sample of 40 mathces): Black player's time was cut by 25% and white's only by 1%.
 
 Conclusion: The amount of reduction seems to vary, but if it's in some scenarios as high as 45%, and in others 30%, 25%, or close to 0% is in any case an improvement.
-
-## To be processed!
-
-* Mitä on testattu, miten tämä tehtiin?
-* Minkälaisilla syötteillä testaus tehtiin (vertailupainotteisissa töissä tärkeää)?
-* Miten testit voidaan toistaa?
-* Ohjelman toiminnan empiirisen testauksen tulosten esittäminen graafisessa muodossa.
-
-Yksikkötesteillä tulee testata kaikki paitsi käyttöliittymä, suorituskykytestit ja mahdollisesti tiedostojen luku ja kirjoittaminen riippuen projektista.
