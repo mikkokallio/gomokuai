@@ -1,48 +1,46 @@
 # Testing document
 
-Work in progress.
+This document describes the different testing types used in this project.
 
 ## Unit testing
 
-The project uses pytest and coverage, which can be run with the commands below. Unit testing is underway but still needs to cover more code.
+The project uses pytest and coverage, which can be run with the commands below.
 
-`poetry run pytest src`
+`pytest src`
 
-`poetry run coverage run --branch -m pytest src`
-
-`coverage report -m`
+`coverage run --branch -m pytest src` and then `coverage report -m`
 
 ### Branch coverage
+
+All main functionality in the project is unit tested. The following report was generated on December 30th 2022 with the above commands:
 ```
 Name                    Stmts   Miss Branch BrPart  Cover   Missing
 -------------------------------------------------------------------
-src\ai_player.py          136     31     80      3    76%   39->42, 64-66, 113->101, 130, 135-166
-src\app.py                 75     25     36      7    64%   25, 33, 37-38, 40->31, 42-44, 48, 66, 76-81, 85-98
-src\board.py               45      1     30      2    96%   36, 47->45
+src\ai_player.py          136      5     76      6    94%   39->42, 107->94, 124, 130, 156->163, 160-162
+src\app.py                 77     12     34      2    82%   39->30, 47, 87-100
+src\board.py               53      0     34      1    99%   56->54
 src\config.py              16      0      0      0   100%
-src\human_player.py         5      0      4      0   100%
-src\proximity_list.py      18      0     12      0   100%
+src\human_player.py         5      0      2      0   100%
+src\proximity_list.py      18      0     10      0   100%
 -------------------------------------------------------------------
-TOTAL                     295     57    162     12    79%
+TOTAL                     305     17    156      9    93%
 ```
 
 ## Performance testing
 
-Optimizing gomoku AI means finding a balance between the speed (measured in average milliseconds / turn) and skill of the AI (percentage of winning vs losing vs draws).
+Optimizing gomoku AI's performance means finding a balance between the speed (measured in average milliseconds / turn) and skill of the AI (percentage of winning vs losing vs draws).
 
 ### Speed
 
-The program measures both players' time expenditure as well as the total length of each game. By changing each AI bot's parameters, it's easy to test how they affect performance. TBA. Maybe a script that has the game play 100 matches, calculating the total amount of time used.
-
-Tavoitteena on havaita kaikki virheet ohjelman toiminnassa. Kannattaa kirjoittaa mahdollisimman pieniä yksikkötestejä mahdollisimman paljon. Ideana on, että jos koodissa on virhe, tulisi vähintään yhden testin havaita se, ja virheen kohta koodissa tulisi olla mahdollisimman selkeä. Tämä on tärkeää, jotta virheiden korjaaminen on tehokasta.
+The program measures both players' time expenditure as well as the total length of each game. By changing each AI bot's parameters, it's easy to test how they affect performance. It's possible to collect speed results from the app's output and using `tools/analyze.py` to get insights, as has been done in the Test results section below. See user instructions for further details on how to get output suitable for analysis.
 
 ### Skill
 
-As part of the performance testing is determining how good the AI is at playing gomoku. Benchmarking can be done e.g. against other versions of the AI, using a different set of parameters. For example, if one player has depth 9, it should quite easily defeat another player with depth 5, of course taking into account the first player advantage when comparing win percentages. Ideally, each player plays both as many games as black and white and the winning % from e.g. 100 games determines which version is better. TBA: script that runs e.g. 100 games and automatically calculates performance.
+Besides speed, the other part of the performance testing is determining how good the AI is at playing gomoku. Benchmarking can be done e.g. against other versions of the AI, using a different set of parameters. For example, if one player has depth 9, it should quite easily defeat another player with depth 5, of course taking into account the first player advantage when comparing win percentages. The tooling included in the project can analyze from game outputs how well different bots do over e.g. 100 or 1000 games.
 
 ### Test results
 
-The app supports outputting game results as .csv, so it's possible to store them in a file. With enough game data stored, it's possible to get insights with the data. The script `tools/analyze.py` put game results in a pandas data frame so it's easy to make calculations. The following performance tests leverage that script.
+The app supports outputting game results as `.csv`, so it's possible to store them in a file. With enough game data stored, it's possible to get insights with the data. The script `tools/analyze.py` put game results in a pandas data frame so it's easy to make calculations. The following performance tests leverage that script.
 
 #### Test 1: Compare depth values and pass-through deepening
 
