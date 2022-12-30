@@ -32,9 +32,7 @@ Optimizing gomoku AI's performance means finding a balance between the speed (me
 
 ### Speed
 
-The program measures both players' time expenditure as well as the total length of each game. By changing each AI bot's parameters, it's easy to test how they affect performance. TBA. Maybe a script that has the game play 100 matches, calculating the total amount of time used.
-
-Tavoitteena on havaita kaikki virheet ohjelman toiminnassa. Kannattaa kirjoittaa mahdollisimman pieniä yksikkötestejä mahdollisimman paljon. Ideana on, että jos koodissa on virhe, tulisi vähintään yhden testin havaita se, ja virheen kohta koodissa tulisi olla mahdollisimman selkeä. Tämä on tärkeää, jotta virheiden korjaaminen on tehokasta.
+The program measures both players' time expenditure as well as the total length of each game. By changing each AI bot's parameters, it's easy to test how they affect performance. It's possible to collect speed results from the app's output and using `tools/analyze.py` to get insights, as has been done in the Test results section below. See user instructions for further details on how to get output suitable for analysis.
 
 ### Skill
 
