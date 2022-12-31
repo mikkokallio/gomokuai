@@ -26,7 +26,7 @@ For testing purposes, consider the following options:
 
 ## Analyzing test data
 
-If data is collected as `.csv` files as described above and saved e.g. in the `tools` folder, it can be analyzed by running e.g. `python tools/analyze.py tools/study2.csv`. This summarizes information about the sample, showing average time (s) per turn as well as wins, losses, and draws:
+If data is collected as `.csv` files as described above and saved e.g. in the `tools` folder, it can be analyzed by running e.g. `python tools/analyze.py tools/study2.csv`. This summarizes information about the sample, showing average time (s) per turn as well as wins, losses, and draws while playing as black and white:
 
 ```
 Robert's statistics
