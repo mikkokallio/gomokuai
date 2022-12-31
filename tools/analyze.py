@@ -1,7 +1,9 @@
+import sys
 import pandas as pd
 
 
-csv_data = pd.read_csv('tools/study5b.csv')
+filename = sys.argv[1] if len(sys.argv) > 1 else 'tools/study1.csv'
+csv_data = pd.read_csv(filename)
 df = pd.DataFrame(csv_data)
 df['b_t_rnd'] = df['b_time'] / df['rounds'] * 2
 df['w_t_rnd'] = df['w_time'] / df['rounds'] * 2

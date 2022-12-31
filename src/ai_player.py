@@ -44,7 +44,7 @@ class AIPlayer:
             y, x = moves[0][1:3]
         else:
             best_move, best_value = None, -999999
-            with ProcessPoolExecutor(max_workers=None) as ex:
+            with ProcessPoolExecutor(max_workers=1) as ex:
                 for move, value in zip(moves, ex.map(self.async_search_branch, moves)):
                     if best_move is None or value > best_value:
                         best_value, best_move = value, move
@@ -133,7 +133,8 @@ class AIPlayer:
 
         if depth == 0:
             threats = self.evaluate_threat(
-                node, move[1], move[2], PIECES[max_node != self.white], PIECES[max_node == self.white]) / 101
+                node, move[1], move[2],
+                PIECES[max_node != self.white], PIECES[max_node == self.white]) / 101
             return (-threats if max_node else threats)
         value = -BIG_NUM if max_node else BIG_NUM
         newmoves = self.get_possible_moves(node, None, max_node)[:self.limit_moves]
