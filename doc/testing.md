@@ -49,7 +49,7 @@ Besides speed, the other part of the performance testing is determining how good
 
 ### Test results
 
-The app supports outputting game results as `.csv`, so it's possible to store them in a file. With enough game data stored, it's possible to get insights with the data. The script `tools/analyze.py` put game results in a pandas data frame so it's easy to make calculations. The following performance tests leverage that script.
+The app supports outputting game results as `.csv`, so it's possible to store them in a file. (For example, running `python src/index.py Eric Robert -a -r 10 -c >> tools/test.csv` gets you results from a total of 20 matches, where Eric plays 10 matches as black and the other 10 as white.) With enough game data stored, it's possible to get insights with the data. The script `tools/analyze.py` put game results in a pandas data frame so it's easy to make calculations. The following performance tests leverage that script.
 
 #### Test: Compare depth values and pass-through deepening
 
@@ -66,7 +66,7 @@ Conclusions: Not surprisingly, increases in depth increase the bot's skill but d
 
 #### Test: Compare branching factor
 
-Since we've established that PTD is a good idea, we'll use it consistently in the next set of matches. In this [study](https://github.com/mikkokallio/tiralabra/blob/main/tools/study2.csv), the idea is to test how much constraints on branching affect speed and skill. The bots have two parameters related to branching: reach and branching. To limit the number of possible moves, only squares near existing stones are considered. Reach determines how many steps away from an existing stone a new stone can be placed. Brnaching, on the other hand, determines the maximum number of different moves evaluated at each depth. The number of positions evaluated is equal to branching to the power of max depth. Alpha-beta pruning removes some branches, but it alone is not necessarily enough, so setting a hard limit may be useful. Note: The bot adds +10 branches at the root level. This is because the 
+Since we've established that PTD is a good idea, we'll use it consistently in the next set of matches. In this [study](https://github.com/mikkokallio/tiralabra/blob/main/tools/study2.csv), the idea is to test how much constraints on branching affect speed and skill. The bots have two parameters related to branching: reach and branching. To limit the number of possible moves, only squares near existing stones are considered. Reach determines how many steps away from an existing stone a new stone can be placed. Brnaching, on the other hand, determines the maximum number of different moves evaluated at each depth. The number of positions evaluated is equal to branching to the power of max depth. Alpha-beta pruning removes some branches, but it alone is not necessarily enough, so setting a hard limit may be useful. Note: The bot adds +10 branches at the root level. This is because multiprocessing is always on, so at the root level, branching is handled quite effectively.
 
 * Eric: depth 3 with reach 2 and branching 3; 11 wins, 2 draws, 46 losses, avg time: 0.37 s
 * Robert: depth 3 with reach 13 and branching 13; 20 wins, 7 draws, 42 losses, avg time: 2.64 s
