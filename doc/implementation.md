@@ -16,6 +16,10 @@ When run, the application sets up a game board and two players, and then has the
 
 ## Performance analysis
 
+As mentioned in the specification document, the time complexity of minimax is O(b^m), where b is the number of legal moves and m is the maximum depth of the tree. Below is further analysis on how this works in practice with gomoku, and how the different AI optimization techniques help reduce the branching factor.
+* Gomoku without constraints on moves has initially 15 x 15 = 225 legal moves, and their number lessens by one each turn. So in theory, there are 225 x 224 x 223 ... 3 x 2 x 1 possible positions.
+
+
 * Saavutetut aika- ja tilavaativuudet (m.m. O-analyysit pseudokoodista)
 * Suorituskyky- ja O-analyysivertailu (mikäli työ vertailupainotteinen)
 
@@ -33,6 +37,6 @@ I read about many different ways to improve the AI, but didn't have time to try 
 
 ## Sources
 
-*
-*
-*
+* https://en.wikipedia.org/wiki/Gomoku -- describes game rules and many of the most common variants.
+* [Go-Moku and Threat-Space Search](https://www.bing.com/ck/a?!&&p=ca281f984ef1b35aJmltdHM9MTY3MjM1ODQwMCZpZ3VpZD0yZmQzZjU2MS02MjVlLTYxNWEtMzAyMS1lNTUyNjNiNTYwNGUmaW5zaWQ9NTIwMQ&ptn=3&hsh=3&fclid=2fd3f561-625e-615a-3021-e55263b5604e&psq=threat+space+analysis+gomoku&u=a1aHR0cHM6Ly93d3cucmVzZWFyY2hnYXRlLm5ldC9wdWJsaWNhdGlvbi8yMjUyNDQ3X0dvLU1va3VfYW5kX1RocmVhdC1TcGFjZV9TZWFyY2g&ntb=1) -- This article explains how gomoku was "solved" (at least in theory) decades ago, using threat-spaces.
+* Various stack overflow and other boards searches for ideas on using different techniques, e.g. multiprocessing.
