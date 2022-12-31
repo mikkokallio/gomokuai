@@ -10,6 +10,15 @@ The project uses pytest and coverage, which can be run with the commands below.
 
 `coverage run --branch -m pytest src` and then `coverage report -m`
 
+### Testing 'rightness'
+
+Besides testing that the project's different parts function correctly, the point of unit testing is also to determine the AI's 'rightness', i.e. ability to play the game in a logical manner as determined by game rules and the game engine. These type of tests are in `ai_player_test.py`. These include:
+* Given the chance to do so, AI's first priority is to win the game, i.e. build a row of 5.
+* The AI does so even if it is aware of an active threat (open fours and double-threes), provided that it is able to win before the opponent can win.
+* If there is an active threat on the board but it is not possible to win before the opponent, AI does everything it can to remove the threat.
+
+These ensure the AI cannot lose unless the opponent can build a threat sequence that is longer than the AI can foresee (limited mainly by depth of evaluating positions).
+
 ### Branch coverage
 
 All main functionality in the project is unit tested. The following report was generated on December 30th 2022 with the above commands:
@@ -49,9 +58,9 @@ Besides speed, the other part of the performance testing is determining how good
 
 ### Test results
 
-The app supports outputting game results as `.csv`, so it's possible to store them in a file. With enough game data stored, it's possible to get insights with the data. The script `tools/analyze.py` put game results in a pandas data frame so it's easy to make calculations. The following performance tests leverage that script.
+The app supports outputting game results as `.csv`, so it's possible to store them in a file. (For example, running `python src/index.py Eric Robert -a -r 10 -c >> tools/test.csv` gets you results from a total of 20 matches, where Eric plays 10 matches as black and the other 10 as white.) With enough game data stored, it's possible to get insights with the data. The script `tools/analyze.py` put game results in a pandas data frame so it's easy to make calculations. The following performance tests leverage that script.
 
-#### Test 1: Compare depth values and pass-through deepening
+#### Test: Compare depth values and pass-through deepening
 
 In this [study](https://github.com/mikkokallio/tiralabra/blob/main/tools/study1.csv), four bots each fought 10 matches against each foe in both colors, for a total of 10 x 2 x 4! = 120 matches. Only two parameters were varied: max depth and pass-through deepening, which effectively increases max depth whenever a node has only one child (i.e. no branching occurs). The bots were configured as shown below, and they had the following win statistic and time used per round:
 
@@ -64,9 +73,9 @@ Going from depth 5 to 7 without PTD (Philip vs Emma) surprisingly didn't increas
 
 Conclusions: Not surprisingly, increases in depth increase the bot's skill but decrease speed, so it's a trade-off. PTD also increases skill and decreases speed, but the ratio is much more favorable than that of increasing depth. In other words, it is a good idea to enable PTD.
 
-#### Test 2: Compare branching factor
+#### Test: Compare branching factor
 
-Since we've established that PTD is a good idea, we'll use it consistently in the next set of matches. In this [study](https://github.com/mikkokallio/tiralabra/blob/main/tools/study2.csv), the idea is to test how much constraints on branching affect speed and skill. The bots have two parameters related to branching: reach and branching. To limit the number of possible moves, only squares near existing stones are considered. Reach determines how many steps away from an existing stone a new stone can be placed. Brnaching, on the other hand, determines the maximum number of different moves evaluated at each depth. The number of positions evaluated is equal to branching to the power of max depth. Alpha-beta pruning removes some branches, but it alone is not necessarily enough, so setting a hard limit may be useful. Note: The bot adds +10 branches at the root level. This is because the 
+Since we've established that PTD is a good idea, we'll use it consistently in the next set of matches. In this [study](https://github.com/mikkokallio/tiralabra/blob/main/tools/study2.csv), the idea is to test how much constraints on branching affect speed and skill. The bots have two parameters related to branching: reach and branching. To limit the number of possible moves, only squares near existing stones are considered. Reach determines how many steps away from an existing stone a new stone can be placed. Brnaching, on the other hand, determines the maximum number of different moves evaluated at each depth. The number of positions evaluated is equal to branching to the power of max depth. Alpha-beta pruning removes some branches, but it alone is not necessarily enough, so setting a hard limit may be useful. Note: The bot adds +10 branches at the root level. This is because multiprocessing is always on, so at the root level, branching is handled quite effectively.
 
 * Eric: depth 3 with reach 2 and branching 3; 11 wins, 2 draws, 46 losses, avg time: 0.37 s
 * Robert: depth 3 with reach 13 and branching 13; 20 wins, 7 draws, 42 losses, avg time: 2.64 s
@@ -77,7 +86,7 @@ From the results, it's obvious that bots with higher reach and branching (Robert
 
 Conclusions: Reach and branching increase a bot's skill, but at a heavy cost. Increasing depth seems to be a better way to increase skill.
 
-#### Test 3: Test transposition tables
+#### Test: Transposition tables
 
 This time there are two depth 5 (Jane, Donald) and two depth 7 bots (George, Maisie) that are otherwise identical except Donald and Maisie have access to data from hundreds of previous games, spesifically first 10 moves and the results (black win, white win, draw) of those games.
 
@@ -94,6 +103,6 @@ The bots default to using multiprocessing, and so, the code doesn't currently su
 
 It was discussed in the demo session that the minimax algorithm doesn't leverage parallel computation very well, but I think a reduction of 30-45% is significant.
 
-With a non-deterministic pairing of bots, the results are the following (with a sample of 40 mathces): Black player's time was cut by 25% and white's only by 1%.
+Next, I tested the effects of multiprocessing by running `python src/index.py Jane Janelle -a  -r 10 -c` twice -- again once with 1 worker and another time without a limit. One of these bots uses some randomness in scoring moves, so matches don't end always the same way. The results are the following (with a sample of 20 matches with a single worker vs 20 matches with no limit on cores): Black player's time was cut by 25% and white's only by 1% when using all cores. On a repeated test with same parameters, the results were a 17% reduction for black player and a 21% reduction for white player. The data is recorded in [1](https://github.com/mikkokallio/tiralabra/blob/main/tools/study5.csv), [2](https://github.com/mikkokallio/tiralabra/blob/main/tools/study5b.csv), [3](https://github.com/mikkokallio/tiralabra/blob/main/tools/study5c.csv), and [4](https://github.com/mikkokallio/tiralabra/blob/main/tools/study5d.csv).
 
-Conclusion: The amount of reduction seems to vary, but if it's in some scenarios as high as 45%, and in others 30%, 25%, or close to 0% is in any case an improvement.
+Conclusion: The amount of reduction seems to vary, but with this small sample it is still evident that some reduction (1%, 17%, 21%, 25%, 30%, or 45%) happens each time.
