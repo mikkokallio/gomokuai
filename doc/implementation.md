@@ -16,9 +16,13 @@ When run, the application sets up a game board and two players, and then has the
 
 ## Performance analysis
 
-As mentioned in the specification document, the time complexity of minimax is O(b^m), where b is the number of legal moves and m is the maximum depth of the tree. Below is further analysis on how this works in practice with gomoku, and how the different AI optimization techniques help reduce the branching factor.
+As mentioned in the specification document, the time complexity of minimax is `O(b^m)`, where `b` is the number of legal moves and `m` is the maximum depth of the tree. Below is further analysis on how this works in practice with gomoku, and how the different AI optimization techniques help reduce the branching factor.
 * Gomoku without constraints on moves has initially 15 x 15 = 225 legal moves, and their number lessens by one each turn. So in theory, there are 225! = 1,23 * 10^433 positions, though some of those cannot occur because the game would end whenever there are 5 stones in a row. Even so, the number is too great to calculate the whole game tree.
 * The variant used in this project has some constraints for the first three moves: First stone has only 1 option for position, and 2nd and 3rd stones have 24 options each. The game engine also rules that games end in a draw if neither player has won after 60 turns. Even with these modifications, there are still 24^2 * (222! - 165!) = 6,45 * 10^428 possible board positions, not accounting for positions eliminated by wins.
+* Because of board symmetry, it'd be possible to divide these figures by 8 (rotated 4 ways and mirrored), but it's not helping much.
+* Therefore, in practice an AI must use a calculation depth, only checking nodes in the tree that are n moves away from current board position.
+* Especially for initial moves, this means nearly all nodes at max depth are neither wins or losses, returning 0. Therefore, a heuristic must be used to evaluate positions and put them in an order that helps searching the most promising branches first. This makes it possible to use alpha-beta pruning, where entire branches can be eliminated if it has been determined in another branch that it's not possible to get a better result.
+* Of course, the heuristic adds another loop. The heuristic I've implemented studies only new threats created by adding one stone (rather than scanning the whole board), and for this, it requires looking at 5 + a few extra squares in 4 directions for about 20-30 squares per evaluation. That's actually a more or less "constant" factor rather than affected by `b` or `m`, so the time complexity doesn't change. 
 
 
 * Saavutetut aika- ja tilavaativuudet (m.m. O-analyysit pseudokoodista)
