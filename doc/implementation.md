@@ -17,7 +17,8 @@ When run, the application sets up a game board and two players, and then has the
 ## Performance analysis
 
 As mentioned in the specification document, the time complexity of minimax is O(b^m), where b is the number of legal moves and m is the maximum depth of the tree. Below is further analysis on how this works in practice with gomoku, and how the different AI optimization techniques help reduce the branching factor.
-* Gomoku without constraints on moves has initially 15 x 15 = 225 legal moves, and their number lessens by one each turn. So in theory, there are 225 x 224 x 223 ... 3 x 2 x 1 possible positions.
+* Gomoku without constraints on moves has initially 15 x 15 = 225 legal moves, and their number lessens by one each turn. So in theory, there are 225! = 1,23 * 10^433 positions, though some of those cannot occur because the game would end whenever there are 5 stones in a row. Even so, the number is too great to calculate the whole game tree.
+* The variant used in this project has some constraints for the first three moves: First stone has only 1 option for position, and 2nd and 3rd stones have 24 options each. The game engine also rules that games end in a draw if neither player has won after 60 turns. Even with these modifications, there are still 24^2 * (222! - 165!) = 6,45 * 10^428 possible board positions, not accounting for positions eliminated by wins.
 
 
 * Saavutetut aika- ja tilavaativuudet (m.m. O-analyysit pseudokoodista)
