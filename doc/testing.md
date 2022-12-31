@@ -51,7 +51,7 @@ Besides speed, the other part of the performance testing is determining how good
 
 The app supports outputting game results as `.csv`, so it's possible to store them in a file. With enough game data stored, it's possible to get insights with the data. The script `tools/analyze.py` put game results in a pandas data frame so it's easy to make calculations. The following performance tests leverage that script.
 
-#### Test 1: Compare depth values and pass-through deepening
+#### Test: Compare depth values and pass-through deepening
 
 In this [study](https://github.com/mikkokallio/tiralabra/blob/main/tools/study1.csv), four bots each fought 10 matches against each foe in both colors, for a total of 10 x 2 x 4! = 120 matches. Only two parameters were varied: max depth and pass-through deepening, which effectively increases max depth whenever a node has only one child (i.e. no branching occurs). The bots were configured as shown below, and they had the following win statistic and time used per round:
 
@@ -64,7 +64,7 @@ Going from depth 5 to 7 without PTD (Philip vs Emma) surprisingly didn't increas
 
 Conclusions: Not surprisingly, increases in depth increase the bot's skill but decrease speed, so it's a trade-off. PTD also increases skill and decreases speed, but the ratio is much more favorable than that of increasing depth. In other words, it is a good idea to enable PTD.
 
-#### Test 2: Compare branching factor
+#### Test: Compare branching factor
 
 Since we've established that PTD is a good idea, we'll use it consistently in the next set of matches. In this [study](https://github.com/mikkokallio/tiralabra/blob/main/tools/study2.csv), the idea is to test how much constraints on branching affect speed and skill. The bots have two parameters related to branching: reach and branching. To limit the number of possible moves, only squares near existing stones are considered. Reach determines how many steps away from an existing stone a new stone can be placed. Brnaching, on the other hand, determines the maximum number of different moves evaluated at each depth. The number of positions evaluated is equal to branching to the power of max depth. Alpha-beta pruning removes some branches, but it alone is not necessarily enough, so setting a hard limit may be useful. Note: The bot adds +10 branches at the root level. This is because the 
 
@@ -77,7 +77,7 @@ From the results, it's obvious that bots with higher reach and branching (Robert
 
 Conclusions: Reach and branching increase a bot's skill, but at a heavy cost. Increasing depth seems to be a better way to increase skill.
 
-#### Test 3: Test transposition tables
+#### Test: Transposition tables
 
 This time there are two depth 5 (Jane, Donald) and two depth 7 bots (George, Maisie) that are otherwise identical except Donald and Maisie have access to data from hundreds of previous games, spesifically first 10 moves and the results (black win, white win, draw) of those games.
 
@@ -94,6 +94,6 @@ The bots default to using multiprocessing, and so, the code doesn't currently su
 
 It was discussed in the demo session that the minimax algorithm doesn't leverage parallel computation very well, but I think a reduction of 30-45% is significant.
 
-With a non-deterministic pairing of bots, the results are the following (with a sample of 40 mathces): Black player's time was cut by 25% and white's only by 1%.
+With a non-deterministic pairing of bots, the results are the following (with a sample of 40 matches): Black player's time was cut by 25% and white's only by 1%.
 
 Conclusion: The amount of reduction seems to vary, but if it's in some scenarios as high as 45%, and in others 30%, 25%, or close to 0% is in any case an improvement.
