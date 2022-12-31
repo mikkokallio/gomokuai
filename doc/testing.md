@@ -94,6 +94,6 @@ The bots default to using multiprocessing, and so, the code doesn't currently su
 
 It was discussed in the demo session that the minimax algorithm doesn't leverage parallel computation very well, but I think a reduction of 30-45% is significant.
 
-With a non-deterministic pairing of bots, the results are the following (with a sample of 40 matches): Black player's time was cut by 25% and white's only by 1%.
+Adding some randomness to the test, I ran `python src/index.py Jane Janelle -a  -r 10 -c`. The results are the following (with a sample of 20 matches with a single worker vs 20 matches with no limit on cores): Black player's time was cut by 25% and white's only by 1% when using all cores. On a repeated test with same parameters, the results were a 17% reduction for black player and a 21% reduction for white player. The data is recorded in [1](https://github.com/mikkokallio/tiralabra/blob/main/tools/study5.csv), [2](https://github.com/mikkokallio/tiralabra/blob/main/tools/study5b.csv), [3](https://github.com/mikkokallio/tiralabra/blob/main/tools/study5c.csv), and [4](https://github.com/mikkokallio/tiralabra/blob/main/tools/study5d.csv).
 
-Conclusion: The amount of reduction seems to vary, but if it's in some scenarios as high as 45%, and in others 30%, 25%, or close to 0% is in any case an improvement.
+Conclusion: The amount of reduction seems to vary, but with this small sample it is still evident that there is some reduction (1%, 17%, 21%, 25%, 30%, or 45%) happens each time.
