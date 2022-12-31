@@ -10,6 +10,15 @@ The project uses pytest and coverage, which can be run with the commands below.
 
 `coverage run --branch -m pytest src` and then `coverage report -m`
 
+### Testing 'rightness'
+
+Besides testing that the project's different parts function correctly, the point of unit testing is also to determine the AI's 'rightness', i.e. ability to play the game in a logical manner as determined by game rules and the game engine. These type of tests are in `ai_player_test.py`. These include:
+* Given the chance to do so, AI's first priority is to win the game, i.e. build a row of 5.
+* The AI does so even if it is aware of an active threat (open fours and double-threes), provided that it is able to win before the opponent can win.
+* If there is an active threat on the board but it is not possible to win before the opponent, AI does everything it can to remove the threat.
+
+These ensure the AI cannot lose unless the opponent can build a threat sequence that is longer than the AI can foresee (limited mainly by depth of evaluating positions).
+
 ### Branch coverage
 
 All main functionality in the project is unit tested. The following report was generated on December 30th 2022 with the above commands:
