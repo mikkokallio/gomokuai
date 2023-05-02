@@ -2,7 +2,7 @@
 
 ![GHA workflow badge](https://github.com/mikkokallio/tiralabra/workflows/pipe/badge.svg)
 
-The goal of this project was to build an AI capable of playing Gomoku, a game similar to tic-tac-toe. The project was made for the "tiralabra" course in period 2 of 2022.
+The goal of this project was to build an AI capable of playing Gomoku, a game similar to tic-tac-toe.
 
 ![Gomoku board](https://github.com/mikkokallio/tiralabra/blob/main/doc/images/board.png "Opening moves")
 
